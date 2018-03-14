@@ -9,7 +9,7 @@ El equipo de desarrollo que ha hecho posible este proyecto es el siguiente:
 * [Luis Gonzaga Rozo Bueno](https://github.com/luisrozo)
 * [Antonio Vélez Estévez](https://github.com/avleze)
 
-Puedes encontrar la carpeta con los entregables del proyecto [en el siguiente enlace](https://drive.google.com/drive/folders/16m9WpyTggtQIZ8601YvZ5ZpoWXoHt2hg).
+Puedes encontrar la carpeta con los entregables del proyecto [en el siguiente enlace](https://drive.google.com/drive/folders/1QdqgGdYmXNcF0Nbxzy9eh8fjJj-ET3Hb).
 
 ## *Funding*
 
