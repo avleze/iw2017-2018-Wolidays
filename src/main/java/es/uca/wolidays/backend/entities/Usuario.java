@@ -31,6 +31,9 @@ public class Usuario {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="propietario")
 	private List<Apartamento> apartamentos;
 	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="usuario")
+	private List<Reserva> reservas;
+	
 	public List<Apartamento> getApartamentos() {
 		return apartamentos;
 	}

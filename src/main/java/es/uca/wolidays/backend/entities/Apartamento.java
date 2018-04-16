@@ -1,11 +1,14 @@
 package es.uca.wolidays.backend.entities;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Apartamento {
@@ -20,11 +23,26 @@ public class Apartamento {
 	private Boolean aire_acondicionado;
 	private Double precio_estandar;
 	
+	@OneToMany(mappedBy="apartamento")
+	private List<Reserva> reservas;
+	
 	@ManyToOne
 	@JoinColumn(name="USR_ID")
 	private Usuario propietario;
 	
 	
+	public List<Reserva> getReservas() {
+		return reservas;
+	}
+	public void setReservas(List<Reserva> reservas) {
+		this.reservas = reservas;
+	}
+	public Usuario getPropietario() {
+		return propietario;
+	}
+	public void setPropietario(Usuario propietario) {
+		this.propietario = propietario;
+	}
 	public Integer getId() {
 		return id;
 	}

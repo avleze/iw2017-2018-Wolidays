@@ -2,10 +2,14 @@ package es.uca.wolidays.backend.entities;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Reserva {
@@ -19,6 +23,26 @@ public class Reserva {
 	private String comentario;
 	private String tarjeta;
 	
+	@ManyToOne
+	@JoinColumn(name="APTO_ID")
+	private Apartamento apartamento;
+	
+	@ManyToOne
+	@JoinColumn(name="USR_ID")
+	private Usuario usuario;
+	
+	public Apartamento getApartamento() {
+		return apartamento;
+	}
+	public void setApartamento(Apartamento apartamento) {
+		this.apartamento = apartamento;
+	}
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 	public Integer getId() {
 		return id;
 	}
