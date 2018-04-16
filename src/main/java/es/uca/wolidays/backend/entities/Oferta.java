@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Oferta {
@@ -16,6 +18,10 @@ public class Oferta {
 	private Date fecha_inicio;
 	private Date fecha_fin;
 	private Double precio_oferta;
+	
+	@ManyToOne
+	@JoinColumn(name="APTO_ID")
+	private Apartamento apartamento;
 	
 	public Integer getId() {
 		return id;

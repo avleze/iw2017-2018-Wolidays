@@ -1,11 +1,15 @@
 package es.uca.wolidays.backend.entities;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Apartamento {
@@ -23,6 +27,9 @@ public class Apartamento {
 	@ManyToOne
 	@JoinColumn(name="USR_ID")
 	private Usuario propietario;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="apartamento")
+	private List<Oferta> ofertas;
 	
 	
 	public Integer getId() {
