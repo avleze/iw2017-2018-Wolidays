@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Apartamento {
@@ -17,6 +19,11 @@ public class Apartamento {
 	private Integer num_camas;
 	private Boolean aire_acondicionado;
 	private Double precio_estandar;
+	
+	@ManyToOne
+	@JoinColumn(name="USR_ID")
+	private Usuario propietario;
+	
 	
 	public Integer getId() {
 		return id;

@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Usuario {
@@ -27,6 +28,15 @@ public class Usuario {
 	inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
 	private List<Rol> roles;
 	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="propietario")
+	private List<Apartamento> apartamentos;
+	
+	public List<Apartamento> getApartamentos() {
+		return apartamentos;
+	}
+	public void setApartamentos(List<Apartamento> apartamentos) {
+		this.apartamentos = apartamentos;
+	}
 	public Integer getId() {
 		return id;
 	}
