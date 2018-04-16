@@ -9,4 +9,5 @@ public class WolidaysApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WolidaysApplication.class, args);
 	}
+	
 }

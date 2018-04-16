@@ -1,9 +1,16 @@
 package es.uca.wolidays.backend.repositories;
 
+import java.sql.Date;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import es.uca.wolidays.backend.entities.Oferta;
 
 public interface OfertaRepository extends CrudRepository<Oferta, Integer>{
 
+	@Query("SELECT o FROM Oferta o WHERE o.fechaInicio >= ?1 AND o.fechaFin <= ?2")
+	List<Oferta> findByFechaInicioFechaFin(Date fechaInicio, Date fechaFin);
+	List<Oferta> findByPrecioOfertaBetween(Double min, Double max);
 }

@@ -19,10 +19,11 @@ public class Apartamento {
 	private Integer id;
 	private String contacto;
 	private String descripcion;
-	private Integer num_dormitorios;
-	private Integer num_camas;
-	private Boolean aire_acondicionado;
-	private Double precio_estandar;
+	private String ubicacion;
+	private Integer numDormitorios;
+	private Integer numCamas;
+	private Boolean aireAcondicionado;
+	private Double precioEstandar;
 	
 	@OneToMany(mappedBy="apartamento")
 	private List<Reserva> reservas;
@@ -34,7 +35,18 @@ public class Apartamento {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="apartamento")
 	private List<Oferta> ofertas;
 	
-	
+	public String getUbicacion() {
+		return ubicacion;
+	}
+	public void setUbicacion(String ubicacion) {
+		this.ubicacion = ubicacion;
+	}
+	public List<Oferta> getOfertas() {
+		return ofertas;
+	}
+	public void setOfertas(List<Oferta> ofertas) {
+		this.ofertas = ofertas;
+	}
 	public List<Reserva> getReservas() {
 		return reservas;
 	}
@@ -65,29 +77,29 @@ public class Apartamento {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	public Integer getNum_dormitorios() {
-		return num_dormitorios;
+	public Integer getNumDormitorios() {
+		return numDormitorios;
 	}
-	public void setNum_dormitorios(Integer num_dormitorios) {
-		this.num_dormitorios = num_dormitorios;
+	public void setNumDormitorios(Integer numDormitorios) {
+		this.numDormitorios = numDormitorios;
 	}
-	public Integer getNum_camas() {
-		return num_camas;
+	public Integer getNumCamas() {
+		return numCamas;
 	}
-	public void setNum_camas(Integer num_camas) {
-		this.num_camas = num_camas;
+	public void setNumCamas(Integer numCamas) {
+		this.numCamas = numCamas;
 	}
-	public Boolean getAire_acondicionado() {
-		return aire_acondicionado;
+	public Boolean getAireAcondicionado() {
+		return aireAcondicionado;
 	}
-	public void setAire_acondicionado(Boolean aire_acondicionado) {
-		this.aire_acondicionado = aire_acondicionado;
+	public void setAireAcondicionado(Boolean aireAcondicionado) {
+		this.aireAcondicionado = aireAcondicionado;
 	}
-	public Double getPrecio_estandar() {
-		return precio_estandar;
+	public Double getPrecioEstandar() {
+		return precioEstandar;
 	}
-	public void setPrecio_estandar(Double precio_estandar) {
-		this.precio_estandar = precio_estandar;
+	public void setPrecioEstandar(Double precioEstandar) {
+		this.precioEstandar = precioEstandar;
 	}
 	
 }
