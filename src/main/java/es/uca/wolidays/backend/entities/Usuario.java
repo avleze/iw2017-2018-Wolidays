@@ -3,6 +3,7 @@ package es.uca.wolidays.backend.entities;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,9 +18,17 @@ public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	
 	private String nombre;
+	
 	private String apellidos;
+	
+	@Column(unique = true)
 	private String correo;
+	
+	@Column(unique = true)
+	private String username;
+	
 	private String password;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -75,5 +84,11 @@ public class Usuario {
 	}
 	public void setRoles(List<Rol> roles) {
 		this.roles = roles;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }

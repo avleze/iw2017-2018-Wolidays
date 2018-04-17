@@ -3,6 +3,7 @@ package es.uca.wolidays.backend.entities;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,8 +18,10 @@ public class Apartamento {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	@Column(length = 100)
 	private String contacto;
 	private String descripcion;
+	@Column(length = 80)
 	private String ubicacion;
 	private Integer numDormitorios;
 	private Integer numCamas;

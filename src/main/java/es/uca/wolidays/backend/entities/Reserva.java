@@ -2,6 +2,7 @@ package es.uca.wolidays.backend.entities;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,11 +15,13 @@ public class Reserva {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	private Date fecha_inicio;
-	private Date fecha_fin;
-	private Double precio_final;
+	private Date fechaInicio;
+	private Date fechaFin;
+	private Double precioFinal;
+	@Column(length = 100)
 	private String contacto;
 	private String comentario;
+	@Column(length = 16)
 	private String tarjeta;
 	
 	@ManyToOne
@@ -28,59 +31,78 @@ public class Reserva {
 	@ManyToOne
 	@JoinColumn(name="USR_ID")
 	private Usuario usuario;
-	
-	public Apartamento getApartamento() {
-		return apartamento;
-	}
-	public void setApartamento(Apartamento apartamento) {
-		this.apartamento = apartamento;
-	}
-	public Usuario getUsuario() {
-		return usuario;
-	}
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Date getFecha_inicio() {
-		return fecha_inicio;
+
+	public Date getFechaInicio() {
+		return fechaInicio;
 	}
-	public void setFecha_inicio(Date fecha_inicio) {
-		this.fecha_inicio = fecha_inicio;
+
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
 	}
-	public Date getFecha_fin() {
-		return fecha_fin;
+
+	public Date getFechaFin() {
+		return fechaFin;
 	}
-	public void setFecha_fin(Date fecha_fin) {
-		this.fecha_fin = fecha_fin;
+
+	public void setFechaFin(Date fechaFin) {
+		this.fechaFin = fechaFin;
 	}
-	public Double getPrecio_final() {
-		return precio_final;
+
+	public Double getPrecioFinal() {
+		return precioFinal;
 	}
-	public void setPrecio_final(Double precio_final) {
-		this.precio_final = precio_final;
+
+	public void setPrecioFinal(Double precioFinal) {
+		this.precioFinal = precioFinal;
 	}
+
 	public String getContacto() {
 		return contacto;
 	}
+
 	public void setContacto(String contacto) {
 		this.contacto = contacto;
 	}
+
 	public String getComentario() {
 		return comentario;
 	}
+
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
 	}
+
 	public String getTarjeta() {
 		return tarjeta;
 	}
+
 	public void setTarjeta(String tarjeta) {
 		this.tarjeta = tarjeta;
 	}
+
+	public Apartamento getApartamento() {
+		return apartamento;
+	}
+
+	public void setApartamento(Apartamento apartamento) {
+		this.apartamento = apartamento;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
+	
 }

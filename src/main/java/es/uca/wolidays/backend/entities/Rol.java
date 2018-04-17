@@ -2,6 +2,7 @@ package es.uca.wolidays.backend.entities;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +14,7 @@ public class Rol {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	@Column(length = 50)
 	private String nombre;
 	
 	@ManyToMany(mappedBy="roles")
