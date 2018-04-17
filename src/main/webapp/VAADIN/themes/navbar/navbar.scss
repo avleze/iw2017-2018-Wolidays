@@ -1,0 +1,29 @@
+/* Import the reindeer theme. */
+/* This only allows us to use the mixins defined in it and does not add any styles by itself. */
+@import "../valo/valo.scss";
+
+/* This contains all of your theme. */
+/* If somebody wants to extend the theme she will include this mixin. */
+@mixin navbar {
+    /* Include all the styles from the reindeer theme */
+    @include valo;
+
+    .orange {
+        background: #f55b0b;
+    }
+    
+    .blue {
+        background: #04749c;
+    }
+    
+    .icon {
+        margin-left: 20px;
+        height: 65%;
+        width: 6%;
+    }
+    
+    .margin_buttons {
+        margin-right: 20px;
+        margin-bottom: 30px;
+    }
+}
