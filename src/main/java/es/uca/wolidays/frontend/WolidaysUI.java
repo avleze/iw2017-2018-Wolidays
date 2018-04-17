@@ -34,7 +34,7 @@ public class WolidaysUI extends UI {
 		layout.setMargin(false);
 		layout.addStyleName("orange");
 		layout.setWidth(100.0f, Unit.PERCENTAGE);
-		layout.setHeight(10.0f, Unit.PERCENTAGE);
+		layout.setHeight("60px");
 		
 		HorizontalLayout buttons_layout = new HorizontalLayout();
 		buttons_layout.setHeight(10.0f, Unit.PERCENTAGE);
