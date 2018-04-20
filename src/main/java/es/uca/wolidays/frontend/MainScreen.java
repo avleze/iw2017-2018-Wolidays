@@ -4,6 +4,13 @@ import java.io.File;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.FileResource;
@@ -20,6 +27,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.frontend.views.LoginView;
 import es.uca.wolidays.frontend.views.SignupView;
 
@@ -56,18 +64,25 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		Image tl_icon = new Image(null, rsc);
 		tl_icon.addStyleName("icon");
 		tl_icon.addClickListener(e -> getUI().getNavigator().navigateTo(""));
-		
-		Button inicio_sesion = createNavigationButton("Iniciar sesión", LoginView.VIEW_NAME);
-		Button registrarse = createNavigationButton("Registrarse", SignupView.VIEW_NAME);
-		
-		buttons_layout.addComponents(inicio_sesion, registrarse);
-		buttons_layout.setComponentAlignment(inicio_sesion, Alignment.MIDDLE_RIGHT);
-		buttons_layout.setComponentAlignment(registrarse, Alignment.MIDDLE_RIGHT);
-		buttons_layout.addStyleName("margin_buttons");
-		
-		navbarLayout.addComponents(tl_icon, buttons_layout);
+		navbarLayout.addComponent(tl_icon);
 		navbarLayout.setComponentAlignment(tl_icon, Alignment.MIDDLE_LEFT);
-		navbarLayout.setComponentAlignment(buttons_layout, Alignment.MIDDLE_RIGHT);
+		
+		if(SecurityUtils.isLoggedIn()) {
+			/*
+			 * Botones para usuario registrado		
+			 */		
+		} else {
+			Button inicio_sesion = createNavigationButton("Iniciar sesión", LoginView.VIEW_NAME);
+			Button registrarse = createNavigationButton("Registrarse", SignupView.VIEW_NAME);
+			
+			buttons_layout.addComponents(inicio_sesion, registrarse);
+			buttons_layout.setComponentAlignment(inicio_sesion, Alignment.MIDDLE_RIGHT);
+			buttons_layout.setComponentAlignment(registrarse, Alignment.MIDDLE_RIGHT);	
+		}
+		
+		buttons_layout.addStyleName("margin_buttons");
+		navbarLayout.addComponent(buttons_layout);
+		navbarLayout.setComponentAlignment(buttons_layout, Alignment.MIDDLE_RIGHT);	
 		
 		mainLayout.addComponent(navbarLayout);
 		mainLayout.setComponentAlignment(navbarLayout, Alignment.TOP_CENTER);
@@ -96,5 +111,6 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 	public void showView(View view) {
 		springViewDisplay.setContent((Component) view);
 	}
+	
 	
 }
