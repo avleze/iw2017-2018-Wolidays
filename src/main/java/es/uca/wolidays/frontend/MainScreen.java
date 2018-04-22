@@ -4,23 +4,16 @@ import java.io.File;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringViewDisplay;
-import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Panel;
@@ -34,6 +27,10 @@ import es.uca.wolidays.frontend.views.SignupView;
 @SpringViewDisplay
 public class MainScreen extends VerticalLayout implements ViewDisplay {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1905072662186258460L;
 	private Panel springViewDisplay;
 	
 	@Override

@@ -23,6 +23,11 @@ import com.vaadin.ui.VerticalLayout;
 @SpringView(name = LoginView.VIEW_NAME)
 public class LoginView extends VerticalLayout implements View {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9207545147516956040L;
+
 	public static final String VIEW_NAME = "login";
 	
 	@Autowired

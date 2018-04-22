@@ -13,7 +13,6 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Composite;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Notification;
@@ -24,6 +23,10 @@ import com.vaadin.ui.themes.ValoTheme;
 @Theme("navbar")
 @SpringView(name = HomeView.VIEW_NAME)
 public class HomeView extends VerticalLayout implements View {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3089381541889114455L;
 	public static final String VIEW_NAME = "";
 	
 	

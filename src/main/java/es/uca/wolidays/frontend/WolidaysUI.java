@@ -18,6 +18,11 @@ import es.uca.wolidays.backend.security.ErrorView;
 @PushStateNavigation
 public class WolidaysUI extends UI {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1714516744778221408L;
+
 	@Autowired
 	SpringViewProvider viewProvider;
 	
