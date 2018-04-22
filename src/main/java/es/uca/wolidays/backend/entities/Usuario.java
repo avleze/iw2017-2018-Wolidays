@@ -43,7 +43,7 @@ public class Usuario implements UserDetails {
 	
 	private String password;
 	
-	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "usuario_rol",
 	joinColumns = @JoinColumn(name = "usr_id", referencedColumnName = "id"),
 	inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))

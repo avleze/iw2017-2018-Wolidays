@@ -2,6 +2,7 @@ package es.uca.wolidays.frontend.views;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -17,6 +18,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import es.uca.wolidays.backend.entities.Rol;
 import es.uca.wolidays.backend.entities.Usuario;
+import es.uca.wolidays.backend.services.RolService;
 import es.uca.wolidays.backend.services.UsuarioService;
 
 @SpringView(name = SignupView.VIEW_NAME)
@@ -32,6 +34,8 @@ public class SignupView extends VerticalLayout implements View {
 	@Autowired
 	private UsuarioService service;
 	
+	@Autowired
+	private RolService rolService;
 	@PostConstruct
 	void init() {
 		final VerticalLayout registroLayout = new VerticalLayout();
@@ -52,7 +56,8 @@ public class SignupView extends VerticalLayout implements View {
 		registroLayout.setComponentAlignment(registro, Alignment.TOP_CENTER);
 		
 		Usuario user = new Usuario();
-		Rol defaultRol = new Rol();
+		
+
 
 		registro.addClickListener(e -> {
 			user.setNombre(nombre.getValue());
@@ -60,9 +65,18 @@ public class SignupView extends VerticalLayout implements View {
 			user.setCorreo(correo.getValue());
 			user.setUsername(username.getValue());
 			user.setPassword(password.getValue());
-			defaultRol.setNombre("DEFAULT_ROL");
 			List<Rol> roles = new ArrayList<>();
-			roles.add(defaultRol);
+			
+			Optional<Rol> defaultRol = rolService.buscarPorNombre("DEFAULT_ROL");
+			if(!defaultRol.isPresent())
+			{
+				Rol rol = new Rol();
+				rol.setNombre("DEFAULT_ROL");
+				rolService.guardar(rol);
+				defaultRol = Optional.of(rol);
+			}
+			
+			roles.add(defaultRol.get());
 			user.setRoles(roles);
 			service.guardar(user);
 		});

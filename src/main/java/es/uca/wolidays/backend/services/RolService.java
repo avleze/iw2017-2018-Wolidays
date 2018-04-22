@@ -23,6 +23,10 @@ public class RolService {
 		return repo.findById(pk);
 	}
 	
+	public Optional<Rol> buscarPorNombre(String nombre){
+		return repo.findByNombre(nombre);
+	}
+	
 	public void eliminar(Rol rol) {
 		repo.delete(rol);
 	}
