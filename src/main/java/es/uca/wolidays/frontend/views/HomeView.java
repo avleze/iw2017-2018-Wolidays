@@ -4,6 +4,8 @@ import java.io.File;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
@@ -20,6 +22,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import es.uca.wolidays.frontend.MainScreen;
+
 @Theme("navbar")
 @SpringView(name = HomeView.VIEW_NAME)
 public class HomeView extends VerticalLayout implements View {
@@ -28,6 +32,9 @@ public class HomeView extends VerticalLayout implements View {
 	 */
 	private static final long serialVersionUID = -3089381541889114455L;
 	public static final String VIEW_NAME = "";
+	
+	@Autowired
+	MainScreen mainScreen;
 	
 	
 	@PostConstruct
@@ -64,7 +71,7 @@ public class HomeView extends VerticalLayout implements View {
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
-		
+		mainScreen.setButtons();
 	}
 	
 }

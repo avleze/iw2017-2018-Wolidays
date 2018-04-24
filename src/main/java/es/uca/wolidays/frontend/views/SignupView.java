@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -20,6 +21,7 @@ import es.uca.wolidays.backend.entities.Rol;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.services.RolService;
 import es.uca.wolidays.backend.services.UsuarioService;
+import es.uca.wolidays.frontend.MainScreen;
 
 @SpringView(name = SignupView.VIEW_NAME)
 public class SignupView extends VerticalLayout implements View {
@@ -36,6 +38,10 @@ public class SignupView extends VerticalLayout implements View {
 	
 	@Autowired
 	private RolService rolService;
+	
+	@Autowired
+	MainScreen mainScreen;
+	
 	@PostConstruct
 	void init() {
 		final VerticalLayout registroLayout = new VerticalLayout();
@@ -55,11 +61,12 @@ public class SignupView extends VerticalLayout implements View {
 		registroLayout.setComponentAlignment(password, Alignment.TOP_CENTER);
 		registroLayout.setComponentAlignment(registro, Alignment.TOP_CENTER);
 		
-		Usuario user = new Usuario();
-		
-
+		nombre.focus();
 
 		registro.addClickListener(e -> {
+			Usuario user = new Usuario();
+			
+			
 			user.setNombre(nombre.getValue());
 			user.setApellidos(apellidos.getValue());
 			user.setCorreo(correo.getValue());
@@ -82,5 +89,10 @@ public class SignupView extends VerticalLayout implements View {
 		});
 		
 		addComponent(registroLayout);
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event) {
+		mainScreen.setButtons();
 	}
 }

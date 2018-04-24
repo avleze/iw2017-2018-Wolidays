@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
@@ -19,6 +20,8 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
+import es.uca.wolidays.frontend.MainScreen;
 
 @SpringView(name = LoginView.VIEW_NAME)
 public class LoginView extends VerticalLayout implements View {
@@ -33,6 +36,9 @@ public class LoginView extends VerticalLayout implements View {
 	@Autowired
 	AuthenticationManager authenticationManager;
 	
+	@Autowired
+	MainScreen mainScreen;
+	
 	
 	@PostConstruct
 	void init() {
@@ -45,6 +51,8 @@ public class LoginView extends VerticalLayout implements View {
         loginLayout.addComponents(username, password);
         loginLayout.setComponentAlignment(username, Alignment.TOP_CENTER);
         loginLayout.setComponentAlignment(password, Alignment.TOP_CENTER);
+        
+        username.focus();
         
         Button login = new Button("Login", evt -> {
             String pword = password.getValue();
@@ -78,6 +86,11 @@ public class LoginView extends VerticalLayout implements View {
 		} catch (AuthenticationException ex) {
 			return false;
 		}
+	}
+	
+	@Override
+	public void enter(ViewChangeEvent event) {
+		mainScreen.setButtons();
 	}
 	
 }

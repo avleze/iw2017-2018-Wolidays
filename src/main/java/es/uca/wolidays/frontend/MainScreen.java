@@ -4,8 +4,7 @@ import java.io.File;
 
 import javax.annotation.PostConstruct;
 
-
-
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.FileResource;
@@ -22,7 +21,11 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.frontend.views.LoginView;
+import es.uca.wolidays.frontend.views.MisApartamentosView;
+import es.uca.wolidays.frontend.views.MisReservasView;
+import es.uca.wolidays.frontend.views.NuevoApartamentoView;
 import es.uca.wolidays.frontend.views.SignupView;
+
 
 @SpringViewDisplay
 public class MainScreen extends VerticalLayout implements ViewDisplay {
@@ -33,6 +36,18 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 	private static final long serialVersionUID = 1905072662186258460L;
 	private Panel springViewDisplay;
 	
+	private final VerticalLayout mainLayout = new VerticalLayout();
+	private final HorizontalLayout navbarLayout = new HorizontalLayout();
+	private final HorizontalLayout buttons_layout = new HorizontalLayout();
+	
+	private Button inicio_sesion = createNavigationButton("Iniciar sesión", LoginView.VIEW_NAME, null);
+	private Button registrarse = createNavigationButton("Registrarse", SignupView.VIEW_NAME, null);
+	private Button misReservas = createNavigationButton("Mis reservas", MisReservasView.VIEW_NAME, VaadinIcons.TAGS);
+	private Button registrarApto = createNavigationButton("Nuevo apartamento", NuevoApartamentoView.VIEW_NAME, VaadinIcons.PLUS_CIRCLE);
+	private Button misAptos = createNavigationButton("Mis apartamentos", MisApartamentosView.VIEW_NAME, VaadinIcons.HOME);
+	private Button perfil = createNavigationButton("Perfil", "", VaadinIcons.USER);
+	
+	
 	@Override
 	public void attach() {
 		super.attach();
@@ -42,18 +57,14 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 	@PostConstruct
 	void init() {
 		
-		this.setMargin(false);
+		this.setMargin(false);		
+		mainLayout.setMargin(false);		
 		
-		final VerticalLayout mainLayout = new VerticalLayout();
-		mainLayout.setMargin(false);
-		
-		final HorizontalLayout navbarLayout = new HorizontalLayout();
 		navbarLayout.setMargin(false);
 		navbarLayout.addStyleName("orange");
 		navbarLayout.setWidth(100.0f, Unit.PERCENTAGE);
-		navbarLayout.setHeight("60px");
+		navbarLayout.setHeight("60px");		
 		
-		HorizontalLayout buttons_layout = new HorizontalLayout();
 		buttons_layout.setHeight("60px");
 		
 		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
@@ -64,18 +75,7 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		navbarLayout.addComponent(tl_icon);
 		navbarLayout.setComponentAlignment(tl_icon, Alignment.MIDDLE_LEFT);
 		
-		if(SecurityUtils.isLoggedIn()) {
-			/*
-			 * Botones para usuario registrado		
-			 */		
-		} else {
-			Button inicio_sesion = createNavigationButton("Iniciar sesión", LoginView.VIEW_NAME);
-			Button registrarse = createNavigationButton("Registrarse", SignupView.VIEW_NAME);
-			
-			buttons_layout.addComponents(inicio_sesion, registrarse);
-			buttons_layout.setComponentAlignment(inicio_sesion, Alignment.MIDDLE_RIGHT);
-			buttons_layout.setComponentAlignment(registrarse, Alignment.MIDDLE_RIGHT);	
-		}
+		setButtons();
 		
 		buttons_layout.addStyleName("margin_buttons");
 		navbarLayout.addComponent(buttons_layout);
@@ -94,11 +94,56 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		addComponent(mainLayout);
 	}
 	
-	private Button createNavigationButton(String caption, final String viewName) {
+	public void setButtons() {
+		
+		cleanButtons();
+		
+		if(SecurityUtils.isLoggedIn()) {
+			
+			buttons_layout.addComponents(misReservas, registrarApto, misAptos, perfil);
+			buttons_layout.setComponentAlignment(misReservas, Alignment.MIDDLE_RIGHT);
+			buttons_layout.setComponentAlignment(registrarApto, Alignment.MIDDLE_RIGHT);
+			buttons_layout.setComponentAlignment(misAptos, Alignment.MIDDLE_RIGHT);
+			buttons_layout.setComponentAlignment(perfil, Alignment.MIDDLE_RIGHT);
+			
+		} else {			
+			
+			buttons_layout.addComponents(inicio_sesion, registrarse);
+			buttons_layout.setComponentAlignment(inicio_sesion, Alignment.MIDDLE_RIGHT);
+			buttons_layout.setComponentAlignment(registrarse, Alignment.MIDDLE_RIGHT);	
+			
+		}
+	}
+	
+	public void cleanButtons() {
+		
+		if(!SecurityUtils.isLoggedIn()) {
+			
+			buttons_layout.removeComponent(misReservas);
+			buttons_layout.removeComponent(registrarApto);
+			buttons_layout.removeComponent(misAptos);
+			buttons_layout.removeComponent(perfil);
+			
+			
+		} else {			
+			
+			buttons_layout.removeComponent(inicio_sesion);
+			buttons_layout.removeComponent(registrarse);
+			
+		}
+	}
+	
+	private Button createNavigationButton(String caption, final String viewName, VaadinIcons icon) {
+		
 		Button button = new Button(caption);
+		
 		button.setHeight("40px");
 		button.addStyleNames(ValoTheme.BUTTON_BORDERLESS);
 		button.addClickListener(event -> getUI().getNavigator().navigateTo(viewName));
+		
+		if(icon != null) {
+			button.setIcon(icon);
+		}
 		
 		return button;
 	}
