@@ -9,6 +9,10 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
+import com.vaadin.data.converter.StringToDoubleConverter;
+import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -17,7 +21,9 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeSelect;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -44,6 +50,17 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 	
 	@Autowired
 	MainScreen mainScreen;
+	
+	Binder<Apartamento> binder = new Binder<>();
+	private String contactoRgx = "(?:[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+"
+			+ "\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-"
+			+ "\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9]"
+			+ "(?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+			+ "|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|"
+			+ "[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f"
+			+ "\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])|(\\d{9})";
+	private String ubicacionRgx = "[\\w\\s,.()áéíóú]+";
+	private String precioStdRgx = "[\\d.]+";
 
 	@PostConstruct
 	void init() {
@@ -54,18 +71,41 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		final VerticalLayout rightFields = new VerticalLayout();
 		Usuario currentUser = (Usuario)userService.loadUserByUsername(SecurityUtils.getUsername());
 		
-		TextField contactoField = new TextField("Contacto *");
-		TextField ubicacionField = new TextField("Ubicación *");
+		TextField contactoField = new TextField("Contacto");
+		binder.forField(contactoField)
+			.withValidator(new RegexpValidator("El contacto debe ser un email o un número de teléfono", contactoRgx, true))
+			.asRequired("Campo obligatorio")
+			.bind(Apartamento::getContacto, Apartamento::setContacto);
+		
+		
+		TextField ubicacionField = new TextField("Ubicación");
+		binder.forField(ubicacionField)
+			.withValidator(new RegexpValidator("La ubicación debe ser válida", ubicacionRgx, true))
+			.asRequired("Campo obligatorio")
+			.bind(Apartamento::getUbicacion, Apartamento::setUbicacion);
+		
+		
 		List<Integer> data = IntStream.range(1, 11).mapToObj(i -> i).collect(Collectors.toList());
-        NativeSelect<Integer> numCamasField = new NativeSelect<>("Número de camas *", data);
+		
+        NativeSelect<Integer> numCamasField = new NativeSelect<>("Número de camas", data);
         numCamasField.setEmptySelectionAllowed(false);
         numCamasField.setSelectedItem(data.get(0));
 		numCamasField.setWidth("50px");
-		NativeSelect<Integer> numDormitoriosField = new NativeSelect<>("Número de dormitorios *", data);
+		binder.forField(numCamasField)
+			.asRequired("Campo obligatorio")
+			.bind(Apartamento::getNumCamas, Apartamento::setNumCamas);
+		
+		NativeSelect<Integer> numDormitoriosField = new NativeSelect<>("Número de dormitorios", data);
         numDormitoriosField.setEmptySelectionAllowed(false);
         numDormitoriosField.setSelectedItem(data.get(0));
 		numDormitoriosField.setWidth("50px");
+		binder.forField(numDormitoriosField)
+			.asRequired("Campo obligatorio")
+			.bind(Apartamento::getNumDormitorios, Apartamento::setNumDormitorios);
+		
 		CheckBox aireAcondCB = new CheckBox("Aire acondicionado", false);
+		binder.forField(aireAcondCB)
+			.bind(Apartamento::getAireAcondicionado, Apartamento::setAireAcondicionado);
 		
 		leftFields.addComponents(contactoField, ubicacionField, numCamasField, numDormitoriosField, aireAcondCB);
 		leftFields.setComponentAlignment(contactoField, Alignment.TOP_LEFT);
@@ -76,9 +116,16 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		
 		TextArea descripcionField = new TextArea("Descripción");
 		descripcionField.setWidth("300px");
-		TextField precioStdField = new TextField("Precio estándar por noche *");
-		precioStdField.setWidth("85px");
+		binder.forField(descripcionField)
+			.bind(Apartamento::getDescripcion, Apartamento::setDescripcion);		
 		
+		TextField precioStdField = new TextField("Precio estándar por noche");
+		precioStdField.setWidth("85px");
+		binder.forField(precioStdField)
+			.withValidator(new RegexpValidator("El precio debe contener solo números y los decimales deben estar separados con un punto (.)", precioStdRgx, true))
+			.asRequired("Campo obligatorio")
+			.withConverter(new StringToDoubleConverter("Introduce un número"))
+			.bind(Apartamento::getPrecioEstandar, Apartamento::setPrecioEstandar);
 		
 		rightFields.addComponents(descripcionField, precioStdField);
 		rightFields.setComponentAlignment(descripcionField, Alignment.TOP_LEFT);
@@ -100,9 +147,21 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 			apartamento.setNumDormitorios(numDormitoriosField.getValue());
 			apartamento.setAireAcondicionado(aireAcondCB.getValue());
 			apartamento.setDescripcion(descripcionField.getValue());
-			apartamento.setPrecioEstandar(Double.parseDouble(precioStdField.getValue()));
 			
-			aptoService.guardar(apartamento);
+			try {
+				
+				apartamento.setPrecioEstandar(Double.parseDouble(precioStdField.getValue()));
+				addComponent(new Label());
+				binder.writeBean(apartamento);				
+				aptoService.guardar(apartamento);
+				//LoginView.setSuccessfulSignUpNotification();
+				//getUI().getNavigator().navigateTo("login");
+				
+			} catch(ValidationException ex) {
+				Notification.show("No se ha podido completar el registro");
+			} catch (NumberFormatException nex) {
+				Notification.show("El precio debe contener solo números y los decimales deben estar separados con un punto (.)");
+			}
 		});
 		registrarAptoButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 		

@@ -154,5 +154,8 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		springViewDisplay.setContent((Component) view);
 	}
 	
+	public void setPerfilButtonCaption() {
+		perfil.setCaption(SecurityUtils.getUsername());
+	}
 	
 }

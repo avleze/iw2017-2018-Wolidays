@@ -83,6 +83,8 @@ public class LoginView extends VerticalLayout implements View {
 			SecurityContextHolder.getContext().setAuthentication(token);
 			
 			// Show the main UI
+			HomeView.setSuccessfulLoginNotification();
+			mainScreen.setPerfilButtonCaption();
 			getUI().getNavigator().navigateTo("");
 			return true;
 		} catch (AuthenticationException ex) {
