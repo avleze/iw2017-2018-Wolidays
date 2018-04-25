@@ -10,9 +10,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinService;
+import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -39,11 +42,10 @@ public class LoginView extends VerticalLayout implements View {
 	@Autowired
 	MainScreen mainScreen;
 	
+	private final VerticalLayout loginLayout = new VerticalLayout();
 	
 	@PostConstruct
 	void init() {
-		
-		final VerticalLayout loginLayout = new VerticalLayout();
 		
 		TextField username = new TextField("Username");
 		PasswordField password = new PasswordField("Password");
@@ -91,6 +93,16 @@ public class LoginView extends VerticalLayout implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 		mainScreen.setButtons();
+	}
+	
+	public static void setSuccessfulSignUpNotification() {
+		Notification successfulSignUp = new Notification("Registro completado con éxito");
+		successfulSignUp.setIcon(VaadinIcons.CHECK);
+		successfulSignUp.setPosition(Position.TOP_RIGHT);
+		successfulSignUp.setDelayMsec(3500);
+		successfulSignUp.setStyleName("success_notification");
+		
+		successfulSignUp.show(Page.getCurrent());
 	}
 	
 }

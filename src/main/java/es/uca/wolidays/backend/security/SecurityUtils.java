@@ -31,5 +31,11 @@ public final class SecurityUtils {
         	return null;
         }
     }
+    
+    public static String getUsername() {
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	
+    	return authentication.getName();
+    }
 
 }
