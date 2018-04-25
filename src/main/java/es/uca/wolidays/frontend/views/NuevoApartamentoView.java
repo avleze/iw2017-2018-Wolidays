@@ -60,7 +60,7 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 			+ "[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f"
 			+ "\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])|(\\d{9})";
 	private String ubicacionRgx = "[\\w\\s,.()áéíóú]+";
-	private String precioStdRgx = "[\\d.]+";
+	private String precioStdRgx = "[1-9]\\d*\\.\\d{1,2}|[1-9]\\d*";
 
 	@PostConstruct
 	void init() {
@@ -122,7 +122,7 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		TextField precioStdField = new TextField("Precio estándar por noche");
 		precioStdField.setWidth("85px");
 		binder.forField(precioStdField)
-			.withValidator(new RegexpValidator("El precio debe contener solo números y los decimales deben estar separados con un punto (.)", precioStdRgx, true))
+			.withValidator(new RegexpValidator("El precio debe contener solo números, no empezar por 0 y los decimales deben estar separados con un punto (.)", precioStdRgx, true))
 			.asRequired("Campo obligatorio")
 			.withConverter(new StringToDoubleConverter("Introduce un número"))
 			.bind(Apartamento::getPrecioEstandar, Apartamento::setPrecioEstandar);
@@ -154,8 +154,8 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 				addComponent(new Label());
 				binder.writeBean(apartamento);				
 				aptoService.guardar(apartamento);
-				//LoginView.setSuccessfulSignUpNotification();
-				//getUI().getNavigator().navigateTo("login");
+
+				// Enlace a "Mis apartamentos" con notificación de registro completada
 				
 			} catch(ValidationException ex) {
 				Notification.show("No se ha podido completar el registro");

@@ -77,12 +77,10 @@ public class LoginView extends VerticalLayout implements View {
 		try {
 			Authentication token = authenticationManager
 					.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-			// Reinitialize the session to protect against session fixation
-			// attacks. This does not work with websocket communication.
+			
 			VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
 			SecurityContextHolder.getContext().setAuthentication(token);
 			
-			// Show the main UI
 			HomeView.setSuccessfulLoginNotification();
 			mainScreen.setPerfilButtonCaption();
 			getUI().getNavigator().navigateTo("");
