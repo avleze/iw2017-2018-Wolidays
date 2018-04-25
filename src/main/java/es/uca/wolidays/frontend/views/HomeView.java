@@ -59,7 +59,9 @@ public class HomeView extends VerticalLayout implements View {
 		Button searchButton = new Button("Buscar");
 		searchButton.setWidth("80px");
 		searchButton.setClickShortcut(KeyCode.ENTER);
-		searchButton.addClickListener(e -> Notification.show("Botón 'Buscar' pulsado"));
+		searchButton.addClickListener(e -> {
+			getUI().getNavigator().navigateTo(BusquedaView.VIEW_NAME + "/" + searchField.getValue());
+		});
 		searchButton.setStyleName("button");
 		
 		searchBar.addComponents(searchField, searchButton);
