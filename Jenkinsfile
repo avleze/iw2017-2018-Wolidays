@@ -28,7 +28,7 @@ pipeline {
 
         stage ('Compilacion') {
             steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true install' 
+                sh 'mvn -Dmaven.test.failure.ignore=true install -e' 
             }
         }
 
