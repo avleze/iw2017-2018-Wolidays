@@ -1,8 +1,10 @@
 package es.uca.wolidays.frontend.views;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 import javax.annotation.PostConstruct;
+import java.net.URLEncoder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,7 +42,6 @@ public class HomeView extends VerticalLayout implements View {
 	@Autowired
 	MainScreen mainScreen;
 	
-	
 	@PostConstruct
 	void init() {
 		final VerticalLayout mainLayout = new VerticalLayout();
@@ -60,7 +61,21 @@ public class HomeView extends VerticalLayout implements View {
 		searchButton.setWidth("80px");
 		searchButton.setClickShortcut(KeyCode.ENTER);
 		searchButton.addClickListener(e -> {
-			getUI().getNavigator().navigateTo(BusquedaView.VIEW_NAME + "/" + searchField.getValue());
+			try {
+				
+				if(searchField.isEmpty()) {
+					Notification.show("Debes introducir una ciudad");
+					
+				} else {
+					String searchValue = URLEncoder.encode(searchField.getValue(), "UTF-8");
+					getUI().getNavigator().navigateTo(BusquedaView.VIEW_NAME + "/" + searchValue);
+				}
+				
+			} catch(UnsupportedEncodingException ex) {
+				
+			}
+			
+			
 		});
 		searchButton.setStyleName("button");
 		

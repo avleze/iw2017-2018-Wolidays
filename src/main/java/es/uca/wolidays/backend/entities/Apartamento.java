@@ -102,7 +102,7 @@ public class Apartamento {
 		return precioEstandar;
 	}
 	public void setPrecioEstandar(Double precioEstandar) {
-		this.precioEstandar = precioEstandar/100;
+		this.precioEstandar = precioEstandar;		
 	}
 	
 }

@@ -104,6 +104,7 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 			buttons_layout.setComponentAlignment(misReservas, Alignment.MIDDLE_RIGHT);
 			buttons_layout.setComponentAlignment(registrarApto, Alignment.MIDDLE_RIGHT);
 			buttons_layout.setComponentAlignment(misAptos, Alignment.MIDDLE_RIGHT);
+			setPerfilButtonCaption();
 			buttons_layout.setComponentAlignment(perfil, Alignment.MIDDLE_RIGHT);
 			
 		} else {			

@@ -1,6 +1,7 @@
 package es.uca.wolidays.frontend.views;
 
 import java.util.List;
+import java.util.regex.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
-import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
@@ -21,7 +21,6 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
@@ -60,7 +59,10 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 			+ "[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f"
 			+ "\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])|(\\d{9})";
 	private String ubicacionRgx = "[\\w\\s,.()áéíóú]+";
-	private String precioStdRgx = "[1-9]\\d*\\.\\d{1,2}|[1-9]\\d*";
+	private String precioStdRgx = "^\\d{0,5}(\\.\\d{1,2})?$";
+	
+	private Boolean precioVacio = true;
+	private Boolean precioValido = false;
 
 	@PostConstruct
 	void init() {
@@ -121,11 +123,6 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		
 		TextField precioStdField = new TextField("Precio estándar por noche");
 		precioStdField.setWidth("85px");
-		binder.forField(precioStdField)
-			.withValidator(new RegexpValidator("El precio debe contener solo números, no empezar por 0 y los decimales deben estar separados con un punto (.)", precioStdRgx, true))
-			.asRequired("Campo obligatorio")
-			.withConverter(new StringToDoubleConverter("Introduce un número"))
-			.bind(Apartamento::getPrecioEstandar, Apartamento::setPrecioEstandar);
 		
 		rightFields.addComponents(descripcionField, precioStdField);
 		rightFields.setComponentAlignment(descripcionField, Alignment.TOP_LEFT);
@@ -138,29 +135,38 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		
 		Button registrarAptoButton = new Button("Registrar apartamento");
 		registrarAptoButton.addClickListener(e -> {
-			Apartamento apartamento = new Apartamento();
-			
+			Apartamento apartamento = new Apartamento();			
 			apartamento.setPropietario(currentUser);
-			apartamento.setContacto(contactoField.getValue());
-			apartamento.setUbicacion(ubicacionField.getValue());
-			apartamento.setNumCamas(numCamasField.getValue());
-			apartamento.setNumDormitorios(numDormitoriosField.getValue());
-			apartamento.setAireAcondicionado(aireAcondCB.getValue());
-			apartamento.setDescripcion(descripcionField.getValue());
 			
-			try {
+			if (!precioStdField.isEmpty()) {
+				precioVacio = false;
 				
-				apartamento.setPrecioEstandar(Double.parseDouble(precioStdField.getValue()));
-				addComponent(new Label());
-				binder.writeBean(apartamento);				
-				aptoService.guardar(apartamento);
-
-				// Enlace a "Mis apartamentos" con notificación de registro completada
-				
-			} catch(ValidationException ex) {
-				Notification.show("No se ha podido completar el registro");
-			} catch (NumberFormatException nex) {
-				Notification.show("El precio debe contener solo números y los decimales deben estar separados con un punto (.)");
+				String precioStd = precioStdField.getValue();
+				Pattern patt = Pattern.compile(precioStdRgx);
+				Matcher mat = patt.matcher(precioStd);
+				if(mat.matches()) {
+					precioValido = true;
+				}
+			}
+			
+			if(precioVacio) {
+				Notification.show("Debes establecer un precio estandar");
+			} else if(!precioValido) {
+				Notification.show("El precio debe contener solo números, no empezar por 0 y los decimales deben estar separados con un punto (.)");
+			} else {
+			
+				try {
+					apartamento.setPrecioEstandar(Double.parseDouble(precioStdField.getValue()));
+					binder.writeBean(apartamento);	
+					aptoService.guardar(apartamento);
+	
+					// Enlace a "Mis apartamentos" con notificación de registro completada
+					
+				} catch(ValidationException ex) {
+					Notification.show("No se ha podido completar el registro");
+				} catch (NumberFormatException nex) {
+					Notification.show("El precio debe contener solo números y los decimales deben estar separados con un punto (.)");
+				}
 			}
 		});
 		registrarAptoButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
@@ -176,6 +182,9 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 		mainScreen.setButtons();
+		
+		precioVacio = true;
+		precioValido = false;
 	}
 	
 }
