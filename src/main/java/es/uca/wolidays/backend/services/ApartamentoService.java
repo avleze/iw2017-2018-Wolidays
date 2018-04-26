@@ -1,5 +1,6 @@
 package es.uca.wolidays.backend.services;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,14 @@ public class ApartamentoService {
 	
 	public List<Apartamento> buscarPorPrecioEstandar(Double min, Double max) {
 		return repo.findByPrecioEstandarBetween(min, max);
+	}
+	
+	public List<Apartamento> filtrarPorUbicacionyPrecioEstandar(String ubicacion, Double min, Double max) {
+		return repo.filterByUbicacionAndPrecio(ubicacion, min, max);
+	}
+	
+	public List<Apartamento> filtrarPorUbicacionyFecha(String ubicacion, Date fechaini, Date fechafin) {
+		return repo.filterByUbicacionAndFecha(ubicacion, fechaini, fechafin);
 	}
 	
 	public Apartamento guardar(Apartamento apartamento) {
