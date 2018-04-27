@@ -58,7 +58,7 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 	void init() {
 		
 		this.setMargin(false);		
-		mainLayout.setMargin(false);		
+		mainLayout.setMargin(false);	
 		
 		navbarLayout.setMargin(false);
 		navbarLayout.addStyleName("orange");
