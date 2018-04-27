@@ -44,7 +44,7 @@ pipeline {
         stage ('Despliege') {
             steps {
               
-               sh 'echo "Desplegando en el Server'
+               sh 'echo "Desplegando en el Server"'
                sh 'jps -v | grep "wolidays" | awk \'{print $1}\' | xargs kill'
 			   sh 'env SERVER.PORT=8081 java -jar ./target/wolidays-0.0.1-SNAPSHOT.jar &'
 
