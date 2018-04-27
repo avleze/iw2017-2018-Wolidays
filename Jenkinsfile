@@ -45,7 +45,7 @@ pipeline {
             steps {
               
                sh 'echo "Desplegando en el Server"'
-               sh 'ps aux | grep wolidays | awk \'{print $2}\' | xargs kill'
+               sh 'ps aux | grep wolidays | awk \'{print $2}\' | xargs kill 2> /dev/null'
 			   sh 'env SERVER.PORT=8081 nohup java -jar ./target/wolidays-0.0.1-SNAPSHOT.jar &'
 
              }
