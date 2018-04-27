@@ -46,7 +46,7 @@ pipeline {
                 sh '''
                 	echo "Desplegando en el Server"
                 	jps -v | grep "wolidays" | awk \'{print $1}\' | xargs kill || true
-					env SERVER.PORT=8081 nohup java -jar ./target/wolidays-0.0.1-SNAPSHOT.jar
+					env SERVER.PORT=8081 nohup java -jar ./target/wolidays-0.0.1-SNAPSHOT.jar &
                 '''
             }
         }
