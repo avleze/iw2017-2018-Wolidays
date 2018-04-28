@@ -16,6 +16,6 @@ public interface ApartamentoRepository extends CrudRepository<Apartamento, Integ
 	List<Apartamento> findByPrecioEstandarBetween(Double min, Double max);
 	@Query("SELECT apt FROM Apartamento apt WHERE apt.ubicacion = ?1 AND apt.precioEstandar BETWEEN ?2 AND ?3")
 	List<Apartamento> filterByUbicacionAndPrecio(String ubicacion, Double min, Double max);
-	@Query("SELECT apt FROM Apartamento apt, Reserva res WHERE apt.id = res.apartamento AND apt.ubicacion = ?1 AND res.fechaInicio < ?2 AND res.fechaFin > ?3")
+	@Query("SELECT apt FROM Apartamento apt, Reserva res WHERE (apt.id = res.apartamento AND apt.ubicacion = ?1 AND res.fechaInicio < ?2 AND res.fechaFin > ?3) OR apt.id NOT IN (SELECT res.apartamento FROM Reserva res)")
 	List<Apartamento> filterByUbicacionAndFecha(String ubicacion, Date fechainicio, Date fechafin);
 }
