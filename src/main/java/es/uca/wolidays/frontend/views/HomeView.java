@@ -33,9 +33,7 @@ import es.uca.wolidays.frontend.MainScreen;
 @Theme("navbar")
 @SpringView(name = HomeView.VIEW_NAME)
 public class HomeView extends VerticalLayout implements View {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -3089381541889114455L;
 	public static final String VIEW_NAME = "";
 	
@@ -56,6 +54,7 @@ public class HomeView extends VerticalLayout implements View {
 		TextField searchField = new TextField();
 		searchField.setPlaceholder("Introduce una ciudad ...");
 		searchField.setWidth("730px");
+		searchField.focus();
 		
 		Button searchButton = new Button("Buscar");
 		searchButton.setWidth("80px");

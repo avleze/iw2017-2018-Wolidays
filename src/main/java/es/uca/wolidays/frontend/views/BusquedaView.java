@@ -17,7 +17,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Slider;
 import com.vaadin.ui.VerticalLayout;
@@ -30,9 +29,7 @@ import es.uca.wolidays.frontend.MainScreen;
 @Theme("navbar")
 @SpringView(name = BusquedaView.VIEW_NAME)
 public class BusquedaView extends VerticalLayout implements View {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -3089381541889114455L;
 	public static final String VIEW_NAME = "buscar";
 	
@@ -73,7 +70,6 @@ public class BusquedaView extends VerticalLayout implements View {
 		filtrosLayout = new VerticalLayout();
 		filtrosLayout.setWidth("100%");
 		filtrosLayout.setHeight("-1");
-		//filtrosLayout.addStyleName("filtros_bar");
 		
 		buttonsLayout = new HorizontalLayout();
 		
@@ -120,7 +116,6 @@ public class BusquedaView extends VerticalLayout implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 		mainScreen.setButtons();
-		//String ubicacionBuscada = "";
 		
 		try {
 			ubicacionBuscada = URLDecoder.decode(event.getParameters().split("/")[0], "UTF-8");
@@ -202,12 +197,13 @@ public class BusquedaView extends VerticalLayout implements View {
 				VerticalLayout aptoInfo = new VerticalLayout();
 				aptoInfo.setSpacing(false);
 				
-				//Label ubicacion = new Label(apto.getUbicacion());
 				Button ubicacion = new Button(apto.getUbicacion());
 				ubicacion.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "large_text");
+				ubicacion.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 				
 				Button precioStd = new Button("Desde " + String.valueOf(apto.getPrecioEstandar()) + "€ la noche");
 				precioStd.setStyleName(ValoTheme.BUTTON_BORDERLESS);
+				precioStd.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 				
 				Button numCamas;
 				
@@ -217,6 +213,7 @@ public class BusquedaView extends VerticalLayout implements View {
 					numCamas = new Button(String.valueOf(apto.getNumCamas()) + " camas");
 				}				
 				numCamas.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
+				numCamas.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 				
 				aptoInfo.addComponents(ubicacion, precioStd, numCamas);			
 				
@@ -231,9 +228,7 @@ public class BusquedaView extends VerticalLayout implements View {
 			
 			resultadosLayout.addComponents(leftAptos, rightAptos);
 		}
-	}
-	
-	
+	}	
 }
 
 

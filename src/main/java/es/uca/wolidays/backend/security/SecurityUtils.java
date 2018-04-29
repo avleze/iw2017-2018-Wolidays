@@ -7,6 +7,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import es.uca.wolidays.backend.entities.Usuario;
+
 public final class SecurityUtils {
 
     private SecurityUtils() {
@@ -36,6 +38,13 @@ public final class SecurityUtils {
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	
     	return authentication.getName();
+    }
+    
+    public static int getUserId() {
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	Usuario user = (Usuario)authentication.getPrincipal();
+    	
+    	return user.getId();
     }
 
 }
