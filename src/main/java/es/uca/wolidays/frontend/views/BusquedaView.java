@@ -21,6 +21,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Slider;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.services.ApartamentoService;
@@ -199,21 +200,23 @@ public class BusquedaView extends VerticalLayout implements View {
 			
 			for(Apartamento apto : aptos) {
 				VerticalLayout aptoInfo = new VerticalLayout();
+				aptoInfo.setSpacing(false);
 				
-				Label ubicacion = new Label(apto.getUbicacion());
-				ubicacion.setStyleName("large_text");
+				//Label ubicacion = new Label(apto.getUbicacion());
+				Button ubicacion = new Button(apto.getUbicacion());
+				ubicacion.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "large_text");
 				
-				Label precioStd = new Label("Desde " + String.valueOf(apto.getPrecioEstandar()) + "€ la noche");
+				Button precioStd = new Button("Desde " + String.valueOf(apto.getPrecioEstandar()) + "€ la noche");
+				precioStd.setStyleName(ValoTheme.BUTTON_BORDERLESS);
 				
-				Label numCamas;
+				Button numCamas;
 				
 				if(apto.getNumCamas() == 1) {
-					numCamas = new Label("1 cama");
+					numCamas = new Button("1 cama");
 				} else {
-					numCamas = new Label(String.valueOf(apto.getNumCamas()) + " camas");
-				}
-				
-				numCamas.setStyleName("small_text");
+					numCamas = new Button(String.valueOf(apto.getNumCamas()) + " camas");
+				}				
+				numCamas.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
 				
 				aptoInfo.addComponents(ubicacion, precioStd, numCamas);			
 				
