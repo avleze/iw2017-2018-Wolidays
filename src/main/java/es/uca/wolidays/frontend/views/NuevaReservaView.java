@@ -1,6 +1,8 @@
 package es.uca.wolidays.frontend.views;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -25,6 +27,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Oferta;
 import es.uca.wolidays.backend.entities.Reserva;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
@@ -149,7 +152,7 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		realizarReservaButton.addClickListener(nuevaRes -> {
 			Reserva reserva = new Reserva();
 			
-			Double precioFinal = 150.0;
+			Double precioFinal = calcularPrecioFinal(apartamento, fechaInicioField.getValue(), fechaFinField.getValue());
 			
 			reserva.setUsuario(usuario);
 			reserva.setApartamento(apartamento);
@@ -185,9 +188,19 @@ public class NuevaReservaView extends VerticalLayout implements View {
 	 * y todas las posibles ofertas que puede tener definidas.
 	 * @return Precio final de una reserva
 	 */
-	private Double calcularPrecioFinal() {
-		Double precioFinal = 150.0;
+	private Double calcularPrecioFinal(Apartamento apto, LocalDate inicioReserva, LocalDate finReserva) {
+		Double precioFinal;
 		
+		List<Oferta> ofertas = apto.getOfertas();
+		long numNoches = ChronoUnit.DAYS.between(inicioReserva, finReserva);
+		
+		if(ofertas.isEmpty()) {			
+			precioFinal = apto.getPrecioEstandar() * numNoches;
+			
+		} else {
+
+			precioFinal = 150.0;
+		}
 		
 		return precioFinal;
 	}
