@@ -1,6 +1,6 @@
 package es.uca.wolidays.backend.services;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +16,7 @@ public class OfertaService {
 	@Autowired
 	private OfertaRepository repo;
 	
-	public List<Oferta> buscarPorFechaInicioFechaFin(Date fechaInicio, Date fechaFin) {
+	public List<Oferta> buscarPorFechaInicioFechaFin(LocalDate fechaInicio, LocalDate fechaFin) {
 		return repo.findByFechaInicioFechaFin(fechaInicio, fechaFin);
 	}
 	
