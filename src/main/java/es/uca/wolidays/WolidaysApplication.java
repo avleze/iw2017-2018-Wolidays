@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import es.uca.wolidays.backend.security.VaadinSessionSecurityContextHolderStrategy;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-@ComponentScan
+@ComponentScan(basePackages="es.uca.*")
 public class WolidaysApplication {
 
 	public static void main(String[] args) {
