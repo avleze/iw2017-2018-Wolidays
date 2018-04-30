@@ -11,27 +11,27 @@ public class ReservaService {
 	@Autowired
 	ReservaRepository repo;
 	
-	void eliminar(Reserva reserva) {
+	public void eliminar(Reserva reserva) {
 		repo.delete(reserva);
 	}
 	
-	void eliminarTodos(Iterable<Reserva> reservas){
+	public void eliminarTodos(Iterable<Reserva> reservas){
 		repo.deleteAll(reservas);
 	}
 	
-	void eliminarPorId(Integer pk){
+	public void eliminarPorId(Integer pk){
 		repo.deleteById(pk);
 	}
 	
-	Iterable<Reserva> reservas() {
+	public Iterable<Reserva> reservas() {
 		return repo.findAll();
 	}
 	
-	Iterable<Reserva> reservasPorId(Iterable<Integer> pks) {
+	public Iterable<Reserva> reservasPorId(Iterable<Integer> pks) {
 		return repo.findAllById(pks);
 	}
 	
-	Reserva guardar(Reserva reserva) {
+	public Reserva guardar(Reserva reserva) {
 		return repo.save(reserva);
 	}
 }
