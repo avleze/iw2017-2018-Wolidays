@@ -1,6 +1,6 @@
 package es.uca.wolidays.backend.services;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +36,7 @@ public class ApartamentoService {
 		return repo.filterByUbicacionAndPrecio(ubicacion, min, max);
 	}
 	
-	public List<Apartamento> filtrarPorUbicacionyFecha(String ubicacion, Date fechaini, Date fechafin) {
+	public List<Apartamento> filtrarPorUbicacionyFecha(String ubicacion, LocalDate fechaini, LocalDate fechafin) {
 		return repo.filterByUbicacionAndFecha(ubicacion, fechaini, fechafin);
 	}
 	
