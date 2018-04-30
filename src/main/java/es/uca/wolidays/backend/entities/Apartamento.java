@@ -12,9 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @Entity
 public class Apartamento {
 
