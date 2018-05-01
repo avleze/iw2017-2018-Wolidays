@@ -61,6 +61,12 @@ public class Usuario implements UserDetails {
 	public void setApartamentos(List<Apartamento> apartamentos) {
 		this.apartamentos = apartamentos;
 	}
+	public List<Reserva> getReservas() {
+		return reservas;
+	}
+	public void setReservas(List<Reserva> reservas) {
+		this.reservas = reservas;
+	}
 	public Integer getId() {
 		return id;
 	}

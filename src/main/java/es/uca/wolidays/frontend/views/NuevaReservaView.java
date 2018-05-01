@@ -61,11 +61,12 @@ public class NuevaReservaView extends VerticalLayout implements View {
 	private HorizontalLayout formLayout;
 	private VerticalLayout infoLayout;
 	private VerticalLayout fechaLayout;
+	private Label precioFinalLabel;
 	
-	private int userId;
 	private Usuario usuario;
 	private int aptoId;
 	private Apartamento apartamento;
+	private Double precioFinal;
 	
 	private Binder<Reserva> binder = new Binder<>();
 	private String contactoRgx = "(?:[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+"
@@ -88,6 +89,8 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		formLayout.setWidth("100%");
 		infoLayout = new VerticalLayout();
 		fechaLayout = new VerticalLayout();
+		precioFinalLabel = new Label("Precio final: ");
+		precioFinalLabel.setStyleName("final_price");
 		
 		nuevaReservaLayout.addComponent(title);
 		nuevaReservaLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
@@ -98,7 +101,6 @@ public class NuevaReservaView extends VerticalLayout implements View {
 	public void enter(ViewChangeEvent event) {
 		mainScreen.setButtons();
 		
-		userId = Integer.parseInt(event.getParameters().split("/")[0]);
 		aptoId = Integer.parseInt(event.getParameters().split("/")[1]);
 		usuario = (Usuario)userService.loadUserByUsername(SecurityUtils.getUsername());
 		apartamento = aptoService.buscarPorId(aptoId).get();
@@ -147,13 +149,15 @@ public class NuevaReservaView extends VerticalLayout implements View {
 				fechaFinBindingBuilder.bind(Reserva::getFechaFin, Reserva::setFechaFin);
 		
 		fechaFinField.addValueChangeListener(compDates -> returnBinder.validate());
+		fechaFinField.addValueChangeListener(precio -> {
+			precioFinal = calcularPrecioFinal(apartamento, fechaInicioField.getValue(), fechaFinField.getValue());
+			precioFinalLabel.setValue("Precio final: " + precioFinal + "€");
+		});
 		
 		Button realizarReservaButton = new Button("Realizar reserva");
 		realizarReservaButton.addClickListener(nuevaRes -> {
-			Reserva reserva = new Reserva();
-			
-			Double precioFinal = calcularPrecioFinal(apartamento, fechaInicioField.getValue(), fechaFinField.getValue());
-			
+			Reserva reserva = new Reserva();			
+
 			reserva.setUsuario(usuario);
 			reserva.setApartamento(apartamento);
 			reserva.setPrecioFinal(precioFinal);
@@ -161,6 +165,8 @@ public class NuevaReservaView extends VerticalLayout implements View {
 			try {
 				binder.writeBean(reserva);
 				reservaService.guardar(reserva);
+				MisReservasView.setSuccessfulReservationNotification();
+				getUI().getNavigator().navigateTo("mis_reservas");
 			} catch (ValidationException vEx) {
 				Notification.show("No se ha podido completar el registro");
 			}
@@ -175,8 +181,9 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		formLayout.setComponentAlignment(infoLayout, Alignment.TOP_LEFT);
 		formLayout.setComponentAlignment(fechaLayout, Alignment.TOP_RIGHT);
 		
-		nuevaReservaLayout.addComponents(formLayout, realizarReservaButton);
+		nuevaReservaLayout.addComponents(formLayout, precioFinalLabel, realizarReservaButton);
 		nuevaReservaLayout.setComponentAlignment(formLayout, Alignment.TOP_CENTER);
+		nuevaReservaLayout.setComponentAlignment(precioFinalLabel, Alignment.TOP_CENTER);
 		nuevaReservaLayout.setComponentAlignment(realizarReservaButton, Alignment.TOP_CENTER);
 		
 		addComponent(nuevaReservaLayout);
@@ -186,23 +193,50 @@ public class NuevaReservaView extends VerticalLayout implements View {
 	 * Método que calcula el precio final de una reserva,
 	 * teniendo en cuenta el precio estándar del apartamento,
 	 * y todas las posibles ofertas que puede tener definidas.
+	 * @param apto Apartamento que se está reservando
+	 * @param inicioReserva Fecha de inicio de la reserva que se está haciendo
+	 * @param finReserva Fecha de fin de la reserva que se está haciendo
 	 * @return Precio final de una reserva
 	 */
 	private Double calcularPrecioFinal(Apartamento apto, LocalDate inicioReserva, LocalDate finReserva) {
-		Double precioFinal;
+		Double precioFinal = 0.0;
 		
-		List<Oferta> ofertas = apto.getOfertas();
 		long numNoches = ChronoUnit.DAYS.between(inicioReserva, finReserva);
+		int i = 0;
 		
-		if(ofertas.isEmpty()) {			
-			precioFinal = apto.getPrecioEstandar() * numNoches;
-			
-		} else {
-
-			precioFinal = 150.0;
-		}
+		while(i < numNoches) {
+			precioFinal += precioAptoDia(inicioReserva.plusDays(i), apto);
+			i++;
+		}		
 		
 		return precioFinal;
+	}
+	
+	/**
+	 * Método que devuelve el precio de un apartamento en un día concreto
+	 * @param dia Día del que se quiere saber el precio
+	 * @param apto Apartamento 
+	 * @return Precio del apartamento en el día indicado
+	 */
+	private Double precioAptoDia(LocalDate dia, Apartamento apto) {
+		Double precio = 0.0;
+		List<Oferta> ofertas = apto.getOfertas();
+		Boolean diaConOferta = false;
+		
+		if(!ofertas.isEmpty()) {
+			for(Oferta oferta : ofertas) {
+				if(!dia.isBefore(oferta.getFechaInicio()) && dia.isBefore(oferta.getFechaFin())) {
+					precio = oferta.getPrecioOferta();
+					diaConOferta = true;
+				}
+			}
+		}
+		
+		if(ofertas.isEmpty() || !diaConOferta) {
+			precio = apto.getPrecioEstandar();
+		}		
+		
+		return precio;
 	}
 	
 }
