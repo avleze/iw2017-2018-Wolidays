@@ -107,7 +107,17 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 			 * Aquí se establecen los botones en el caso de que un usuario haya iniciado sesión
 			 * y sea el propietario del apartamento en cuestión.
 			 */
-		} else {
+			Button ofertasAptoButton = new Button("Ver ofertas");
+			ofertasAptoButton.addClickListener(e -> {
+				getUI().getNavigator().navigateTo(OfertasView.VIEW_NAME + "/" + id_apto);
+				}
+				
+			);
+			
+			buttonsLayout.addComponent(ofertasAptoButton);
+			buttonsLayout.setComponentAlignment(ofertasAptoButton, Alignment.BOTTOM_RIGHT);
+		}
+		else {
 			/*
 			 * El usuario no ha iniciado sesión o ha iniciado sesión y no es propietario del 
 			 * apartamento en cuestión.
