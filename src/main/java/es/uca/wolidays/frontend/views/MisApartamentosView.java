@@ -56,7 +56,7 @@ public class MisApartamentosView extends VerticalLayout implements View {
 		resultadosLayout = new HorizontalLayout();
 		resultadosLayout.setWidth("100%");
 		
-		Usuario currentUser = (Usuario)userService.loadUserByUsername(SecurityUtils.getUsername());
+		Usuario currentUser = userService.loadUserByUsernameWithApartamentos(SecurityUtils.getUsername());
 		misAptos = currentUser.getApartamentos();
 		
 		setAptosInfoColumns();

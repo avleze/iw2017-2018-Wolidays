@@ -11,16 +11,30 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
+@NamedEntityGraphs({
+	@NamedEntityGraph(name="Usuario.usuarioConApartamentos", attributeNodes =  {
+		@NamedAttributeNode(value="apartamentos")
+	}),
+	@NamedEntityGraph(name="Usuario.usuarioConReservas", attributeNodes =  {
+		@NamedAttributeNode(value="reservas")
+	}), 
+})
+@Table(indexes= {@Index(columnList = "username")})
 public class Usuario implements UserDetails {
 	/**
 	 * 

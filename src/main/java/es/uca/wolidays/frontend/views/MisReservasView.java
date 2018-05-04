@@ -71,7 +71,7 @@ public class MisReservasView extends VerticalLayout implements View {
 	public void enter(ViewChangeEvent event) {
 		mainScreen.setButtons();
 		
-		usuario = (Usuario)userService.loadUserByUsername(SecurityUtils.getUsername());
+		usuario = userService.loadUserByUsernameWithReservas(SecurityUtils.getUsername());
 		usuarioReservas = usuario.getReservas();
 		int i = 0;
 		
