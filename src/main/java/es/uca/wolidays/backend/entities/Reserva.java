@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Reserva {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private LocalDate fechaInicio;
 	private LocalDate fechaFin;

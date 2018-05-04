@@ -24,7 +24,7 @@ import javax.persistence.OneToMany;
 public class Apartamento {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@Column(length = 100)
 	private String contacto;

@@ -12,7 +12,7 @@ import javax.persistence.ManyToMany;
 @Entity
 public class Rol {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@Column(length = 50)
 	private String nombre;
