@@ -12,8 +12,8 @@ pipeline {
     
     environment {
     	groupId = readMavenPom().getGroupId()
-	artifactId = readMavenPom().getArtifactId()
-	version = readMavenPom().getVersion()
+		artifactId = readMavenPom().getArtifactId()
+		version = readMavenPom().getVersion()
     }
     
     stages {
@@ -45,8 +45,8 @@ pipeline {
             steps {
                 sh '''
                 	echo "Desplegando en el Server"
-                	jps -v | grep "wolidays" | awk \'{print $1}\' | xargs kill || true
-					BUILD_ID=dontKillMe env SERVER.PORT=8081 nohup java -jar ./target/wolidays-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
+                	jps -v | grep "${artifactId}" | awk \'{print $1}\' | xargs kill || true
+					BUILD_ID=dontKillMe env SERVER.PORT=8081 nohup java -jar -Dspring.profiles.active=prod ./target/${artifactId}-${version}.jar > /dev/null 2>&1 &
                 '''
             }
         }
