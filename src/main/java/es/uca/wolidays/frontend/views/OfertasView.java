@@ -78,7 +78,7 @@ public class OfertasView extends VerticalLayout implements View {
 		
 		id_aptoOferta = Integer.parseInt(event.getParameters().split("/")[0]);
 		
-		ofertas = aptoService.buscarPorId(id_aptoOferta).get().getOfertas();
+		ofertas = aptoService.buscarPorIdConOfertas(id_aptoOferta).get().getOfertas();
 		
 		if(ofertas.isEmpty()) {
 			
