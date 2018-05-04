@@ -25,19 +25,16 @@ pipeline {
                 '''
             }
         }
+		stage ('Pruebas') {
+			steps {
+			    sh 'mvn clean verify'
+			}
 
-        stage ('Compilacion') {
+		}
+		
+        stage ('Compilacion y Entrega') {
             steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true install -e' 
-            }
-        }
-
-        stage ('Entrega') {
-            steps {
-		sh '''
-                        echo "Dejando JAR"
-                        mvn clean package
-                '''
+                sh 'mvn package -DskipTests=true' 
             }
         }
 
