@@ -1,5 +1,6 @@
 package es.uca.wolidays.backend.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,7 +36,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 	}), 
 })
 @Table(indexes= {@Index(columnList = "username")})
-public class Usuario implements UserDetails {
+public class Usuario implements UserDetails, Serializable {
 	/**
 	 * 
 	 */

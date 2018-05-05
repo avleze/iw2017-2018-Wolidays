@@ -1,5 +1,6 @@
 package es.uca.wolidays.backend.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -10,7 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Oferta {
+public class Oferta implements Serializable{
+	
+	private static final long serialVersionUID = 3084327633186126314L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
