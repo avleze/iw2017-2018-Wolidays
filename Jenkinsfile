@@ -32,6 +32,16 @@ pipeline {
 
 		}
 		
+		stage ('SonarQube'){
+			steps {
+			    sh '''
+			    	mvn sonar:sonar   -Dsonar.host.url=http://ec2-18-236-104-144.us-west-2.compute.amazonaws.com:9000   -Dsonar.login=f9ba1e0dc37356fb91c5fa9486083dea337d95b5
+			    '''
+		
+			}
+
+		}
+		
         stage ('Compilacion y Entrega') {
             steps {
                 sh 'mvn package -DskipTests=true' 
