@@ -37,10 +37,10 @@ public class OfertasView extends VerticalLayout implements View {
 	MainScreen mainScreen;
 	
 	@Autowired
-	OfertaService oftaService;
+	private transient OfertaService oftaService;
 	
 	@Autowired
-	ApartamentoService aptoService;
+	private transient ApartamentoService aptoService;
 	
 	private VerticalLayout ofertasLayout;
 	private Label title;
