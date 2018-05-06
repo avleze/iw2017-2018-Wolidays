@@ -125,8 +125,8 @@ public class Usuario implements UserDetails, Serializable {
 		this.username = username;
 	}
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+	public Collection<GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> list = new ArrayList<>();
 		for(Rol rol : this.getRoles())
 			list.add(new SimpleGrantedAuthority(rol.getNombre()));
 		return list;
