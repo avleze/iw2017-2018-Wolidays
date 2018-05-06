@@ -42,10 +42,10 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 	public static final String VIEW_NAME = "nuevo_apartamento";
 	
 	@Autowired
-	UsuarioService userService;
+	transient UsuarioService userService;
 	
 	@Autowired
-	ApartamentoService aptoService;
+	transient ApartamentoService aptoService;
 	
 	@Autowired
 	MainScreen mainScreen;

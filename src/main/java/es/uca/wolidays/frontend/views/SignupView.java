@@ -39,10 +39,10 @@ public class SignupView extends VerticalLayout implements View {
 	public static final String VIEW_NAME = "signup";
 	
 	@Autowired
-	private UsuarioService service;
+	transient private UsuarioService service;
 	
 	@Autowired
-	private RolService rolService;
+	transient private RolService rolService;
 	
 	@Autowired
 	MainScreen mainScreen;

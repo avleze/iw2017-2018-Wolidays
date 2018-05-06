@@ -35,7 +35,7 @@ public class MisApartamentosView extends VerticalLayout implements View {
 	MainScreen mainScreen;
 	
 	@Autowired
-	UsuarioService userService;
+	transient UsuarioService userService;
 	
 	private VerticalLayout misapartamentosLayout;
 	private HorizontalLayout resultadosLayout;

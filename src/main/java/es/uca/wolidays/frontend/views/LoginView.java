@@ -37,7 +37,7 @@ public class LoginView extends VerticalLayout implements View {
 	public static final String VIEW_NAME = "login";
 	
 	@Autowired
-	AuthenticationManager authenticationManager;
+	transient AuthenticationManager authenticationManager;
 	
 	@Autowired
 	MainScreen mainScreen;

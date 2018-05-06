@@ -37,7 +37,7 @@ public class BusquedaView extends VerticalLayout implements View {
 	MainScreen mainScreen;
 	
 	@Autowired
-	ApartamentoService aptoService;
+	transient ApartamentoService aptoService;
 	
 	private String ubicacionBuscada = "";
 	
