@@ -1,7 +1,6 @@
 package es.uca.wolidays.backend.repositories;
 
 
-import org.junit.Ignore;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.Query;
@@ -9,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import es.uca.wolidays.backend.entities.Usuario;
 
-@Ignore
+
 public interface UsuarioRepository extends CrudRepository<Usuario, Integer>{
 	Usuario findByUsername(String username);
 	Usuario findByCorreo(String correo);

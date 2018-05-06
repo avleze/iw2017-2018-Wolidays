@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Ignore;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +11,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import es.uca.wolidays.backend.entities.Apartamento;
 
-@Ignore
+
 public interface ApartamentoRepository extends CrudRepository<Apartamento, Integer>{
 	
 	List<Apartamento> findByUbicacion(String ubicacion);
