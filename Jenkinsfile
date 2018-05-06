@@ -35,8 +35,9 @@ pipeline {
 		stage ('SonarQube'){
 			steps {
 			    sh '''
-			    	mvn sonar:sonar   -Dsonar.host.url=http://ec2-18-236-104-144.us-west-2.compute.amazonaws.com:9000   -Dsonar.login=f9ba1e0dc37356fb91c5fa9486083dea337d95b5
-			    '''
+					mvn sonar:sonar \
+					  -Dsonar.host.url=http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000 \
+					  -Dsonar.login=4a222dde51e575f4e0b5dd4411fc0db5972bf792'''
 		
 			}
 

@@ -1,5 +1,6 @@
 package es.uca.wolidays.backend.entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -21,8 +22,10 @@ import javax.persistence.OneToMany;
 	@NamedEntityGraph(name="Apartamento.apartamentoConOfertas", attributeNodes=@NamedAttributeNode("ofertas")),
 	@NamedEntityGraph(name="Apartamento.apartamentoConReservas", attributeNodes=@NamedAttributeNode("reservas"))
 })
-public class Apartamento {
+public class Apartamento implements Serializable {
 
+	private static final long serialVersionUID = -1392912192298652747L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
