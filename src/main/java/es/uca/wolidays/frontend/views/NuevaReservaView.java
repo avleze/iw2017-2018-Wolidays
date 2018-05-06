@@ -44,13 +44,13 @@ public class NuevaReservaView extends VerticalLayout implements View {
 	public static final String VIEW_NAME = "nueva_reserva";
 	
 	@Autowired
-	transient UsuarioService userService;
+	private transient UsuarioService userService;
 	
 	@Autowired
-	transient ApartamentoService aptoService;
+	private transient ApartamentoService aptoService;
 	
 	@Autowired
-	transient ReservaService reservaService;
+	private transient ReservaService reservaService;
 	
 	@Autowired
 	MainScreen mainScreen;

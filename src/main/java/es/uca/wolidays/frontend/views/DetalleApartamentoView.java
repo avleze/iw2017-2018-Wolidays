@@ -31,7 +31,7 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 	MainScreen mainScreen;
 	
 	@Autowired
-	transient ApartamentoService aptoService;
+	private transient ApartamentoService aptoService;
 	
 	private VerticalLayout detalleLayout;
 	

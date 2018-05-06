@@ -40,7 +40,7 @@ public class MisReservasView extends VerticalLayout implements View {
 	MainScreen mainScreen;
 	
 	@Autowired
-	transient UsuarioService userService;
+	private transient UsuarioService userService;
 	
 	private VerticalLayout misReservasLayout;
 	private Label title;
