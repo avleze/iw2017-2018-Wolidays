@@ -38,6 +38,7 @@ import es.uca.wolidays.frontend.MainScreen;
 @SpringView(name = NuevoApartamentoView.VIEW_NAME)
 public class NuevoApartamentoView extends VerticalLayout implements View {
 	
+	private static final String CAMPO_OBLIGATORIO = "Campo obligatorio";
 	private static final long serialVersionUID = -3089381541889114455L;
 	public static final String VIEW_NAME = "nuevo_apartamento";
 	
@@ -76,14 +77,14 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		TextField contactoField = new TextField("Contacto");
 		binder.forField(contactoField)
 			.withValidator(new RegexpValidator("El contacto debe ser un email o un número de teléfono", contactoRgx, true))
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Apartamento::getContacto, Apartamento::setContacto);
 		
 		
 		TextField ubicacionField = new TextField("Ubicación");
 		binder.forField(ubicacionField)
 			.withValidator(new RegexpValidator("La ubicación debe ser válida", ubicacionRgx, true))
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Apartamento::getUbicacion, Apartamento::setUbicacion);
 		
 		
@@ -94,7 +95,7 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
         numCamasField.setSelectedItem(data.get(0));
 		numCamasField.setWidth("50px");
 		binder.forField(numCamasField)
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Apartamento::getNumCamas, Apartamento::setNumCamas);
 		
 		NativeSelect<Integer> numDormitoriosField = new NativeSelect<>("Número de dormitorios", data);
@@ -102,7 +103,7 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
         numDormitoriosField.setSelectedItem(data.get(0));
 		numDormitoriosField.setWidth("50px");
 		binder.forField(numDormitoriosField)
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Apartamento::getNumDormitorios, Apartamento::setNumDormitorios);
 		
 		CheckBox aireAcondCB = new CheckBox("Aire acondicionado", false);

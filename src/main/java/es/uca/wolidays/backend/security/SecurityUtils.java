@@ -24,11 +24,12 @@ public final class SecurityUtils {
         return authentication != null && authentication.getAuthorities().contains(new SimpleGrantedAuthority(role));
     }
     
-    public static Collection<? extends GrantedAuthority> roles() {
+    @SuppressWarnings("unchecked")
+	public static Collection<GrantedAuthority> roles() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
         if(authentication != null ){
-        	return authentication.getAuthorities();
+        	return (Collection<GrantedAuthority>) authentication.getAuthorities();
         } else{
         	return null;
         }
