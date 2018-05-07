@@ -64,7 +64,7 @@ public class SignupView extends VerticalLayout implements View {
 			.bind(Usuario::getNombre, Usuario::setNombre);
 		
 		TextField apellidos = new TextField("Apellidos");
-		apellidos.setId("form_apellidos")
+		apellidos.setId("form_apellidos");
 		binder.forField(apellidos)
 			.withValidator(new RegexpValidator("El apellido solo puede contener letras", nameRgx, true))
 			.asRequired(CAMPO_OBLIGATORIO)
@@ -78,7 +78,7 @@ public class SignupView extends VerticalLayout implements View {
 			.bind(Usuario::getCorreo, Usuario::setCorreo);		
 		
 		TextField username = new TextField("Username");
-		username.setId("form_username"));
+		username.setId("form_username");
 		binder.forField(username)
 			.withValidator(new RegexpValidator("El nombre de usuario sólo admite letras, "
 					+ "números, guiones (-) y guiones bajos (_).", usrnameRgx, true))
