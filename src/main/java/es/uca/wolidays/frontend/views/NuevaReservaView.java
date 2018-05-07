@@ -40,6 +40,7 @@ import es.uca.wolidays.frontend.MainScreen;
 @SpringView(name = NuevaReservaView.VIEW_NAME)
 public class NuevaReservaView extends VerticalLayout implements View {
 	
+	private static final String CAMPO_OBLIGATORIO = "Campo obligatorio";
 	private static final long serialVersionUID = -3089381541889114455L;
 	public static final String VIEW_NAME = "nueva_reserva";
 	
@@ -108,7 +109,7 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		TextField contactoField = new TextField("Contacto");
 		binder.forField(contactoField)
 			.withValidator(new RegexpValidator("El contacto debe ser un email o un número de teléfono", contactoRgx, true))
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Reserva::getContacto, Reserva::setContacto);
 		
 		TextArea comentarioField = new TextArea("Comentario");
@@ -119,7 +120,7 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		TextField tarjetaCredField = new TextField("Tarjeta de crédito");
 		binder.forField(tarjetaCredField)
 			.withValidator(new RegexpValidator("La tarjeta de crédito debe tener 16 dígitos.", tarjetaRgx, true))
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Reserva::getTarjeta, Reserva::setTarjeta);
 		
 		infoLayout.addComponents(contactoField, comentarioField, tarjetaCredField);
@@ -130,7 +131,7 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		DateField fechaInicioField = new DateField("Fecha de inicio");
 		fechaInicioField.setValue(LocalDate.now());
 		binder.forField(fechaInicioField)
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Reserva::getFechaInicio, Reserva::setFechaInicio);
 		
 		DateField fechaFinField = new DateField("Fecha fin");
@@ -143,7 +144,7 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		Binder.BindingBuilder<Reserva, LocalDate> fechaFinBindingBuilder = 
 				binder.forField(fechaFinField)
 					.withValidator(fechaFin -> !fechaFin.isBefore(fechaInicioField.getValue()), "No puedes irte antes de llegar")
-					.asRequired("Campo obligatorio");
+					.asRequired(CAMPO_OBLIGATORIO);
 		
 		Binder.Binding<Reserva, LocalDate> returnBinder = 
 				fechaFinBindingBuilder.bind(Reserva::getFechaFin, Reserva::setFechaFin);

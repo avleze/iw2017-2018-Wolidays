@@ -30,6 +30,7 @@ import es.uca.wolidays.frontend.MainScreen;
 @SpringView(name = OfertasView.VIEW_NAME)
 public class OfertasView extends VerticalLayout implements View {
 	
+	private static final String LARGE_TEXT = "large_text";
 	private static final long serialVersionUID = -3089381541889114455L;
 	public static final String VIEW_NAME = "ofertas";
 	
@@ -119,13 +120,13 @@ public class OfertasView extends VerticalLayout implements View {
 					oftaInfo.setSpacing(false);
 					
 					Button fechaInicio = new Button(ofta.getFechaInicio().format(formatter));
-					fechaInicio.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "large_text");
+					fechaInicio.addStyleNames(ValoTheme.BUTTON_BORDERLESS, LARGE_TEXT);
 					
 					Button fechaFin = new Button(ofta.getFechaInicio().format(formatter));
-					fechaFin.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "large_text");
+					fechaFin.addStyleNames(ValoTheme.BUTTON_BORDERLESS, LARGE_TEXT);
 					
 					Button precio = new Button(String.valueOf(ofta.getPrecioOferta()));
-					precio.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "large_text");
+					precio.addStyleNames(ValoTheme.BUTTON_BORDERLESS, LARGE_TEXT);
 					
 					oftaInfo.addComponents(fechaInicio, fechaFin, precio);			
 					
