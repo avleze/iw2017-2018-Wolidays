@@ -32,7 +32,7 @@ public final class SecurityUtils {
         if(authentication != null ){
         	return (Collection<GrantedAuthority>) authentication.getAuthorities();
         } else{
-        	return new ArrayList<GrantedAuthority>();
+        	return new ArrayList<>();
         }
     }
     
