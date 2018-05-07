@@ -57,24 +57,28 @@ public class SignupView extends VerticalLayout implements View {
 		final VerticalLayout registroLayout = new VerticalLayout();
 		
 		TextField nombre = new TextField("Nombre");
+		nombre.setId("form_nombre");
 		binder.forField(nombre)
 			.withValidator(new RegexpValidator("El nombre solo puede contener letras", nameRgx, true))
 			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Usuario::getNombre, Usuario::setNombre);
 		
 		TextField apellidos = new TextField("Apellidos");
+		apellidos.setId("form_apellidos")
 		binder.forField(apellidos)
 			.withValidator(new RegexpValidator("El apellido solo puede contener letras", nameRgx, true))
 			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Usuario::getApellidos, Usuario::setApellidos);
 		
 		TextField correo = new TextField("Correo");
+		correo.setId("form_correo");
 		binder.forField(correo)
 			.withValidator(new EmailValidator("Dirección de correo no válida."))
 			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Usuario::getCorreo, Usuario::setCorreo);		
 		
 		TextField username = new TextField("Username");
+		username.setId("form_username"));
 		binder.forField(username)
 			.withValidator(new RegexpValidator("El nombre de usuario sólo admite letras, "
 					+ "números, guiones (-) y guiones bajos (_).", usrnameRgx, true))
@@ -82,16 +86,18 @@ public class SignupView extends VerticalLayout implements View {
 			.bind(Usuario::getUsername, Usuario::setUsername);
 		
 		PasswordField password = new PasswordField("Contraseña");
+		password.setId("form_password");
 		binder.forField(password)
 			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Usuario::getPassword, Usuario::setPassword);
 		
 		PasswordField confirmPassword = new PasswordField("Confirma la contraseña");
+		confirmPassword.setId("form_confirmpassword");
 		binder.forField(confirmPassword)
 			.asRequired(CAMPO_OBLIGATORIO);
 		
 		Button registro = new Button("Regístrate");
-		
+		registro.setId("form_btn_registrate");
 		registroLayout.addComponents(nombre, apellidos, correo, username, password, confirmPassword, registro);
 		registroLayout.setComponentAlignment(nombre, Alignment.TOP_CENTER);
 		registroLayout.setComponentAlignment(apellidos, Alignment.TOP_CENTER);
