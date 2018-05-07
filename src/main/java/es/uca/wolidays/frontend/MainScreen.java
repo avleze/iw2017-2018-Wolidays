@@ -40,12 +40,12 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 	private final HorizontalLayout navbarLayout = new HorizontalLayout();
 	private final HorizontalLayout buttons_layout = new HorizontalLayout();
 	
-	private Button inicio_sesion = createNavigationButton("Iniciar sesión", LoginView.VIEW_NAME, null);
-	private Button registrarse = createNavigationButton("Registrarse", SignupView.VIEW_NAME, null);
-	private Button misReservas = createNavigationButton("Mis reservas", MisReservasView.VIEW_NAME, VaadinIcons.TAGS);
-	private Button registrarApto = createNavigationButton("Nuevo apartamento", NuevoApartamentoView.VIEW_NAME, VaadinIcons.PLUS_CIRCLE);
-	private Button misAptos = createNavigationButton("Mis apartamentos", MisApartamentosView.VIEW_NAME, VaadinIcons.HOME);
-	private Button perfil = createNavigationButton("Perfil", "", VaadinIcons.USER);
+	private Button inicio_sesion = createNavigationButton("Iniciar sesión", "nav_btn_iniciosesion", LoginView.VIEW_NAME, null);
+	private Button registrarse = createNavigationButton("Registrarse","nav_btn_registrarse", SignupView.VIEW_NAME, null);
+	private Button misReservas = createNavigationButton("Mis reservas", "nav_btn_misreservas", MisReservasView.VIEW_NAME, VaadinIcons.TAGS);
+	private Button registrarApto = createNavigationButton("Nuevo apartamento", "nav_btn_nuevoapartamento", NuevoApartamentoView.VIEW_NAME, VaadinIcons.PLUS_CIRCLE);
+	private Button misAptos = createNavigationButton("Mis apartamentos", "nav_btn_misapartamentos", MisApartamentosView.VIEW_NAME, VaadinIcons.HOME);
+	private Button perfil = createNavigationButton("Perfil", "nav_btn_perfil", "", VaadinIcons.USER);
 	
 	
 	@Override
@@ -134,13 +134,14 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		}
 	}
 	
-	private Button createNavigationButton(String caption, final String viewName, VaadinIcons icon) {
+	private Button createNavigationButton(String caption, String id, final String viewName, VaadinIcons icon) {
 		
 		Button button = new Button(caption);
 		
 		button.setHeight("40px");
 		button.addStyleNames(ValoTheme.BUTTON_BORDERLESS);
 		button.addClickListener(event -> getUI().getNavigator().navigateTo(viewName));
+		button.setId(id);
 		
 		if(icon != null) {
 			button.setIcon(icon);
