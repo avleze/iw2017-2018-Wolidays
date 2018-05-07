@@ -37,6 +37,7 @@ public class SignupView extends VerticalLayout implements View {
 	private static final long serialVersionUID = -7191299438297310094L;
 
 	public static final String VIEW_NAME = "signup";
+	private static final String CAMPO_OBLIGATORIO = "Campo obligatorio";
 	
 	@Autowired
 	private transient UsuarioService service;
@@ -48,7 +49,7 @@ public class SignupView extends VerticalLayout implements View {
 	MainScreen mainScreen;
 	
 	private Binder<Usuario> binder = new Binder<>();
-	private String nameRgx = "[a-zA-Záéíóúü\\s]+";
+	private String nameRgx = "[a-zA-ZáéíóúÁÉÍÓÚü\\s]+";
 	private String usrnameRgx = "[a-zA-Z-_\\d]+";
 	
 	@PostConstruct
@@ -58,36 +59,36 @@ public class SignupView extends VerticalLayout implements View {
 		TextField nombre = new TextField("Nombre");
 		binder.forField(nombre)
 			.withValidator(new RegexpValidator("El nombre solo puede contener letras", nameRgx, true))
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Usuario::getNombre, Usuario::setNombre);
 		
 		TextField apellidos = new TextField("Apellidos");
 		binder.forField(apellidos)
 			.withValidator(new RegexpValidator("El apellido solo puede contener letras", nameRgx, true))
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Usuario::getApellidos, Usuario::setApellidos);
 		
 		TextField correo = new TextField("Correo");
 		binder.forField(correo)
 			.withValidator(new EmailValidator("Dirección de correo no válida."))
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Usuario::getCorreo, Usuario::setCorreo);		
 		
 		TextField username = new TextField("Username");
 		binder.forField(username)
 			.withValidator(new RegexpValidator("El nombre de usuario sólo admite letras, "
 					+ "números, guiones (-) y guiones bajos (_).", usrnameRgx, true))
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Usuario::getUsername, Usuario::setUsername);
 		
 		PasswordField password = new PasswordField("Contraseña");
 		binder.forField(password)
-			.asRequired("Campo obligatorio")
+			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Usuario::getPassword, Usuario::setPassword);
 		
 		PasswordField confirmPassword = new PasswordField("Confirma la contraseña");
 		binder.forField(confirmPassword)
-			.asRequired("Campo obligatorio");
+			.asRequired(CAMPO_OBLIGATORIO);
 		
 		Button registro = new Button("Regístrate");
 		

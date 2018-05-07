@@ -1,5 +1,7 @@
 package es.uca.wolidays.frontend.views;
 
+import java.util.Optional;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +71,12 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 		mainScreen.setButtons();
 		
 		id_apto = Integer.parseInt(event.getParameters().split("/")[0]);
-		apartamento = aptoService.buscarPorId(id_apto).get();
+		
+		Optional<Apartamento> existeApartamento = aptoService.buscarPorId(id_apto);
+		
+		if(existeApartamento.isPresent()) {
+			apartamento = existeApartamento.get();
+		}
 		
 		huesped_username = apartamento.getPropietario().getUsername();
 		

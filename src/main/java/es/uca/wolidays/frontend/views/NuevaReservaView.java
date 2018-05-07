@@ -3,6 +3,7 @@ package es.uca.wolidays.frontend.views;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -104,7 +105,12 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		
 		aptoId = Integer.parseInt(event.getParameters().split("/")[1]);
 		usuario = (Usuario)userService.loadUserByUsername(SecurityUtils.getUsername());
-		apartamento = aptoService.buscarPorId(aptoId).get();
+		
+		Optional<Apartamento> existeApartamento = aptoService.buscarPorIdConOfertas(aptoId);
+		
+		if(existeApartamento.isPresent()) {
+			apartamento = existeApartamento.get();
+		}
 		
 		TextField contactoField = new TextField("Contacto");
 		binder.forField(contactoField)
