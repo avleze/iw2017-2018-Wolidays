@@ -1,5 +1,6 @@
 package es.uca.wolidays.backend.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.security.core.Authentication;
@@ -31,7 +32,7 @@ public final class SecurityUtils {
         if(authentication != null ){
         	return (Collection<GrantedAuthority>) authentication.getAuthorities();
         } else{
-        	return null;
+        	return new ArrayList<GrantedAuthority>();
         }
     }
     
