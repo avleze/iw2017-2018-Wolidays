@@ -48,7 +48,9 @@ public class LoginView extends VerticalLayout implements View {
 	void init() {
 		
 		TextField username = new TextField("Username");
+		username.setId("form_username");
 		PasswordField password = new PasswordField("Password");
+		password.setId("form_password");
 
         loginLayout.addComponents(username, password);
         loginLayout.setComponentAlignment(username, Alignment.TOP_CENTER);
@@ -65,6 +67,7 @@ public class LoginView extends VerticalLayout implements View {
                 username.focus();
             }
         });
+        login.setId("form_btn_login");
         login.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         
         loginLayout.addComponent(login);
