@@ -2,6 +2,7 @@ package es.uca.wolidays.frontend.views;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -20,9 +21,9 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.entities.Oferta;
 import es.uca.wolidays.backend.services.ApartamentoService;
-import es.uca.wolidays.backend.services.OfertaService;
 import es.uca.wolidays.frontend.MainScreen;
 
 
@@ -36,9 +37,6 @@ public class OfertasView extends VerticalLayout implements View {
 	
 	@Autowired
 	MainScreen mainScreen;
-	
-	@Autowired
-	private transient OfertaService oftaService;
 	
 	@Autowired
 	private transient ApartamentoService aptoService;
@@ -79,7 +77,10 @@ public class OfertasView extends VerticalLayout implements View {
 		
 		id_aptoOferta = Integer.parseInt(event.getParameters().split("/")[0]);
 		
-		ofertas = aptoService.buscarPorIdConOfertas(id_aptoOferta).get().getOfertas();
+		Optional<Apartamento> existeApartamento = aptoService.buscarPorIdConOfertas(id_aptoOferta);
+		if(existeApartamento.isPresent()) {
+			ofertas = aptoService.buscarPorIdConOfertas(id_aptoOferta).get().getOfertas();
+		}
 		
 		if(ofertas.isEmpty()) {
 			
@@ -113,7 +114,7 @@ public class OfertasView extends VerticalLayout implements View {
 				Notification.show("No existen ofertas para el apartamento escogido","", Notification.Type.ERROR_MESSAGE);
 			} else {
 				int i = 0;
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/mm/yyyy");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				
 				for(Oferta ofta : oftas) {
 					VerticalLayout oftaInfo = new VerticalLayout();

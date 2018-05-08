@@ -121,8 +121,15 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 				
 			);
 			
+			Button nuevaOfertaButton = new Button("Nueva oferta");
+			nuevaOfertaButton.addClickListener(e -> {
+				getUI().getNavigator().navigateTo(NuevaOfertaView.VIEW_NAME + "/" + id_apto);
+			});
+			
 			buttonsLayout.addComponent(ofertasAptoButton);
+			buttonsLayout.addComponent(nuevaOfertaButton);
 			buttonsLayout.setComponentAlignment(ofertasAptoButton, Alignment.BOTTOM_RIGHT);
+			buttonsLayout.setComponentAlignment(nuevaOfertaButton, Alignment.BOTTOM_LEFT);
 		}
 		else {
 			/*
