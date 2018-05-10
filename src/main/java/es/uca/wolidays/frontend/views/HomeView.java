@@ -30,7 +30,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.frontend.MainScreen;
 
-@Theme("navbar")
+@Theme("wolidays")
 @SpringView(name = HomeView.VIEW_NAME)
 public class HomeView extends VerticalLayout implements View {
 

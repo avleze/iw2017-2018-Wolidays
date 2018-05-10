@@ -37,7 +37,7 @@ import es.uca.wolidays.backend.services.ReservaService;
 import es.uca.wolidays.backend.services.UsuarioService;
 import es.uca.wolidays.frontend.MainScreen;
 
-@Theme("navbar")
+@Theme("wolidays")
 @SpringView(name = NuevaReservaView.VIEW_NAME)
 public class NuevaReservaView extends VerticalLayout implements View {
 	
@@ -84,8 +84,11 @@ public class NuevaReservaView extends VerticalLayout implements View {
 	void init() {
 		nuevaReservaLayout = new VerticalLayout();
 		nuevaReservaLayout.setWidth("100%");
-		title = new Label("Nueva reserva");
-		title.addStyleName("detail_apto_title");
+		nuevaReservaLayout.setMargin(false);
+		
+		title = new Label();
+		title.setCaptionAsHtml(true);
+		title.setCaption("<h1>Nueva reserva</h1>");
 		
 		formLayout = new HorizontalLayout();
 		formLayout.setWidth("100%");

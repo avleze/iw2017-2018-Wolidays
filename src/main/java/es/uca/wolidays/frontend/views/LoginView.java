@@ -19,6 +19,7 @@ import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
@@ -29,9 +30,6 @@ import es.uca.wolidays.frontend.MainScreen;
 @SpringView(name = LoginView.VIEW_NAME)
 public class LoginView extends VerticalLayout implements View {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 9207545147516956040L;
 
 	public static final String VIEW_NAME = "login";
@@ -44,15 +42,22 @@ public class LoginView extends VerticalLayout implements View {
 	
 	private final VerticalLayout loginLayout = new VerticalLayout();
 	
+	private Label title;
+	
 	@PostConstruct
 	void init() {
+		
+		title = new Label();
+		title.setCaptionAsHtml(true);
+		title.setCaption("<h1>Iniciar sesión</h1>");
 		
 		TextField username = new TextField("Username");
 		username.setId("form_username");
 		PasswordField password = new PasswordField("Password");
 		password.setId("form_password");
 
-        loginLayout.addComponents(username, password);
+        loginLayout.addComponents(title, username, password);
+        loginLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
         loginLayout.setComponentAlignment(username, Alignment.TOP_CENTER);
         loginLayout.setComponentAlignment(password, Alignment.TOP_CENTER);
         
@@ -70,7 +75,7 @@ public class LoginView extends VerticalLayout implements View {
         login.setId("form_btn_login");
         login.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         
-        loginLayout.addComponent(login);
+        loginLayout.addComponents(login);
         loginLayout.setComponentAlignment(login, Alignment.TOP_CENTER);
         
         addComponent(loginLayout);

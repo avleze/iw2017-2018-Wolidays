@@ -30,7 +30,7 @@ import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.backend.services.OfertaService;
 import es.uca.wolidays.frontend.MainScreen;
 
-@Theme("navbar")
+@Theme("wolidays")
 @SpringView(name = NuevaOfertaView.VIEW_NAME)
 public class NuevaOfertaView extends VerticalLayout implements View {
 	
@@ -54,8 +54,6 @@ public class NuevaOfertaView extends VerticalLayout implements View {
 	private VerticalLayout infoLayout;
 	
 	private int aptoId;
-	private LocalDate fechaInicio;
-	private LocalDate fechaFin;
 	private Apartamento apartamento;
 	
 	Binder<Oferta> binder = new Binder<>();
@@ -69,8 +67,11 @@ public class NuevaOfertaView extends VerticalLayout implements View {
 		
 		nuevaOfertaLayout = new VerticalLayout();
 		nuevaOfertaLayout.setWidth("100%");
-		title = new Label("Nueva oferta");
-		title.addStyleName("detail_apto_title");
+		nuevaOfertaLayout.setMargin(false);
+		
+		title = new Label();
+		title.setCaptionAsHtml(true);
+		title.setCaption("<h1>Nueva oferta</h1>");
 		
 		formLayout = new HorizontalLayout();
 		formLayout.setWidth("100%");
@@ -90,8 +91,7 @@ public class NuevaOfertaView extends VerticalLayout implements View {
 		
 		if(existeApto.isPresent()) {
 			apartamento = existeApto.get();
-		}
-		
+		}		
 				
 		DateField fechaInicioField = new DateField("Fecha de inicio");
 		fechaInicioField.setValue(LocalDate.now());
@@ -108,7 +108,7 @@ public class NuevaOfertaView extends VerticalLayout implements View {
 		
 		Binder.BindingBuilder<Oferta, LocalDate> fechaFinBindingBuilder = 
 				binder.forField(fechaFinField)
-					.withValidator(fechaFin -> !fechaFin.isBefore(fechaInicioField.getValue()), "No puedes irte antes de llegar")
+					.withValidator(fechaFin -> !fechaFin.isBefore(fechaInicioField.getValue()), "La fecha de fin debe ser posterior a la de inicio")
 					.asRequired(CAMPO_OBLIGATORIO);
 		
 		Binder.Binding<Oferta, LocalDate> returnBinder = 
@@ -120,11 +120,8 @@ public class NuevaOfertaView extends VerticalLayout implements View {
 		
 		Button registrarOfertaButton = new Button("Registrar oferta");
 		registrarOfertaButton.addClickListener(nuevaOf -> {
-			Oferta oferta = new Oferta();			
-
+			Oferta oferta = new Oferta();
 			oferta.setApartamento(apartamento);
-			oferta.setFechaInicio(fechaInicio);
-			oferta.setFechaFin(fechaFin);
 						
 			if (!precioStdField.isEmpty()) {
 				precioVacio = false;
@@ -148,7 +145,8 @@ public class NuevaOfertaView extends VerticalLayout implements View {
 					binder.writeBean(oferta);	
 					oftaService.guardar(oferta);
 	
-					// Enlace a "Mis ofertas" con notificación de registro completada
+					OfertasView.setSuccessfulRegistroOfertaNotification();
+					getUI().getNavigator().navigateTo(OfertasView.VIEW_NAME + "/" + aptoId);
 					
 				} catch(ValidationException ex) {
 					Notification.show("No se ha podido completar el registro");
@@ -166,7 +164,8 @@ public class NuevaOfertaView extends VerticalLayout implements View {
 		
 		formLayout.addComponents(infoLayout);
 		
-		nuevaOfertaLayout.addComponents(formLayout, registrarOfertaButton);
+		nuevaOfertaLayout.addComponents(title, formLayout, registrarOfertaButton);
+		nuevaOfertaLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
 		nuevaOfertaLayout.setComponentAlignment(formLayout, Alignment.TOP_CENTER);
 		nuevaOfertaLayout.setComponentAlignment(registrarOfertaButton, Alignment.TOP_CENTER);
 		

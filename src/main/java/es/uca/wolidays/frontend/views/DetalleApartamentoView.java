@@ -22,7 +22,7 @@ import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.frontend.MainScreen;
 
-@Theme("navbar")
+@Theme("wolidays")
 @SpringView(name = DetalleApartamentoView.VIEW_NAME)
 public class DetalleApartamentoView extends VerticalLayout implements View {
 	
@@ -46,16 +46,20 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 	private Apartamento apartamento;
 	private String huesped_username;
 	private int id_apto;
-	private Label detalleTitulo;
+	private Label title;
 
 	@PostConstruct
 	void init() {
 		detalleLayout = new VerticalLayout();
 		detalleLayout.setWidth("100%");
+		detalleLayout.setMargin(false);
 		
 		infoLayout = new HorizontalLayout();
 		infoLayout.setWidth("100%");
 		aptoParamsLayout = new VerticalLayout();
+		
+		title = new Label();
+		title.setCaptionAsHtml(true);
 		
 		desc_buttons_Layout = new VerticalLayout();
 		desc_buttons_Layout.setHeight("100%");
@@ -79,9 +83,7 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 		}
 		
 		huesped_username = apartamento.getPropietario().getUsername();
-		
-		detalleTitulo = new Label("Apartamento de " + apartamento.getUbicacion());
-		detalleTitulo.setStyleName("detail_apto_title");
+		title.setCaption("<h1>Apartamento de <i>" + apartamento.getUbicacion() + "</i></h1>");
 		
 		// Parametros del apartamento
 		Label contacto = new Label("Contacto: " + apartamento.getContacto());
@@ -111,25 +113,17 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 		
 		if(SecurityUtils.isLoggedIn() && huesped_username.equals(SecurityUtils.getUsername())) {
 			/*
-			 * Aquí se establecen los botones en el caso de que un usuario haya iniciado sesión
-			 * y sea el propietario del apartamento en cuestión.
+			 * El usuario ha iniciado sesión y es el propietario del apartamento en cuestión.
 			 */
 			Button ofertasAptoButton = new Button("Ver ofertas");
 			ofertasAptoButton.addClickListener(e -> {
 				getUI().getNavigator().navigateTo(OfertasView.VIEW_NAME + "/" + id_apto);
-				}
-				
-			);
-			
-			Button nuevaOfertaButton = new Button("Nueva oferta");
-			nuevaOfertaButton.addClickListener(e -> {
-				getUI().getNavigator().navigateTo(NuevaOfertaView.VIEW_NAME + "/" + id_apto);
 			});
 			
 			buttonsLayout.addComponent(ofertasAptoButton);
-			buttonsLayout.addComponent(nuevaOfertaButton);
+			//buttonsLayout.addComponent(nuevaOfertaButton);
 			buttonsLayout.setComponentAlignment(ofertasAptoButton, Alignment.BOTTOM_RIGHT);
-			buttonsLayout.setComponentAlignment(nuevaOfertaButton, Alignment.BOTTOM_LEFT);
+			//buttonsLayout.setComponentAlignment(nuevaOfertaButton, Alignment.BOTTOM_LEFT);
 		}
 		else {
 			/*
@@ -159,8 +153,8 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 		infoLayout.setComponentAlignment(aptoParamsLayout, Alignment.TOP_LEFT);
 		infoLayout.setComponentAlignment(desc_buttons_Layout, Alignment.TOP_RIGHT);
 		
-		detalleLayout.addComponents(detalleTitulo, infoLayout);
-		detalleLayout.setComponentAlignment(detalleTitulo, Alignment.TOP_CENTER);
+		detalleLayout.addComponents(title, infoLayout);
+		detalleLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
 		detalleLayout.setComponentAlignment(infoLayout, Alignment.TOP_CENTER);
 		
 		addComponent(detalleLayout);

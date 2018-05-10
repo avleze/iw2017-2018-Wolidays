@@ -29,7 +29,7 @@ import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.UsuarioService;
 import es.uca.wolidays.frontend.MainScreen;
 
-@Theme("navbar")
+@Theme("wolidays")
 @SpringView(name = MisReservasView.VIEW_NAME)
 public class MisReservasView extends VerticalLayout implements View {
 	
@@ -56,8 +56,10 @@ public class MisReservasView extends VerticalLayout implements View {
 	void init() {
 		misReservasLayout = new VerticalLayout();
 		misReservasLayout.setWidth("100%");
-		title = new Label("Mis reservas");
-		title.addStyleName("detail_apto_title");
+		misReservasLayout.setMargin(false);
+		title = new Label();
+		title.setCaptionAsHtml(true);
+		title.setCaption("<h1>Mis reservas</h1>");
 		
 		reservaInfo = new HorizontalLayout();
 		reservaInfo.setWidth("100%");
@@ -75,39 +77,43 @@ public class MisReservasView extends VerticalLayout implements View {
 		usuarioReservas = usuario.getReservas();
 		int i = 0;
 		
-		for(Reserva rsrv : usuarioReservas) {
-			VerticalLayout reserva = new VerticalLayout();
-			reserva.setSpacing(false);
-			
-			Button fechaLlegada = new Button();
-			fechaLlegada.setCaption("Fecha llegada: " + rsrv.getFechaInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-			fechaLlegada.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-			
-			Button fechaSalida = new Button();
-			fechaSalida.setCaption("Fecha salida: " + rsrv.getFechaFin().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-			fechaSalida.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-			
-			Button ubicacion = new Button();
-			ubicacion.setCaption(rsrv.getApartamento().getUbicacion());
-			ubicacion.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-			
-			Button precioNoches = new Button();
-			precioNoches.setCaption(rsrv.getPrecioFinal() + "€ - " + ChronoUnit.DAYS.between(rsrv.getFechaInicio(), rsrv.getFechaFin()) + " noches");
-			precioNoches.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-			
-			Button estadoReserva = new Button();
-			estadoReserva.setCaption("Estado: Pendiente de confirmación");
-			estadoReserva.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-			
-			reserva.addComponents(fechaLlegada, fechaSalida, ubicacion, precioNoches, estadoReserva);
-			
-			if(i % 2 == 0) {
-				reservasLeft.addComponent(reserva);
-			} else {
-				reservasRight.addComponent(reserva);
+		if(usuarioReservas.isEmpty()) {
+			Notification.show("No has realizado ninguna reserva aún", Notification.Type.ERROR_MESSAGE);
+		} else {
+			for(Reserva rsrv : usuarioReservas) {
+				VerticalLayout reserva = new VerticalLayout();
+				reserva.setSpacing(false);
+				
+				Button fechaLlegada = new Button();
+				fechaLlegada.setCaption("Fecha llegada: " + rsrv.getFechaInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+				fechaLlegada.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+				
+				Button fechaSalida = new Button();
+				fechaSalida.setCaption("Fecha salida: " + rsrv.getFechaFin().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+				fechaSalida.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+				
+				Button ubicacion = new Button();
+				ubicacion.setCaption(rsrv.getApartamento().getUbicacion());
+				ubicacion.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+				
+				Button precioNoches = new Button();
+				precioNoches.setCaption(rsrv.getPrecioFinal() + "€ - " + ChronoUnit.DAYS.between(rsrv.getFechaInicio(), rsrv.getFechaFin()) + " noches");
+				precioNoches.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+				
+				Button estadoReserva = new Button();
+				estadoReserva.setCaption("Estado: Pendiente de confirmación");
+				estadoReserva.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+				
+				reserva.addComponents(fechaLlegada, fechaSalida, ubicacion, precioNoches, estadoReserva);
+				
+				if(i % 2 == 0) {
+					reservasLeft.addComponent(reserva);
+				} else {
+					reservasRight.addComponent(reserva);
+				}
+				
+				i++;
 			}
-			
-			i++;
 		}
 		
 		reservaInfo.addComponents(reservasLeft, reservasRight);

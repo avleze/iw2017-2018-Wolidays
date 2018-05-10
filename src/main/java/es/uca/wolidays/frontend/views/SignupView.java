@@ -17,6 +17,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
@@ -31,9 +32,6 @@ import es.uca.wolidays.frontend.MainScreen;
 @SpringView(name = SignupView.VIEW_NAME)
 public class SignupView extends VerticalLayout implements View {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7191299438297310094L;
 
 	public static final String VIEW_NAME = "signup";
@@ -48,6 +46,8 @@ public class SignupView extends VerticalLayout implements View {
 	@Autowired
 	MainScreen mainScreen;
 	
+	private Label title;
+	
 	private Binder<Usuario> binder = new Binder<>();
 	private String nameRgx = "[a-zA-ZáéíóúÁÉÍÓÚü\\s]+";
 	private String usrnameRgx = "[a-zA-Z-_\\d]+";
@@ -55,6 +55,11 @@ public class SignupView extends VerticalLayout implements View {
 	@PostConstruct
 	void init() {
 		final VerticalLayout registroLayout = new VerticalLayout();
+		registroLayout.setMargin(false);
+		
+		title = new Label();
+		title.setCaptionAsHtml(true);
+		title.setCaption("<h1>¡Regístrate en Wolidays!</h1>");
 		
 		TextField nombre = new TextField("Nombre");
 		nombre.setId("form_nombre");
@@ -98,7 +103,8 @@ public class SignupView extends VerticalLayout implements View {
 		
 		Button registro = new Button("Regístrate");
 		registro.setId("form_btn_registrate");
-		registroLayout.addComponents(nombre, apellidos, correo, username, password, confirmPassword, registro);
+		registroLayout.addComponents(title, nombre, apellidos, correo, username, password, confirmPassword, registro);
+		registroLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
 		registroLayout.setComponentAlignment(nombre, Alignment.TOP_CENTER);
 		registroLayout.setComponentAlignment(apellidos, Alignment.TOP_CENTER);
 		registroLayout.setComponentAlignment(correo, Alignment.TOP_CENTER);

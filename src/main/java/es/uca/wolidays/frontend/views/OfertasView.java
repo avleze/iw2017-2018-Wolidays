@@ -1,5 +1,6 @@
 package es.uca.wolidays.frontend.views;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -9,11 +10,13 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.annotations.Theme;
-import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -27,7 +30,7 @@ import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.frontend.MainScreen;
 
 
-@Theme("navbar")
+@Theme("wolidays")
 @SpringView(name = OfertasView.VIEW_NAME)
 public class OfertasView extends VerticalLayout implements View {
 	
@@ -43,10 +46,15 @@ public class OfertasView extends VerticalLayout implements View {
 	
 	private VerticalLayout ofertasLayout;
 	private Label title;
+	private Label help;
 	
+	private HorizontalLayout buttonsLayout;
 	private HorizontalLayout resultadosLayout;
 	private VerticalLayout ofertasLeft;
 	private VerticalLayout ofertasRight;
+	
+	private Button volverButton;
+	private Button nuevaOfertaButton;
 	
 	private List<Oferta> ofertas;
 	
@@ -57,12 +65,24 @@ public class OfertasView extends VerticalLayout implements View {
 		
 		ofertasLayout = new VerticalLayout();
 		ofertasLayout.setWidth("100%");
-		title = new Label("Ofertas");
-		title.addStyleName("detail_apto_title");
 		ofertasLayout.setMargin(false);
+		
+		title = new Label();
+		title.setCaptionAsHtml(true);
+		help = new Label();
+		help.setCaptionAsHtml(true);
+		
+		buttonsLayout = new HorizontalLayout();
+		buttonsLayout.setWidth("100%");
+		buttonsLayout.setMargin(false);
 		
 		ofertasLeft = new VerticalLayout();
 		ofertasRight = new VerticalLayout();
+		
+		nuevaOfertaButton = new Button("Nueva oferta");
+		nuevaOfertaButton.setIcon(VaadinIcons.PLUS);
+		volverButton = new Button("Volver al apartamento");
+		volverButton.setIcon(VaadinIcons.ARROW_BACKWARD);
 		
 		resultadosLayout = new HorizontalLayout();
 		resultadosLayout.setWidth("100%");
@@ -79,23 +99,34 @@ public class OfertasView extends VerticalLayout implements View {
 		
 		Optional<Apartamento> existeApartamento = aptoService.buscarPorIdConOfertas(id_aptoOferta);
 		if(existeApartamento.isPresent()) {
-			ofertas = aptoService.buscarPorIdConOfertas(id_aptoOferta).get().getOfertas();
+			ofertas = existeApartamento.get().getOfertas();
+			title.setCaption("<h1>Ofertas del apartamento de <i>" + existeApartamento.get().getUbicacion() + "</i></h1>");
+			help.setCaption("<h3><i>Sólo se muestran las ofertas vigentes o futuras.</i></h3>");
+			
+			nuevaOfertaButton.addClickListener(e -> {
+				getUI().getNavigator().navigateTo(NuevaOfertaView.VIEW_NAME + "/" + id_aptoOferta);
+			});
+			volverButton.addClickListener(e -> {
+				getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + id_aptoOferta);
+			});
+			
 		}
 		
-		if(ofertas.isEmpty()) {
-			
+		if(ofertas.isEmpty()) {			
 			Notification.show("No existen ofertas para el apartamento seleccionado", Notification.Type.ERROR_MESSAGE);
-			Button volver = new Button("Volver");
-			volver.setIcon(VaadinIcons.ARROW_BACKWARD);
-			volver.setClickShortcut(KeyCode.ENTER);
-			volver.addClickListener(e -> getUI().getNavigator().navigateTo(""));
-			ofertasLeft.addComponent(volver);
-			
 		} else {			
 			setOfertas(ofertas);			
 		}
 		
-		ofertasLayout.addComponents(resultadosLayout);
+		buttonsLayout.addComponents(volverButton, nuevaOfertaButton);
+		buttonsLayout.setComponentAlignment(volverButton, Alignment.TOP_LEFT);
+		buttonsLayout.setComponentAlignment(nuevaOfertaButton, Alignment.TOP_RIGHT);
+		
+		ofertasLayout.addComponents(title, help, buttonsLayout, resultadosLayout);
+		ofertasLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
+		ofertasLayout.setComponentAlignment(help, Alignment.TOP_CENTER);
+		ofertasLayout.setComponentAlignment(buttonsLayout, Alignment.TOP_CENTER);
+		ofertasLayout.setComponentAlignment(resultadosLayout, Alignment.TOP_CENTER);
 		addComponent(ofertasLayout);
 	}
 	
@@ -117,30 +148,50 @@ public class OfertasView extends VerticalLayout implements View {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				
 				for(Oferta ofta : oftas) {
-					VerticalLayout oftaInfo = new VerticalLayout();
-					oftaInfo.setSpacing(false);
-					
-					Button fechaInicio = new Button(ofta.getFechaInicio().format(formatter));
-					fechaInicio.addStyleNames(ValoTheme.BUTTON_BORDERLESS, LARGE_TEXT);
-					
-					Button fechaFin = new Button(ofta.getFechaInicio().format(formatter));
-					fechaFin.addStyleNames(ValoTheme.BUTTON_BORDERLESS, LARGE_TEXT);
-					
-					Button precio = new Button(String.valueOf(ofta.getPrecioOferta()));
-					precio.addStyleNames(ValoTheme.BUTTON_BORDERLESS, LARGE_TEXT);
-					
-					oftaInfo.addComponents(fechaInicio, fechaFin, precio);			
-					
-					if(i % 2 == 0) {
-						ofertasLeft.addComponent(oftaInfo);
-					} else {
-						ofertasRight.addComponent(oftaInfo);
+					if(ofta.getFechaFin().isAfter(LocalDate.now()) || ofta.getFechaFin().isEqual(LocalDate.now())) {
+						VerticalLayout oftaInfo = new VerticalLayout();
+						oftaInfo.setSpacing(false);
+						
+						Button fechaInicio = new Button("Fecha inicio: " + ofta.getFechaInicio().format(formatter));
+						fechaInicio.addStyleNames(ValoTheme.BUTTON_BORDERLESS, LARGE_TEXT);
+						
+						Button fechaFin = new Button("Fecha fin: " + ofta.getFechaFin().format(formatter));
+						fechaFin.addStyleNames(ValoTheme.BUTTON_BORDERLESS, LARGE_TEXT);
+						
+						Button precio = new Button("Precio: " + String.valueOf(ofta.getPrecioOferta()));
+						precio.setStyleName(ValoTheme.BUTTON_BORDERLESS);
+						
+						oftaInfo.addComponents(fechaInicio, fechaFin, precio);			
+						
+						if(i % 2 == 0) {
+							ofertasLeft.addComponent(oftaInfo);
+						} else {
+							ofertasRight.addComponent(oftaInfo);
+						}
+						
+						i++;
 					}
-					
-					i++;
+				}
+				
+				/* 
+				 * Si la variable i vale 0 después del bucle anterior, significa que el apartamento
+				 * tiene ofertas, pero están todas expiradas.
+				 */
+				if(i == 0) {
+					Notification.show("Todas las ofertas para este apartamento están expiradas", "", Notification.Type.WARNING_MESSAGE);
 				}
 				
 				resultadosLayout.addComponents(ofertasLeft, ofertasRight);
 			}
+	}
+	
+	public static void setSuccessfulRegistroOfertaNotification() {
+		Notification successfulRegistroOferta = new Notification("Oferta registrada con éxito");
+		successfulRegistroOferta.setIcon(VaadinIcons.CHECK);
+		successfulRegistroOferta.setPosition(Position.TOP_RIGHT);
+		successfulRegistroOferta.setDelayMsec(2500);
+		successfulRegistroOferta.setStyleName("success_notification");
+		
+		successfulRegistroOferta.show(Page.getCurrent());
 	}
 }

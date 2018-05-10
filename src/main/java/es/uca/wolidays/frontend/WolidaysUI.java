@@ -13,7 +13,7 @@ import es.uca.wolidays.backend.security.AccessDeniedView;
 import es.uca.wolidays.backend.security.ErrorView;
 
 
-@Theme("navbar")
+@Theme("wolidays")
 @SpringUI
 @PushStateNavigation
 public class WolidaysUI extends UI {

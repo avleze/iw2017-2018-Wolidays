@@ -1,0 +1,77 @@
+/* Import the reindeer theme. */
+/* This only allows us to use the mixins defined in it and does not add any styles by itself. */
+@import "../valo/valo.scss";
+
+/* This contains all of your theme. */
+/* If somebody wants to extend the theme she will include this mixin. */
+@mixin wolidays {
+    /* Include all the styles from the reindeer theme */
+    @include valo;
+
+    .orange {
+        background: #f55b0b;
+    }
+    
+    .blue {
+        background: #04749c;
+    }
+    
+    .icon {
+        margin-left: 20px;
+        height: 43px;
+        width: 40px;
+        cursor: pointer;
+    }
+    
+    .margin_buttons {
+        margin-right: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .button {
+        text-align: center;
+    }
+    
+    .success_notification {
+        background: lightgreen;
+        color: green;
+    }
+    
+    .small_text {
+        font-size: small;
+    }
+    
+    .large_text {
+        font-size: large;
+        font-weight: bold;
+    }
+    
+    .filtros_bar {
+        background: #04749c;
+        border: 1.5px solid black;
+    }
+    
+    .filtros_buttons {
+        color: white;
+    }
+    
+    .sliders_precio_filter {
+        margin-bottom: 20px;
+        color: white;
+    }
+    
+    .final_price {
+        width: 250px;
+        height: 65px;
+        padding: 15px;
+        background-color: #04749c;
+        color: white;
+        font-size: x-large;
+        text-align: center;
+    }
+}
+
+
+
+
+

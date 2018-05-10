@@ -21,6 +21,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
@@ -34,7 +35,7 @@ import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.backend.services.UsuarioService;
 import es.uca.wolidays.frontend.MainScreen;
 
-@Theme("navbar")
+@Theme("wolidays")
 @SpringView(name = NuevoApartamentoView.VIEW_NAME)
 public class NuevoApartamentoView extends VerticalLayout implements View {
 	
@@ -64,15 +65,22 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 	
 	private Boolean precioVacio = true;
 	private Boolean precioValido = false;
+	
+	private Label title;
 
 	@PostConstruct
 	void init() {
 		
 		final VerticalLayout nuevoAptoLayout = new VerticalLayout();
+		nuevoAptoLayout.setMargin(false);
 		final HorizontalLayout fieldsLayout = new HorizontalLayout();
 		final VerticalLayout leftFields = new VerticalLayout();
 		final VerticalLayout rightFields = new VerticalLayout();
 		Usuario currentUser = (Usuario)userService.loadUserByUsername(SecurityUtils.getUsername());
+		
+		title = new Label();
+		title.setCaptionAsHtml(true);
+		title.setCaption("<h1>Nuevo apartamento</h1>");
 		
 		TextField contactoField = new TextField("Contacto");
 		binder.forField(contactoField)
@@ -161,7 +169,8 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 					binder.writeBean(apartamento);	
 					aptoService.guardar(apartamento);
 	
-					// Enlace a "Mis apartamentos" con notificación de registro completada
+					MisApartamentosView.setSuccessfulNuevoAptoNotification();
+					getUI().getNavigator().navigateTo(MisApartamentosView.VIEW_NAME);
 					
 				} catch(ValidationException ex) {
 					Notification.show("No se ha podido completar el registro");
@@ -172,7 +181,8 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		});
 		registrarAptoButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 		
-		nuevoAptoLayout.addComponents(fieldsLayout, registrarAptoButton);
+		nuevoAptoLayout.addComponents(title, fieldsLayout, registrarAptoButton);
+		nuevoAptoLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
 		nuevoAptoLayout.setComponentAlignment(fieldsLayout, Alignment.TOP_CENTER);
 		nuevoAptoLayout.setComponentAlignment(registrarAptoButton, Alignment.TOP_CENTER);
 		

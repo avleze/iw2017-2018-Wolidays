@@ -11,9 +11,13 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -24,7 +28,7 @@ import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.UsuarioService;
 import es.uca.wolidays.frontend.MainScreen;
 
-@Theme("navbar")
+@Theme("wolidays")
 @SpringView(name = MisApartamentosView.VIEW_NAME)
 public class MisApartamentosView extends VerticalLayout implements View {
 	
@@ -42,6 +46,8 @@ public class MisApartamentosView extends VerticalLayout implements View {
 	private VerticalLayout leftAptos;
 	private VerticalLayout rightAptos;
 	
+	private Label title;
+	
 	private List<Apartamento> misAptos;
 
 	@PostConstruct
@@ -55,6 +61,10 @@ public class MisApartamentosView extends VerticalLayout implements View {
 		
 		resultadosLayout = new HorizontalLayout();
 		resultadosLayout.setWidth("100%");
+		
+		title = new Label();
+		title.setCaptionAsHtml(true);
+		title.setCaption("<h1>Mis apartamentos</h1>");
 		
 		Usuario currentUser = userService.loadUserByUsernameWithApartamentos(SecurityUtils.getUsername());
 		misAptos = currentUser.getApartamentos();
@@ -81,63 +91,72 @@ public class MisApartamentosView extends VerticalLayout implements View {
 			setApartamentos(misAptos);			
 		}
 		
-		misapartamentosLayout.addComponents(resultadosLayout);
+		misapartamentosLayout.addComponents(title, resultadosLayout);
+		misapartamentosLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
 		addComponent(misapartamentosLayout);
 	}
 	
-		private void setAptosInfoColumns() {
-			leftAptos = new VerticalLayout();
-			leftAptos.setMargin(true);
-			leftAptos.setSpacing(true);
-			rightAptos = new VerticalLayout();
-			rightAptos.setMargin(true);
-			rightAptos.setSpacing(true);
-		}
+	private void setAptosInfoColumns() {
+		leftAptos = new VerticalLayout();
+		leftAptos.setMargin(true);
+		leftAptos.setSpacing(true);
+		rightAptos = new VerticalLayout();
+		rightAptos.setMargin(true);
+		rightAptos.setSpacing(true);
+	}
+	
+	private void setApartamentos(List<Apartamento> aptos) {
 		
-		private void setApartamentos(List<Apartamento> aptos) {
+		if(aptos.isEmpty()) {
+			Notification.show("No has registrado ningún apartamento aún.", Notification.Type.ERROR_MESSAGE);
+		} else {
+			int i = 0;
 			
-			if(aptos.isEmpty()) {
-				Notification.show("No existen apartamentos registrados por usted", Notification.Type.ERROR_MESSAGE);
-			} else {
-				int i = 0;
+			for(Apartamento apto : aptos) {
+				VerticalLayout aptoInfo = new VerticalLayout();
+				aptoInfo.setSpacing(false);
 				
-				for(Apartamento apto : aptos) {
-					VerticalLayout aptoInfo = new VerticalLayout();
-					aptoInfo.setSpacing(false);
-					
-					Button ubicacion = new Button(apto.getUbicacion());
-					ubicacion.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "large_text");
-					ubicacion.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
-					
-					Button precioStd = new Button("Desde " + String.valueOf(apto.getPrecioEstandar()) + "€ la noche");
-					precioStd.setStyleName(ValoTheme.BUTTON_BORDERLESS);
-					precioStd.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
-					
-					Button numCamas;
-					
-					if(apto.getNumCamas() == 1) {
-						numCamas = new Button("1 cama");
-					} else {
-						numCamas = new Button(String.valueOf(apto.getNumCamas()) + " camas");
-					}				
-					numCamas.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
-					numCamas.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
-					
-					aptoInfo.addComponents(ubicacion, precioStd, numCamas);			
-					
-					if(i % 2 == 0) {
-						leftAptos.addComponent(aptoInfo);
-					} else {
-						rightAptos.addComponent(aptoInfo);
-					}
-					
-					i++;
+				Button ubicacion = new Button(apto.getUbicacion());
+				ubicacion.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "large_text");
+				ubicacion.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
+				
+				Button precioStd = new Button("Desde " + String.valueOf(apto.getPrecioEstandar()) + "€ la noche");
+				precioStd.setStyleName(ValoTheme.BUTTON_BORDERLESS);
+				precioStd.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
+				
+				Button numCamas;
+				
+				if(apto.getNumCamas() == 1) {
+					numCamas = new Button("1 cama");
+				} else {
+					numCamas = new Button(String.valueOf(apto.getNumCamas()) + " camas");
+				}				
+				numCamas.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
+				numCamas.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
+				
+				aptoInfo.addComponents(ubicacion, precioStd, numCamas);			
+				
+				if(i % 2 == 0) {
+					leftAptos.addComponent(aptoInfo);
+				} else {
+					rightAptos.addComponent(aptoInfo);
 				}
 				
-				resultadosLayout.addComponents(leftAptos, rightAptos);
+				i++;
 			}
-		
+			
+			resultadosLayout.addComponents(leftAptos, rightAptos);
+		}	
 	}
+	
+	public static void setSuccessfulNuevoAptoNotification() {
+		Notification successfulSignUp = new Notification("Apartamento registrado con éxito");
+		successfulSignUp.setIcon(VaadinIcons.CHECK);
+		successfulSignUp.setPosition(Position.TOP_RIGHT);
+		successfulSignUp.setDelayMsec(2500);
+		successfulSignUp.setStyleName("success_notification");
 		
+		successfulSignUp.show(Page.getCurrent());
+	}
 	
 }

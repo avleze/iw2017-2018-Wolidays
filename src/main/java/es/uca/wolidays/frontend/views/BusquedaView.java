@@ -26,7 +26,7 @@ import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.frontend.MainScreen;
 
-@Theme("navbar")
+@Theme("wolidays")
 @SpringView(name = BusquedaView.VIEW_NAME)
 public class BusquedaView extends VerticalLayout implements View {
 	
@@ -55,6 +55,8 @@ public class BusquedaView extends VerticalLayout implements View {
 	private HorizontalLayout slidersLayout;
 	private Slider precioMinSlider;
 	private Slider precioMaxSlider;
+	
+	private Button aplicarFiltroPrecio;
 	
 	private List<Apartamento> aptosSinFiltro;
 	
@@ -109,6 +111,12 @@ public class BusquedaView extends VerticalLayout implements View {
 		slidersLayout.addComponent(precioMinSlider);
 		slidersLayout.addComponent(precioMaxSlider);
 		
+		aplicarFiltroPrecio = new Button("Aplicar filtro");
+		aplicarFiltroPrecio.addClickListener(filter -> updateApartamentos());
+		filtrosLayout.addComponent(aplicarFiltroPrecio);
+		filtrosLayout.setComponentAlignment(aplicarFiltroPrecio, Alignment.TOP_CENTER);
+		aplicarFiltroPrecio.setVisible(false);
+		
 		setAptosInfoColumns();		
 	}
 	
@@ -144,11 +152,8 @@ public class BusquedaView extends VerticalLayout implements View {
 			filtrosLayout.addComponent(slidersLayout);
 			filtrosLayout.setComponentAlignment(slidersLayout, Alignment.TOP_LEFT);
 			
-			Button aplicarFiltro = new Button("Aplicar filtro");
-			aplicarFiltro.addClickListener(filter -> updateApartamentos());
-			
-			filtrosLayout.addComponent(aplicarFiltro);
-			filtrosLayout.setComponentAlignment(aplicarFiltro, Alignment.TOP_CENTER);
+			aplicarFiltroPrecio.setVisible(false);
+			aplicarFiltroPrecio.setVisible(true);			
 			
 		});		
 		
