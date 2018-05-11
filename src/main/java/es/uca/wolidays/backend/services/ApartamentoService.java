@@ -44,9 +44,12 @@ public class ApartamentoService {
 		return repo.filterByUbicacionAndFecha(ubicacion, fechaini, fechafin);
 	}
 	
-	public List<Oferta> buscarOfertasEntreFechas(Apartamento apto, LocalDate fechaini, LocalDate fechafin)
-	{
+	public List<Oferta> buscarOfertasEntreFechas(Apartamento apto, LocalDate fechaini, LocalDate fechafin) {
 		return ofertasRepo.findByApartamentoAndFechaInicioFechaFin(apto.getId(), fechaini, fechafin);
+	}
+	
+	public Boolean existeOfertasEntreFechas(Apartamento apto, LocalDate fechaini, LocalDate fechafin) {
+		return buscarOfertasEntreFechas(apto, fechaini, fechafin).size() > 0;
 	}
 	
 	public Apartamento guardar(Apartamento apartamento) {
