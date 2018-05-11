@@ -58,6 +58,8 @@ public class Usuario implements UserDetails, Serializable {
 	
 	private String password;
 	
+	private String cuenta_bancaria;
+	
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "usuario_rol",
 	joinColumns = @JoinColumn(name = "usr_id", referencedColumnName = "id"),
@@ -73,6 +75,12 @@ public class Usuario implements UserDetails, Serializable {
 	@OneToMany(mappedBy="afectado")
 	private List<Incidencia> incidencias;
 	
+	public String getCuenta_bancaria() {
+		return cuenta_bancaria;
+	}
+	public void setCuenta_bancaria(String cuenta_bancaria) {
+		this.cuenta_bancaria = cuenta_bancaria;
+	}
 	public List<Incidencia> getIncidencias() {
 		return incidencias;
 	}
