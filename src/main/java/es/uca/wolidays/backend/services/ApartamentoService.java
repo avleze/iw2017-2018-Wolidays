@@ -8,13 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Oferta;
 import es.uca.wolidays.backend.repositories.ApartamentoRepository;
+import es.uca.wolidays.backend.repositories.OfertaRepository;
 
 @Service
 public class ApartamentoService {
 
 	@Autowired
 	private ApartamentoRepository repo;
+	@Autowired
+	private OfertaRepository ofertasRepo;
 	
 	public List<Apartamento> buscarPorUbicacion(String ubicacion) {
 		return repo.findByUbicacion(ubicacion);
@@ -38,6 +42,11 @@ public class ApartamentoService {
 	
 	public List<Apartamento> filtrarPorUbicacionyFecha(String ubicacion, LocalDate fechaini, LocalDate fechafin) {
 		return repo.filterByUbicacionAndFecha(ubicacion, fechaini, fechafin);
+	}
+	
+	public List<Oferta> buscarOfertasEntreFechas(Apartamento apto, LocalDate fechaini, LocalDate fechafin)
+	{
+		return ofertasRepo.findByApartamentoAndFechaInicioFechaFin(apto.getId(), fechaini, fechafin);
 	}
 	
 	public Apartamento guardar(Apartamento apartamento) {

@@ -1,8 +1,6 @@
 package es.uca.wolidays.frontend.views;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -28,7 +26,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import es.uca.wolidays.backend.entities.Apartamento;
-import es.uca.wolidays.backend.entities.Oferta;
 import es.uca.wolidays.backend.entities.Reserva;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
@@ -160,7 +157,7 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		
 		fechaFinField.addValueChangeListener(compDates -> returnBinder.validate());
 		fechaFinField.addValueChangeListener(precio -> {
-			precioFinal = calcularPrecioFinal(apartamento, fechaInicioField.getValue(), fechaFinField.getValue());
+			precioFinal = reservaService.calcularPrecioFinal(apartamento, fechaInicioField.getValue(), fechaFinField.getValue());
 			precioFinalLabel.setValue("Precio final: " + precioFinal + "€");
 		});
 		
@@ -199,54 +196,5 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		addComponent(nuevaReservaLayout);
 	}
 	
-	/**
-	 * Método que calcula el precio final de una reserva,
-	 * teniendo en cuenta el precio estándar del apartamento,
-	 * y todas las posibles ofertas que puede tener definidas.
-	 * @param apto Apartamento que se está reservando
-	 * @param inicioReserva Fecha de inicio de la reserva que se está haciendo
-	 * @param finReserva Fecha de fin de la reserva que se está haciendo
-	 * @return Precio final de una reserva
-	 */
-	private Double calcularPrecioFinal(Apartamento apto, LocalDate inicioReserva, LocalDate finReserva) {
-		Double precioFinal = 0.0;
-		
-		long numNoches = ChronoUnit.DAYS.between(inicioReserva, finReserva);
-		int i = 0;
-		
-		while(i < numNoches) {
-			precioFinal += precioAptoDia(inicioReserva.plusDays(i), apto);
-			i++;
-		}		
-		
-		return precioFinal;
-	}
-	
-	/**
-	 * Método que devuelve el precio de un apartamento en un día concreto
-	 * @param dia Día del que se quiere saber el precio
-	 * @param apto Apartamento 
-	 * @return Precio del apartamento en el día indicado
-	 */
-	private Double precioAptoDia(LocalDate dia, Apartamento apto) {
-		Double precio = 0.0;
-		List<Oferta> ofertas = apto.getOfertas();
-		Boolean diaConOferta = false;
-		
-		if(!ofertas.isEmpty()) {
-			for(Oferta oferta : ofertas) {
-				if(!dia.isBefore(oferta.getFechaInicio()) && dia.isBefore(oferta.getFechaFin())) {
-					precio = oferta.getPrecioOferta();
-					diaConOferta = true;
-				}
-			}
-		}
-		
-		if(ofertas.isEmpty() || !diaConOferta) {
-			precio = apto.getPrecioEstandar();
-		}		
-		
-		return precio;
-	}
-	
+
 }
