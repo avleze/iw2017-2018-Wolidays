@@ -64,7 +64,7 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 	private String precioStdRgx = "^\\d{0,5}(\\.\\d{1,2})?$";
 	
 	Binder<Ubicacion> ubiBinder = new Binder<>();
-	private String ubicacionRgx = "[\\w\\s,.()áéíóú]+";
+	private String ubicacionRgx = "[\\w\\s,.()áéíóúÁÉÍÓÚñÑ]+";
 	
 	private Boolean precioVacio = true;
 	private Boolean precioValido = false;
