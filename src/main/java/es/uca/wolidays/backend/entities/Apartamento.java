@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +16,7 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 
 @Entity
@@ -32,8 +34,6 @@ public class Apartamento implements Serializable {
 	@Column(length = 100)
 	private String contacto;
 	private String descripcion;
-	@Column(length = 80)
-	private String ubicacion;
 	private Integer numDormitorios;
 	private Integer numCamas;
 	private Boolean aireAcondicionado;
@@ -49,10 +49,13 @@ public class Apartamento implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="apartamento")
 	private List<Oferta> ofertas;
 	
-	public String getUbicacion() {
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Ubicacion ubicacion;
+	
+	public Ubicacion getUbicacion() {
 		return ubicacion;
 	}
-	public void setUbicacion(String ubicacion) {
+	public void setUbicacion(Ubicacion ubicacion) {
 		this.ubicacion = ubicacion;
 	}
 	public List<Oferta> getOfertas() {
