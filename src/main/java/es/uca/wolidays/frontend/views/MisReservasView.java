@@ -24,6 +24,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.entities.Reserva;
+import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.UsuarioService;
@@ -92,8 +93,9 @@ public class MisReservasView extends VerticalLayout implements View {
 				fechaSalida.setCaption("Fecha salida: " + rsrv.getFechaFin().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 				fechaSalida.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 				
+				Ubicacion aptoUbicacion = rsrv.getApartamento().getUbicacion();
 				Button ubicacion = new Button();
-				ubicacion.setCaption(rsrv.getApartamento().getUbicacion());
+				ubicacion.setCaption("Ubicación: " + aptoUbicacion.getDireccion() + " (" + aptoUbicacion.getCiudad() + ")");
 				ubicacion.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 				
 				Button precioNoches = new Button();

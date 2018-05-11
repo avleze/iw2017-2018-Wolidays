@@ -23,6 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.frontend.MainScreen;
 
@@ -39,7 +40,7 @@ public class BusquedaView extends VerticalLayout implements View {
 	@Autowired
 	private transient ApartamentoService aptoService;
 	
-	private String ubicacionBuscada = "";
+	private String ciudadBuscada = "";
 	
 	private VerticalLayout busquedaLayout;
 	private HorizontalLayout resultadosLayout;
@@ -126,15 +127,15 @@ public class BusquedaView extends VerticalLayout implements View {
 		mainScreen.setButtons();
 		
 		try {
-			ubicacionBuscada = URLDecoder.decode(event.getParameters().split("/")[0], "UTF-8");
+			ciudadBuscada = URLDecoder.decode(event.getParameters().split("/")[0], "UTF-8");
 		} catch (UnsupportedEncodingException ex) {
 			
 		}
-		aptosSinFiltro = aptoService.buscarPorUbicacion(ubicacionBuscada);
+		aptosSinFiltro = aptoService.buscarPorCiudad(ciudadBuscada);
 		
 		if(aptosSinFiltro.isEmpty()) {
 			
-			Notification.show("No existen apartamentos", "en " + ubicacionBuscada, Notification.Type.ERROR_MESSAGE);
+			Notification.show("No existen apartamentos", "en " + ciudadBuscada, Notification.Type.ERROR_MESSAGE);
 			Button volverInicio = new Button("Buscar otra ciudad");
 			volverInicio.setIcon(VaadinIcons.ARROW_BACKWARD);
 			volverInicio.setClickShortcut(KeyCode.ENTER);
@@ -169,7 +170,7 @@ public class BusquedaView extends VerticalLayout implements View {
 			Notification.show("El valor mínimo es mayor que el máximo", "Introdúcelo de nuevo", Notification.Type.ERROR_MESSAGE);
 		} else {
 			List<Apartamento> aptosActualizados = aptoService
-					.filtrarPorUbicacionyPrecioEstandar(ubicacionBuscada, minPrecio, maxPrecio);
+					.filtrarPorUbicacionyPrecioEstandar(ciudadBuscada, minPrecio, maxPrecio);
 			
 			limpiarApartamentos();
 			setApartamentos(aptosActualizados);
@@ -202,7 +203,8 @@ public class BusquedaView extends VerticalLayout implements View {
 				VerticalLayout aptoInfo = new VerticalLayout();
 				aptoInfo.setSpacing(false);
 				
-				Button ubicacion = new Button(apto.getUbicacion());
+				Ubicacion aptoUbi = apto.getUbicacion();
+				Button ubicacion = new Button(aptoUbi.getDireccion() + " (" + aptoUbi.getCiudad() + ")");
 				ubicacion.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "large_text");
 				ubicacion.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 				

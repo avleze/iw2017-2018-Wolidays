@@ -24,6 +24,10 @@ public class ApartamentoService {
 		return repo.findByUbicacion(ubicacion);
 	}
 	
+	public List<Apartamento> buscarPorCiudad(String ciudad) {
+		return repo.findByCiudad(ciudad);
+	}
+	
 	public List<Apartamento> buscarPorNumDormitorios(Integer numDormitorios) {
 		return repo.findByNumDormitorios(numDormitorios);
 	}

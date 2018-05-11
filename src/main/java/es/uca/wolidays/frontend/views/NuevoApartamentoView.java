@@ -29,6 +29,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.ApartamentoService;
@@ -52,7 +53,7 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 	@Autowired
 	MainScreen mainScreen;
 	
-	Binder<Apartamento> binder = new Binder<>();
+	Binder<Apartamento> aptoBinder = new Binder<>();
 	private String contactoRgx = "(?:[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+"
 			+ "\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-"
 			+ "\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9]"
@@ -60,8 +61,10 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 			+ "|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|"
 			+ "[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f"
 			+ "\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])|(\\d{9})";
-	private String ubicacionRgx = "[\\w\\s,.()áéíóú]+";
 	private String precioStdRgx = "^\\d{0,5}(\\.\\d{1,2})?$";
+	
+	Binder<Ubicacion> ubiBinder = new Binder<>();
+	private String ubicacionRgx = "[\\w\\s,.()áéíóú]+";
 	
 	private Boolean precioVacio = true;
 	private Boolean precioValido = false;
@@ -83,18 +86,28 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		title.setCaption("<h1>Nuevo apartamento</h1>");
 		
 		TextField contactoField = new TextField("Contacto");
-		binder.forField(contactoField)
+		aptoBinder.forField(contactoField)
 			.withValidator(new RegexpValidator("El contacto debe ser un email o un número de teléfono", contactoRgx, true))
 			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Apartamento::getContacto, Apartamento::setContacto);
 		
-		
-		TextField ubicacionField = new TextField("Ubicación");
-		binder.forField(ubicacionField)
-			.withValidator(new RegexpValidator("La ubicación debe ser válida", ubicacionRgx, true))
+		TextField direccionField = new TextField("Dirección");
+		ubiBinder.forField(direccionField)
+			.withValidator(new RegexpValidator("La dirección debe ser válida", ubicacionRgx, true))
 			.asRequired(CAMPO_OBLIGATORIO)
-			.bind(Apartamento::getUbicacion, Apartamento::setUbicacion);
+			.bind(Ubicacion::getDireccion, Ubicacion::setDireccion);
 		
+		TextField ciudadField = new TextField("Ciudad");
+		ubiBinder.forField(ciudadField)
+			.withValidator(new RegexpValidator("La ciudad debe ser válida", ubicacionRgx, true))
+			.asRequired(CAMPO_OBLIGATORIO)
+			.bind(Ubicacion::getCiudad, Ubicacion::setCiudad);
+		
+		TextField paisField = new TextField("País");
+		ubiBinder.forField(paisField)
+			.withValidator(new RegexpValidator("El país debe ser válido", ubicacionRgx, true))
+			.asRequired(CAMPO_OBLIGATORIO)
+			.bind(Ubicacion::getPais, Ubicacion::setPais);		
 		
 		List<Integer> data = IntStream.range(1, 11).mapToObj(i -> i).collect(Collectors.toList());
 		
@@ -102,7 +115,7 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
         numCamasField.setEmptySelectionAllowed(false);
         numCamasField.setSelectedItem(data.get(0));
 		numCamasField.setWidth("50px");
-		binder.forField(numCamasField)
+		aptoBinder.forField(numCamasField)
 			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Apartamento::getNumCamas, Apartamento::setNumCamas);
 		
@@ -110,24 +123,26 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
         numDormitoriosField.setEmptySelectionAllowed(false);
         numDormitoriosField.setSelectedItem(data.get(0));
 		numDormitoriosField.setWidth("50px");
-		binder.forField(numDormitoriosField)
+		aptoBinder.forField(numDormitoriosField)
 			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Apartamento::getNumDormitorios, Apartamento::setNumDormitorios);
 		
 		CheckBox aireAcondCB = new CheckBox("Aire acondicionado", false);
-		binder.forField(aireAcondCB)
+		aptoBinder.forField(aireAcondCB)
 			.bind(Apartamento::getAireAcondicionado, Apartamento::setAireAcondicionado);
 		
-		leftFields.addComponents(contactoField, ubicacionField, numCamasField, numDormitoriosField, aireAcondCB);
+		leftFields.addComponents(contactoField, direccionField, ciudadField, paisField, numCamasField, numDormitoriosField, aireAcondCB);
 		leftFields.setComponentAlignment(contactoField, Alignment.TOP_LEFT);
-		leftFields.setComponentAlignment(ubicacionField, Alignment.TOP_LEFT);
+		leftFields.setComponentAlignment(direccionField, Alignment.TOP_LEFT);
+		leftFields.setComponentAlignment(ciudadField, Alignment.TOP_LEFT);
+		leftFields.setComponentAlignment(paisField, Alignment.TOP_LEFT);
 		leftFields.setComponentAlignment(numCamasField, Alignment.TOP_LEFT);
 		leftFields.setComponentAlignment(numDormitoriosField, Alignment.TOP_LEFT);
 		leftFields.setComponentAlignment(aireAcondCB, Alignment.TOP_LEFT);
 		
 		TextArea descripcionField = new TextArea("Descripción");
 		descripcionField.setWidth("300px");
-		binder.forField(descripcionField)
+		aptoBinder.forField(descripcionField)
 			.bind(Apartamento::getDescripcion, Apartamento::setDescripcion);		
 		
 		TextField precioStdField = new TextField("Precio estándar por noche");
@@ -144,7 +159,9 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		
 		Button registrarAptoButton = new Button("Registrar apartamento");
 		registrarAptoButton.addClickListener(e -> {
-			Apartamento apartamento = new Apartamento();			
+			Apartamento apartamento = new Apartamento();
+			Ubicacion ubicacion = new Ubicacion();
+			
 			apartamento.setPropietario(currentUser);
 			
 			if (!precioStdField.isEmpty()) {
@@ -165,8 +182,11 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 			} else {
 			
 				try {
+					ubiBinder.writeBean(ubicacion);
+					apartamento.setUbicacion(ubicacion);
+					
 					apartamento.setPrecioEstandar(Double.parseDouble(precioStdField.getValue()));
-					binder.writeBean(apartamento);	
+					aptoBinder.writeBean(apartamento);
 					aptoService.guardar(apartamento);
 	
 					MisApartamentosView.setSuccessfulNuevoAptoNotification();

@@ -18,6 +18,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.frontend.MainScreen;
@@ -83,11 +84,13 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 		}
 		
 		huesped_username = apartamento.getPropietario().getUsername();
-		title.setCaption("<h1>Apartamento de <i>" + apartamento.getUbicacion() + "</i></h1>");
+		
+		Ubicacion aptoUbi = apartamento.getUbicacion();
+		title.setCaption("<h1>Apartamento de <i>" + aptoUbi.getDireccion() + " (" + aptoUbi.getCiudad() + ")</i></h1>");
 		
 		// Parametros del apartamento
 		Label contacto = new Label("Contacto: " + apartamento.getContacto());
-		Label ubicacion = new Label("Ubicación: " + apartamento.getUbicacion());
+		Label ubicacion = new Label("Ubicación: " + aptoUbi.getDireccion() + " (" + aptoUbi.getCiudad() + ")");
 		Label precioStd = new Label("Precio por noche estándar: " + apartamento.getPrecioEstandar() + "€");
 		Label numCamas = new Label("Número de camas: " + apartamento.getNumCamas());
 		Label numDormitorios = new Label("Número de dormitorios: " + apartamento.getNumDormitorios());
@@ -121,9 +124,7 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 			});
 			
 			buttonsLayout.addComponent(ofertasAptoButton);
-			//buttonsLayout.addComponent(nuevaOfertaButton);
 			buttonsLayout.setComponentAlignment(ofertasAptoButton, Alignment.BOTTOM_RIGHT);
-			//buttonsLayout.setComponentAlignment(nuevaOfertaButton, Alignment.BOTTOM_LEFT);
 		}
 		else {
 			/*

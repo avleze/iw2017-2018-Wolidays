@@ -15,6 +15,8 @@ import es.uca.wolidays.backend.entities.Apartamento;
 public interface ApartamentoRepository extends CrudRepository<Apartamento, Integer>{
 	
 	List<Apartamento> findByUbicacion(String ubicacion);
+	@Query("SELECT apt FROM Apartamento apt, Ubicacion u WHERE apt.id = u.apartamento AND u.ciudad = ?1")
+	List<Apartamento> findByCiudad(String ciudad);
 	List<Apartamento> findByNumDormitorios(Integer numDormitorios);
 	List<Apartamento> findByNumCamas(Integer numCamas);
 	List<Apartamento> findByPrecioEstandarBetween(Double min, Double max);

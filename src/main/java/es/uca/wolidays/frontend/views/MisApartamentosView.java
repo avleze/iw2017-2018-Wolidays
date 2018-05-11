@@ -23,6 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.UsuarioService;
@@ -116,7 +117,8 @@ public class MisApartamentosView extends VerticalLayout implements View {
 				VerticalLayout aptoInfo = new VerticalLayout();
 				aptoInfo.setSpacing(false);
 				
-				Button ubicacion = new Button(apto.getUbicacion());
+				Ubicacion aptoUbicacion = apto.getUbicacion();
+				Button ubicacion = new Button(aptoUbicacion.getDireccion() + " (" + aptoUbicacion.getCiudad() + ")");
 				ubicacion.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "large_text");
 				ubicacion.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 				
