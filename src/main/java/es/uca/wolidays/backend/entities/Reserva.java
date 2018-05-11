@@ -2,6 +2,7 @@ package es.uca.wolidays.backend.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Reserva implements Serializable {
@@ -35,6 +37,17 @@ public class Reserva implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="USR_ID")
 	private Usuario usuario;
+
+	@OneToMany(mappedBy="reserva")
+	private List<Incidencia> incidencias;
+	
+	public List<Incidencia> getIncidencias() {
+		return incidencias;
+	}
+
+	public void setIncidencias(List<Incidencia> incidencias) {
+		this.incidencias = incidencias;
+	}
 
 	public Integer getId() {
 		return id;

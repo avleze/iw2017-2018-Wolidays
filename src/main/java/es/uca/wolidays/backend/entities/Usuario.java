@@ -70,6 +70,15 @@ public class Usuario implements UserDetails, Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="usuario")
 	private List<Reserva> reservas;
 	
+	@OneToMany(mappedBy="afectado")
+	private List<Incidencia> incidencias;
+	
+	public List<Incidencia> getIncidencias() {
+		return incidencias;
+	}
+	public void setIncidencias(List<Incidencia> incidencias) {
+		this.incidencias = incidencias;
+	}
 	public List<Apartamento> getApartamentos() {
 		return apartamentos;
 	}
