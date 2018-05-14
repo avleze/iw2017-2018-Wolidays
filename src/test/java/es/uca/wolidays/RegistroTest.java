@@ -1,18 +1,23 @@
+
 package es.uca.wolidays;
 
 import static org.junit.Assert.assertTrue;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -20,17 +25,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.core.env.Environment;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestContextManager;
+import org.springframework.test.context.junit4.rules.SpringClassRule;
+import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
-@RunWith(SpringRunner.class)
+import es.uca.wolidays.backend.entities.Usuario;
+import es.uca.wolidays.backend.repositories.UsuarioRepository;
+
+
+@RunWith(Parameterized.class)
+@ContextConfiguration
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
 
+	@ClassRule
+	public static final SpringClassRule springClassRule = new SpringClassRule();
+	
+	@Rule
+	public final SpringMethodRule springMethodRule = new SpringMethodRule();
+	
+	public RegistroTest(String os, String version, String browser, String deviceName, String deviceOrientation) {
+		super(os, version, browser, deviceName, deviceOrientation);
+	}
+
 	@Autowired
 	public Environment env;
+	
+	@Autowired
+	public static UsuarioRepository usersRepo;
 
+	private TestContextManager testContextManager;
+	
 	private static final String HOST_URL = "http://ec2-18-236-104-144.us-west-2.compute.amazonaws.com:";
 	private static final String XPATH_NAV_BTN_PERFIL = "//*[@id=\"nav_btn_perfil\"]";
 	private static final String XPATH_NAV_BTN_INICIOSESION = "//*[@id=\"nav_btn_iniciosesion\"]";
@@ -47,13 +75,31 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	private WebDriver driver;
 	private WebDriverWait wait;
 
+	@BeforeClass
+	public static void removeUser()
+	{
+		Usuario user = usersRepo.findByUsername("pruebausername");
+		
+		if(user != null)
+			usersRepo.delete(user);
+	}
+	
 	@Before
-	public void setUp() throws MalformedURLException {
-		ChromeOptions caps = new ChromeOptions();
-		caps.setCapability("platform", "Windows 10");
-		caps.setCapability("version", "latest");
-		caps.setCapability("name", name.getMethodName());
-		this.driver = new RemoteWebDriver(new URL(URL), caps);
+	public void setUp() throws Exception {
+		this.testContextManager = new TestContextManager(getClass());
+		this.testContextManager.prepareTestInstance(this);
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+
+        capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
+        capabilities.setCapability(CapabilityType.VERSION, version);
+        capabilities.setCapability("deviceName", deviceName);
+        capabilities.setCapability("device-orientation", deviceOrientation);
+        capabilities.setCapability(CapabilityType.PLATFORM_NAME, os);
+
+        String methodName = name.getMethodName();
+        capabilities.setCapability("name", methodName);
+        
+		this.driver = new RemoteWebDriver(new URL(URL), capabilities);
 		this.sessionId = (((RemoteWebDriver) driver).getSessionId()).toString();
 		this.wait = new WebDriverWait(driver, 100);
 	}
@@ -115,7 +161,6 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 
 	@After
 	public void tearDown() {
-		driver.close();
 		driver.quit();
 	}
 
