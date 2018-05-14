@@ -26,8 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
 @RunWith(SpringRunner.class)
-@TestPropertySource(locations="classpath:application-test.properties")
-@SpringBootTest(webEnvironment=WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
 
 	@Autowired
