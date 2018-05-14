@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.core.env.Environment;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
@@ -43,7 +42,6 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	private static final String XPATH_TEXTBOX_CORREO = "//*[@id=\"form_correo\"]";
 	private static final String XPATH_TEXTBOX_NOMBRE = "//*[@id=\"form_nombre\"]";
 	private static final String XPATH_TEXTBOX_APELLIDOS = "//*[@id=\"form_apellidos\"]";
-
 	private static final String XPATH_NAV_BTN_REGISTRARSE = "//*[@id=\"nav_btn_registrarse\"]";
 
 	private WebDriver driver;
@@ -54,6 +52,7 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 		ChromeOptions caps = new ChromeOptions();
 		caps.setCapability("platform", "Windows 10");
 		caps.setCapability("version", "latest");
+		caps.setCapability("name", "Tests de Inicio de Sesion y Registro");
 		this.driver = new RemoteWebDriver(new URL(URL), caps);
 		this.sessionId = (((RemoteWebDriver) driver).getSessionId()).toString();
 		this.wait = new WebDriverWait(driver, 100);
