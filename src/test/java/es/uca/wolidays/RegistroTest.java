@@ -114,6 +114,6 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	}
 
 	private String getHostUrl() {
-		return HOST_URL + environment.getProperty("local.server.port");
+		return HOST_URL + environment.getProperty("server.port");
 	}
 }
