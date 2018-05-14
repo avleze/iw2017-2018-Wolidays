@@ -8,6 +8,7 @@ import java.net.URL;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,14 +16,24 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.core.env.Environment;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
+@RunWith(SpringRunner.class)
+@TestPropertySource(locations="classpath:application-test.properties")
+@SpringBootTest(webEnvironment=WebEnvironment.DEFINED_PORT)
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
 
+	@Autowired
+	public Environment env;
 
 	private static final String HOST_URL = "http://ec2-18-236-104-144.us-west-2.compute.amazonaws.com:";
-	private static final String PORT = "81";
 	private static final String XPATH_NAV_BTN_PERFIL = "//*[@id=\"nav_btn_perfil\"]";
 	private static final String XPATH_NAV_BTN_INICIOSESION = "//*[@id=\"nav_btn_iniciosesion\"]";
 	private static final String XPATH_BOTON_INICIOSESION = "//*[@id=\"form_btn_login\"]";
@@ -110,6 +121,6 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	}
 
 	private String getHostUrl() {
-		return HOST_URL + PORT;
+		return HOST_URL + env.getProperty("server.port");
 	}
 }
