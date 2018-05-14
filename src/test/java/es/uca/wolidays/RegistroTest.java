@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,11 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.core.env.Environment;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestContextManager;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.junit.ConcurrentParameterized;
 
+
 @RunWith(ConcurrentParameterized.class)
+@ContextConfiguration(classes = {WolidaysApplicationTests.class})
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
 
@@ -36,6 +41,8 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	@Autowired
 	public Environment env;
 
+	private TestContextManager testContextManager;
+	
 	private static final String HOST_URL = "http://ec2-18-236-104-144.us-west-2.compute.amazonaws.com:";
 	private static final String XPATH_NAV_BTN_PERFIL = "//*[@id=\"nav_btn_perfil\"]";
 	private static final String XPATH_NAV_BTN_INICIOSESION = "//*[@id=\"nav_btn_iniciosesion\"]";
@@ -53,7 +60,10 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	private WebDriverWait wait;
 
 	@Before
-	public void setUp() throws MalformedURLException {
+	public void setUp() throws Exception {
+		
+		this.testContextManager = new TestContextManager(getClass());
+		this.testContextManager.prepareTestInstance(this);
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
