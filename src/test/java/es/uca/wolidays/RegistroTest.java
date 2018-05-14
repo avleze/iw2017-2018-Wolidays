@@ -37,7 +37,7 @@ import es.uca.wolidays.backend.repositories.UsuarioRepository;
 
 
 @RunWith(Parameterized.class)
-@ContextConfiguration
+@ContextConfiguration(classes = WolidaysApplication.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
 
