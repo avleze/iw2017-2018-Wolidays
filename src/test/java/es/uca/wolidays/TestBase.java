@@ -4,11 +4,11 @@ import java.util.LinkedList;
 
 import org.junit.Rule;
 import org.junit.rules.TestName;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
-import com.saucelabs.junit.ConcurrentParameterized;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
 public class TestBase implements SauceOnDemandSessionIdProvider{
@@ -59,7 +59,7 @@ public class TestBase implements SauceOnDemandSessionIdProvider{
 	     * @return a LinkedList containing String arrays representing the browser combinations the test should be run against. The values
 	     * in the String array are used as part of the invocation of the test constructor
 	     */
-	    @ConcurrentParameterized.Parameters
+	    @Parameterized.Parameters
 	    public static LinkedList<String[]> browsersStrings() {
 	        LinkedList<String[]> browsers = new LinkedList<>();
 

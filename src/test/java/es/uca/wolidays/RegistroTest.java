@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,10 +27,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
-import com.saucelabs.junit.ConcurrentParameterized;
 
 
-@RunWith(ConcurrentParameterized.class)
+@RunWith(Parameterized.class)
 @ContextConfiguration
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
