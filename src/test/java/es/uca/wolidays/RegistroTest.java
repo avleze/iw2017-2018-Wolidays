@@ -55,7 +55,7 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	public Environment env;
 	
 	@Autowired
-	public static UsuarioRepository usersRepo;
+	private UsuarioRepository usersRepo;
 
 	private TestContextManager testContextManager;
 	
@@ -75,14 +75,6 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	private WebDriver driver;
 	private WebDriverWait wait;
 
-	@BeforeClass
-	public static void removeUser()
-	{
-		Usuario user = usersRepo.findByUsername("pruebausername");
-		
-		if(user != null)
-			usersRepo.delete(user);
-	}
 	
 	@Before
 	public void setUp() throws Exception {
@@ -106,6 +98,12 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 
 	@Test
 	public void registrarse() {
+		
+		Usuario user = usersRepo.findByUsername("pruebausername");
+		
+		if(user != null)
+			usersRepo.delete(user);
+		
 		driver.get(getHostUrl());
 		WebElement botonRegistrarse = wait
 				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_NAV_BTN_REGISTRARSE)));
