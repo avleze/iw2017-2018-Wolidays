@@ -1,6 +1,10 @@
 ![Logo de Wolidays](https://i.imgur.com/yvDiDp9.png)
 
 [![Build Status](https://saucelabs.com/browser-matrix/avleze.svg)](https://saucelabs.com/beta/builds/372d29e3d0fc4c8c9d09dd5300150843)
+[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/gate?key=es.uca%3Awolidays)
+[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/measure?key=es.uca%3Awolidays&metric=bugs)
+[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/measure?key=es.uca%3Awolidays&metric=test_success_density)
+[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/measure?key=es.uca%3Awolidays&metric=code_smells)
 
 ¡Bienvenido al repositorio oficial de **Wolidays**, tu nueva plataforma software dedicada al alquiler de apartamentos favorita! 
 
