@@ -31,7 +31,7 @@ import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
 @RunWith(Parameterized.class)
 @ContextConfiguration
-@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
 
@@ -133,7 +133,7 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 
 		WebElement navBtnPerfil = wait
 				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_NAV_BTN_PERFIL)));
-		assertTrue(navBtnPerfil.getText() == "pruebausername");
+		assertTrue(navBtnPerfil.getText().equals("pruebausername"));
 	}
 
 	@After
