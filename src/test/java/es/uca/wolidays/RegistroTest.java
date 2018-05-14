@@ -6,6 +6,7 @@ import java.net.URL;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -63,13 +64,17 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	private WebDriver driver;
 	private WebDriverWait wait;
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public void removeUser()
+	{
 		Usuario user = usersRepo.findByUsername("pruebausername");
 		
 		if(user != null)
 			usersRepo.delete(user);
+	}
 	
+	@Before
+	public void setUp() throws Exception {
 		this.testContextManager = new TestContextManager(getClass());
 		this.testContextManager.prepareTestInstance(this);
         DesiredCapabilities capabilities = new DesiredCapabilities();
