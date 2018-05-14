@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.core.env.Environment;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
 
@@ -29,6 +31,7 @@ import com.saucelabs.junit.ConcurrentParameterized;
 
 @RunWith(ConcurrentParameterized.class)
 @ContextConfiguration
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
 
@@ -130,7 +133,7 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 
 		WebElement navBtnPerfil = wait
 				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_NAV_BTN_PERFIL)));
-		assertTrue(navBtnPerfil.isDisplayed());
+		assertTrue(navBtnPerfil.getText() == "pruebausername");
 	}
 
 	@After
