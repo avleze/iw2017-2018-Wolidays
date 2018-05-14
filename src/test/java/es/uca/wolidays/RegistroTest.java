@@ -2,14 +2,12 @@ package es.uca.wolidays;
 
 import static org.junit.Assert.assertTrue;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -30,7 +28,7 @@ import com.saucelabs.junit.ConcurrentParameterized;
 
 
 @RunWith(ConcurrentParameterized.class)
-@ContextConfiguration(classes = {WolidaysApplicationTests.class})
+@ContextConfiguration
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
 
