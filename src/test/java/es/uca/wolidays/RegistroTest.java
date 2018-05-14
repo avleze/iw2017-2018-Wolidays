@@ -12,7 +12,8 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -27,6 +28,10 @@ import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
+
+	public RegistroTest(String os, String version, String browser, String deviceName, String deviceOrientation) {
+		super(os, version, browser, deviceName, deviceOrientation);
+	}
 
 	@Autowired
 	public Environment env;
@@ -49,11 +54,18 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 
 	@Before
 	public void setUp() throws MalformedURLException {
-		ChromeOptions caps = new ChromeOptions();
-		caps.setCapability("platform", "Windows 10");
-		caps.setCapability("version", "latest");
-		caps.setCapability("name", "Tests de Inicio de Sesion y Registro");
-		this.driver = new RemoteWebDriver(new URL(URL), caps);
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+
+        capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
+        capabilities.setCapability(CapabilityType.VERSION, version);
+        capabilities.setCapability("deviceName", deviceName);
+        capabilities.setCapability("device-orientation", deviceOrientation);
+        capabilities.setCapability(CapabilityType.PLATFORM_NAME, os);
+
+        String methodName = name.getMethodName();
+        capabilities.setCapability("name", methodName);
+        
+		this.driver = new RemoteWebDriver(new URL(URL), capabilities);
 		this.sessionId = (((RemoteWebDriver) driver).getSessionId()).toString();
 		this.wait = new WebDriverWait(driver, 100);
 	}
