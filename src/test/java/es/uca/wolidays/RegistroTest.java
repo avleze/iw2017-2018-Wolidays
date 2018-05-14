@@ -21,17 +21,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.core.env.Environment;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
+import es.uca.wolidays.backend.repositories.UsuarioRepository;
+
 
 @RunWith(Parameterized.class)
 @ContextConfiguration
-@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
 
@@ -41,6 +40,9 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 
 	@Autowired
 	public Environment env;
+	
+	@Autowired
+	public UsuarioRepository usersRepo;
 
 	private TestContextManager testContextManager;
 	
@@ -62,7 +64,7 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 
 	@Before
 	public void setUp() throws Exception {
-		
+		usersRepo.delete(usersRepo.findByUsername("pruebausername"));
 		this.testContextManager = new TestContextManager(getClass());
 		this.testContextManager.prepareTestInstance(this);
         DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -133,7 +135,7 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 
 		WebElement navBtnPerfil = wait
 				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_NAV_BTN_PERFIL)));
-		assertTrue(navBtnPerfil.getText().equals("pruebausername"));
+		assertTrue(navBtnPerfil.getText().contains("pruebausername"));
 	}
 
 	@After
