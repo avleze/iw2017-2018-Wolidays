@@ -18,14 +18,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.test.context.TestPropertySource;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
-	@Autowired
-	private Environment environment;
+
 
 	private static final String HOST_URL = "http://ec2-18-236-104-144.us-west-2.compute.amazonaws.com:";
+	private static final String PORT = "8080:";
 	private static final String XPATH_NAV_BTN_PERFIL = "//*[@id=\"nav_btn_perfil\"]";
 	private static final String XPATH_NAV_BTN_INICIOSESION = "//*[@id=\"nav_btn_iniciosesion\"]";
 	private static final String XPATH_BOTON_INICIOSESION = "//*[@id=\"form_btn_login\"]";
@@ -114,6 +115,6 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	}
 
 	private String getHostUrl() {
-		return HOST_URL + environment.getProperty("server.port");
+		return HOST_URL + PORT;
 	}
 }
