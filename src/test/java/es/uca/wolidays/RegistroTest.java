@@ -44,7 +44,7 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	public Environment env;
 	
 	@Autowired
-	public UsuarioRepository usersRepo;
+	public static UsuarioRepository usersRepo;
 
 	private TestContextManager testContextManager;
 	
@@ -65,7 +65,7 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	private WebDriverWait wait;
 
 	@BeforeClass
-	public void removeUser()
+	public static void removeUser()
 	{
 		Usuario user = usersRepo.findByUsername("pruebausername");
 		
