@@ -26,6 +26,7 @@ import org.springframework.test.context.TestContextManager;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
+import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.repositories.UsuarioRepository;
 
 
@@ -64,7 +65,11 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 
 	@Before
 	public void setUp() throws Exception {
-		usersRepo.delete(usersRepo.findByUsername("pruebausername"));
+		Usuario user = usersRepo.findByUsername("pruebausername");
+		
+		if(user != null)
+			usersRepo.delete(user);
+	
 		this.testContextManager = new TestContextManager(getClass());
 		this.testContextManager.prepareTestInstance(this);
         DesiredCapabilities capabilities = new DesiredCapabilities();
