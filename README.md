@@ -1,5 +1,7 @@
 ![Logo de Wolidays](https://i.imgur.com/yvDiDp9.png)
 
+[![Build Status](https://saucelabs.com/browser-matrix/avleze.svg)](https://saucelabs.com/beta/builds/372d29e3d0fc4c8c9d09dd5300150843)
+
 ¡Bienvenido al repositorio oficial de **Wolidays**, tu nueva plataforma software dedicada al alquiler de apartamentos favorita! 
 
 El equipo de desarrollo que ha hecho posible este proyecto es el siguiente:
