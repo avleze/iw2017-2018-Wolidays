@@ -6,7 +6,7 @@
 [![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=alert_status)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=alert_status)
 [![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=ncloc)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=ncloc)
 [![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=bugs)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=bugs)
-[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=bugs)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=bugs)
+[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=code_smells)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=code_smellss)
 [![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=security_rating)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=security_rating)
 
 
