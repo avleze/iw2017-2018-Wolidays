@@ -7,7 +7,6 @@ import java.net.URL;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -119,15 +118,12 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 		elementoFormulario.sendKeys("antonio.velezestevez@alum.uca.es");
 		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_USERNAME)));
 		elementoFormulario.sendKeys("pruebausername");
-		elementoFormulario = wait
-				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONTRASENA)));
+		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONTRASENA)));
 		elementoFormulario.sendKeys("pruebacontraseña");
-		elementoFormulario = wait
-				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONFIRMACIONCONTRASENA)));
+		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONFIRMACIONCONTRASENA)));
 		elementoFormulario.sendKeys("pruebacontraseña");
 
-		elementoFormulario = wait
-				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_BOTON_REGISTRARSE_FORMULARIO)));
+		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_BOTON_REGISTRARSE_FORMULARIO)));
 		elementoFormulario.click();
 
 		assertTrue(wait.until(ExpectedConditions.urlContains("login")));
@@ -144,16 +140,13 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 
 		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_USERNAME)));
 		elementoFormulario.sendKeys("pruebausername");
-		elementoFormulario = wait
-				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONTRASENA)));
+		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONTRASENA)));
 		elementoFormulario.sendKeys("pruebacontraseña");
 
-		elementoFormulario = wait
-				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_BOTON_INICIOSESION)));
+		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_BOTON_INICIOSESION)));
 		elementoFormulario.click();
 
-		WebElement navBtnPerfil = wait
-				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_NAV_BTN_PERFIL)));
+		WebElement navBtnPerfil = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_NAV_BTN_PERFIL)));
 		assertTrue(navBtnPerfil.getText().contains("pruebausername"));
 	}
 

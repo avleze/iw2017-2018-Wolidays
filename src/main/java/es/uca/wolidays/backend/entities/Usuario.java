@@ -58,7 +58,7 @@ public class Usuario implements UserDetails, Serializable {
 	
 	private String password;
 	
-	private String cuenta_bancaria;
+	private String cuentaBancaria;
 	
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "usuario_rol",
@@ -75,30 +75,12 @@ public class Usuario implements UserDetails, Serializable {
 	@OneToMany(mappedBy="afectado")
 	private List<Incidencia> incidencias;
 	
-	public String getCuenta_bancaria() {
-		return cuenta_bancaria;
-	}
-	public void setCuenta_bancaria(String cuenta_bancaria) {
-		this.cuenta_bancaria = cuenta_bancaria;
-	}
-	public List<Incidencia> getIncidencias() {
-		return incidencias;
-	}
-	public void setIncidencias(List<Incidencia> incidencias) {
-		this.incidencias = incidencias;
-	}
-	public List<Apartamento> getApartamentos() {
-		return apartamentos;
-	}
-	public void setApartamentos(List<Apartamento> apartamentos) {
-		this.apartamentos = apartamentos;
-	}
-	public List<Reserva> getReservas() {
-		return reservas;
-	}
-	public void setReservas(List<Reserva> reservas) {
-		this.reservas = reservas;
-	}
+	@OneToMany(mappedBy="usuarioAfectado")
+	private List<TransaccionPenalizacion> penalizacionesAfectado;
+	
+	@OneToMany(mappedBy="usuarioPenalizado")
+	private List<TransaccionPenalizacion> penalizacionesPenalizado;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -123,11 +105,23 @@ public class Usuario implements UserDetails, Serializable {
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	public String getPassword() {
 		return password;
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getCuentaBancaria() {
+		return cuentaBancaria;
+	}
+	public void setCuentaBancaria(String cuentaBancaria) {
+		this.cuentaBancaria = cuentaBancaria;
 	}
 	public List<Rol> getRoles() {
 		return roles;
@@ -135,11 +129,38 @@ public class Usuario implements UserDetails, Serializable {
 	public void setRoles(List<Rol> roles) {
 		this.roles = roles;
 	}
-	public String getUsername() {
-		return username;
+	public List<Apartamento> getApartamentos() {
+		return apartamentos;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setApartamentos(List<Apartamento> apartamentos) {
+		this.apartamentos = apartamentos;
+	}
+	public List<Reserva> getReservas() {
+		return reservas;
+	}
+	public void setReservas(List<Reserva> reservas) {
+		this.reservas = reservas;
+	}
+	public List<Incidencia> getIncidencias() {
+		return incidencias;
+	}
+	public void setIncidencias(List<Incidencia> incidencias) {
+		this.incidencias = incidencias;
+	}
+	public List<TransaccionPenalizacion> getPenalizacionesAfectado() {
+		return penalizacionesAfectado;
+	}
+	public void setPenalizacionesAfectado(List<TransaccionPenalizacion> penalizacionesAfectado) {
+		this.penalizacionesAfectado = penalizacionesAfectado;
+	}
+	public List<TransaccionPenalizacion> getPenalizacionesPenalizado() {
+		return penalizacionesPenalizado;
+	}
+	public void setPenalizacionesPenalizado(List<TransaccionPenalizacion> penalizacionesPenalizado) {
+		this.penalizacionesPenalizado = penalizacionesPenalizado;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {

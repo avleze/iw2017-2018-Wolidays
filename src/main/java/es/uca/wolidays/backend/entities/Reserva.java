@@ -49,6 +49,9 @@ public class Reserva implements Serializable {
 	@OneToMany(mappedBy="reserva")
 	private List<Incidencia> incidencias;
 	
+	@OneToMany(mappedBy="reservaAsociada")
+	private List<TransaccionReserva> transaccionesReserva;
+	
 	public List<Incidencia> getIncidencias() {
 		return incidencias;
 	}
