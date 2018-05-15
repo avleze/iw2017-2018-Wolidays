@@ -3,10 +3,12 @@
 
 [![Build Status](https://saucelabs.com/browser-matrix/avleze.svg)](https://saucelabs.com/beta/builds/630f18df601a4176ba84d555fe840ec8)
 
-[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/gate?key=es.uca.wolidays)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/gate?key=es.uca.wolidays)
-[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/measure?key=es.uca.wolidays&metric=bugs)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/measure?key=es.uca.wolidays&metric=bugs)
-[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/measure?key=es.uca.wolidays&metric=test_success_density)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/measure?key=es.uca.wolidays&metric=test_success_density)
-[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/measure?key=es.uca.wolidays&metric=code_smells)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/badges/measure?key=es.uca.wolidays&metric=code_smells)
+[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=alert_status)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=alert_status)
+[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=ncloc)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=ncloc)
+[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=bugs)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=bugs)
+[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=bugs)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=bugs)
+[![Quality Gate](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=security_rating)](http://ec2-18-237-71-231.us-west-2.compute.amazonaws.com:9000/api/project_badges/measure?project=es.uca%3Awolidays&metric=security_rating)
+
 
 ¡Bienvenido al repositorio oficial de **Wolidays**, tu nueva plataforma software dedicada al alquiler de apartamentos favorita! 
 
