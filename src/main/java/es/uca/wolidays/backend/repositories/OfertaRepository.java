@@ -5,10 +5,11 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import es.uca.wolidays.backend.entities.Oferta;
 
-
+@Repository
 public interface OfertaRepository extends CrudRepository<Oferta, Integer>{
 
 	@Query("SELECT o FROM Oferta o WHERE o.fechaInicio >= ?1 AND o.fechaFin <= ?2")

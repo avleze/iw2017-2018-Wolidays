@@ -3,6 +3,7 @@ package es.uca.wolidays.backend.services;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,11 @@ public class ReservaService {
 	
 	public void eliminarTodos(Iterable<Reserva> reservas){
 		repo.deleteAll(reservas);
+	}
+	
+	public Optional<Reserva> buscarReservaPorIdConTransaccionesReserva(Integer pk)
+	{
+		return repo.findByIdWithTransaccionesReserva(pk);
 	}
 	
 	public void eliminarPorId(Integer pk){

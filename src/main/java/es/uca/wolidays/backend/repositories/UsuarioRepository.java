@@ -5,10 +5,11 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import es.uca.wolidays.backend.entities.Usuario;
 
-
+@Repository
 public interface UsuarioRepository extends CrudRepository<Usuario, Integer>{
 	Usuario findByUsername(String username);
 	Usuario findByCorreo(String correo);

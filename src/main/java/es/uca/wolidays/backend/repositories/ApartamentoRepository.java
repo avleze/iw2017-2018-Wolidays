@@ -8,10 +8,11 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import es.uca.wolidays.backend.entities.Apartamento;
 
-
+@Repository
 public interface ApartamentoRepository extends CrudRepository<Apartamento, Integer>{
 	
 	List<Apartamento> findByUbicacion(String ubicacion);
