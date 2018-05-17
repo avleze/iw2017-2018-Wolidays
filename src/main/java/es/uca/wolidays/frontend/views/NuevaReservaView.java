@@ -127,7 +127,7 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		binder.forField(tarjetaCredField)
 			.withValidator(new RegexpValidator("La tarjeta de crédito debe tener 16 dígitos.", tarjetaRgx, true))
 			.asRequired(CAMPO_OBLIGATORIO)
-			.bind(Reserva::getTarjeta_huesped, Reserva::setTarjeta_huesped);
+			.bind(Reserva::getTarjetaHuesped, Reserva::setTarjetaHuesped);
 		
 		infoLayout.addComponents(contactoField, comentarioField, tarjetaCredField);
 		infoLayout.setComponentAlignment(contactoField, Alignment.TOP_LEFT);
