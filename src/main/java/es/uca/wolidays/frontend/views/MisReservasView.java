@@ -103,7 +103,7 @@ public class MisReservasView extends VerticalLayout implements View {
 				precioNoches.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 				
 				Button estadoReserva = new Button();
-				estadoReserva.setCaption("Estado: Pendiente de confirmación");
+				estadoReserva.setCaption("Estado: " + rsrv.getEstado());
 				estadoReserva.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 				
 				reserva.addComponents(fechaLlegada, fechaSalida, ubicacion, precioNoches, estadoReserva);

@@ -40,7 +40,7 @@ public class Reserva implements Serializable {
 	private String contacto;
 	private String comentario;
 	@Column(length = 16)
-	private String tarjeta_huesped;
+	private String tarjetaHuesped;
 	@Enumerated(EnumType.STRING)
 	private Estado estado;
 	
@@ -113,13 +113,29 @@ public class Reserva implements Serializable {
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
 	}
-
-	public String getTarjeta() {
-		return tarjeta_huesped;
+	
+	public String getTarjetaHuesped() {
+		return tarjetaHuesped;
 	}
 
-	public void setTarjeta(String tarjeta) {
-		this.tarjeta_huesped = tarjeta;
+	public void setTarjetaHuesped(String tarjetaHuesped) {
+		this.tarjetaHuesped = tarjetaHuesped;
+	}
+	
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	public List<TransaccionReserva> getTransaccionesReserva() {
+		return transaccionesReserva;
+	}
+
+	public void setTransaccionesReserva(List<TransaccionReserva> transaccionesReserva) {
+		this.transaccionesReserva = transaccionesReserva;
 	}
 
 	public Apartamento getApartamento() {

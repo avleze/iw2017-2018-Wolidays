@@ -64,7 +64,7 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 	private String precioStdRgx = "^\\d{0,5}(\\.\\d{1,2})?$";
 	
 	Binder<Ubicacion> ubiBinder = new Binder<>();
-	private String ubicacionRgx = "[\\w\\s,.()áéíóúÁÉÍÓÚñÑ]+";
+	private String ubicacionRgx = "[\\w\\s,.()áéíóúÁÉÍÓÚñÑ\\/]+";
 	
 	private Boolean precioVacio = true;
 	private Boolean precioValido = false;
@@ -147,6 +147,8 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		
 		TextField precioStdField = new TextField("Precio estándar por noche");
 		precioStdField.setWidth("85px");
+		aptoBinder.forField(precioStdField)
+			.asRequired(CAMPO_OBLIGATORIO);
 		
 		rightFields.addComponents(descripcionField, precioStdField);
 		rightFields.setComponentAlignment(descripcionField, Alignment.TOP_LEFT);
