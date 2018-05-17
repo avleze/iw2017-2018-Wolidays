@@ -38,9 +38,9 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 	
 	private final VerticalLayout mainLayout = new VerticalLayout();
 	private final HorizontalLayout navbarLayout = new HorizontalLayout();
-	private final HorizontalLayout buttons_layout = new HorizontalLayout();
+	private final HorizontalLayout buttonsLayout = new HorizontalLayout();
 	
-	private Button inicio_sesion = createNavigationButton("Iniciar sesión", "nav_btn_iniciosesion", LoginView.VIEW_NAME, null);
+	private Button inicioSesion = createNavigationButton("Iniciar sesión", "nav_btn_iniciosesion", LoginView.VIEW_NAME, null);
 	private Button registrarse = createNavigationButton("Registrarse","nav_btn_registrarse", SignupView.VIEW_NAME, null);
 	private Button misReservas = createNavigationButton("Mis reservas", "nav_btn_misreservas", MisReservasView.VIEW_NAME, VaadinIcons.TAGS);
 	private Button registrarApto = createNavigationButton("Nuevo apartamento", "nav_btn_nuevoapartamento", NuevoApartamentoView.VIEW_NAME, VaadinIcons.PLUS_CIRCLE);
@@ -65,21 +65,21 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		navbarLayout.setWidth(100.0f, Unit.PERCENTAGE);
 		navbarLayout.setHeight("60px");		
 		
-		buttons_layout.setHeight("60px");
+		buttonsLayout.setHeight("60px");
 		
 		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 		FileResource rsc = new FileResource(new File(basepath + "/resources/img/WolidaysIcon.png"));
-		Image tl_icon = new Image(null, rsc);
-		tl_icon.addStyleName("icon");
-		tl_icon.addClickListener(e -> getUI().getNavigator().navigateTo(""));
-		navbarLayout.addComponent(tl_icon);
-		navbarLayout.setComponentAlignment(tl_icon, Alignment.MIDDLE_LEFT);
+		Image tlIcon = new Image(null, rsc);
+		tlIcon.addStyleName("icon");
+		tlIcon.addClickListener(e -> getUI().getNavigator().navigateTo(""));
+		navbarLayout.addComponent(tlIcon);
+		navbarLayout.setComponentAlignment(tlIcon, Alignment.MIDDLE_LEFT);
 		
 		setButtons();
 		
-		buttons_layout.addStyleName("margin_buttons");
-		navbarLayout.addComponent(buttons_layout);
-		navbarLayout.setComponentAlignment(buttons_layout, Alignment.MIDDLE_RIGHT);	
+		buttonsLayout.addStyleName("margin_buttons");
+		navbarLayout.addComponent(buttonsLayout);
+		navbarLayout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);	
 		
 		mainLayout.addComponent(navbarLayout);
 		mainLayout.setComponentAlignment(navbarLayout, Alignment.TOP_CENTER);
@@ -100,18 +100,18 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		
 		if(SecurityUtils.isLoggedIn()) {
 			
-			buttons_layout.addComponents(misReservas, registrarApto, misAptos, perfil);
-			buttons_layout.setComponentAlignment(misReservas, Alignment.MIDDLE_RIGHT);
-			buttons_layout.setComponentAlignment(registrarApto, Alignment.MIDDLE_RIGHT);
-			buttons_layout.setComponentAlignment(misAptos, Alignment.MIDDLE_RIGHT);
+			buttonsLayout.addComponents(misReservas, registrarApto, misAptos, perfil);
+			buttonsLayout.setComponentAlignment(misReservas, Alignment.MIDDLE_RIGHT);
+			buttonsLayout.setComponentAlignment(registrarApto, Alignment.MIDDLE_RIGHT);
+			buttonsLayout.setComponentAlignment(misAptos, Alignment.MIDDLE_RIGHT);
 			setPerfilButtonCaption();
-			buttons_layout.setComponentAlignment(perfil, Alignment.MIDDLE_RIGHT);
+			buttonsLayout.setComponentAlignment(perfil, Alignment.MIDDLE_RIGHT);
 			
 		} else {			
 			
-			buttons_layout.addComponents(inicio_sesion, registrarse);
-			buttons_layout.setComponentAlignment(inicio_sesion, Alignment.MIDDLE_RIGHT);
-			buttons_layout.setComponentAlignment(registrarse, Alignment.MIDDLE_RIGHT);	
+			buttonsLayout.addComponents(inicioSesion, registrarse);
+			buttonsLayout.setComponentAlignment(inicioSesion, Alignment.MIDDLE_RIGHT);
+			buttonsLayout.setComponentAlignment(registrarse, Alignment.MIDDLE_RIGHT);	
 			
 		}
 	}
@@ -120,16 +120,16 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		
 		if(!SecurityUtils.isLoggedIn()) {
 			
-			buttons_layout.removeComponent(misReservas);
-			buttons_layout.removeComponent(registrarApto);
-			buttons_layout.removeComponent(misAptos);
-			buttons_layout.removeComponent(perfil);
+			buttonsLayout.removeComponent(misReservas);
+			buttonsLayout.removeComponent(registrarApto);
+			buttonsLayout.removeComponent(misAptos);
+			buttonsLayout.removeComponent(perfil);
 			
 			
 		} else {			
 			
-			buttons_layout.removeComponent(inicio_sesion);
-			buttons_layout.removeComponent(registrarse);
+			buttonsLayout.removeComponent(inicioSesion);
+			buttonsLayout.removeComponent(registrarse);
 			
 		}
 	}
