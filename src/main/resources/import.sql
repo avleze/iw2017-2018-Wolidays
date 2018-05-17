@@ -1,1 +1,0 @@
-INSERT INTO rol (nombre) VALUES ('ADMIN_ROL'), ('CLIENTE_ROL'), ('GESTOR_ROL');
