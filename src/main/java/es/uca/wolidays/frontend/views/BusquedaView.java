@@ -208,7 +208,7 @@ public class BusquedaView extends VerticalLayout implements View {
 				ubicacion.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "large_text");
 				ubicacion.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 				
-				Button precioStd = new Button("Desde " + apto.getPrecioEstandar() + "€ la noche");
+				Button precioStd = new Button("Desde " + String.valueOf(apto.getPrecioEstandar()) + "€ la noche");
 				precioStd.setStyleName(ValoTheme.BUTTON_BORDERLESS);
 				precioStd.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 				
