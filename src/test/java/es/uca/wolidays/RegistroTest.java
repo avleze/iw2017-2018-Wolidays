@@ -67,6 +67,7 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 	private static final String XPATH_TEXTBOX_CONTRASENA = "//*[@id=\"form_password\"]";
 	private static final String XPATH_TEXTBOX_USERNAME = "//*[@id=\"form_username\"]";
 	private static final String XPATH_TEXTBOX_CORREO = "//*[@id=\"form_correo\"]";
+	private static final String XPATH_TEXTBOX_CUENTABANCARIA = "//*[@id=\"form_cuentabancaria\"]";
 	private static final String XPATH_TEXTBOX_NOMBRE = "//*[@id=\"form_nombre\"]";
 	private static final String XPATH_TEXTBOX_APELLIDOS = "//*[@id=\"form_apellidos\"]";
 	private static final String XPATH_NAV_BTN_REGISTRARSE = "//*[@id=\"nav_btn_registrarse\"]";
@@ -116,6 +117,8 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 		elementoFormulario.sendKeys("VÉLEZ ESTÉVEZ");
 		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CORREO)));
 		elementoFormulario.sendKeys("antonio.velezestevez@alum.uca.es");
+		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CUENTABANCARIA)));
+		elementoFormulario.sendKeys("12345678901234567890");
 		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_USERNAME)));
 		elementoFormulario.sendKeys("pruebausername");
 		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONTRASENA)));

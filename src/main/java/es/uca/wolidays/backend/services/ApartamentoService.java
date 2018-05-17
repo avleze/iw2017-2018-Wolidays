@@ -53,7 +53,7 @@ public class ApartamentoService {
 	}
 	
 	public Boolean existeOfertasEntreFechas(Apartamento apto, LocalDate fechaini, LocalDate fechafin) {
-		return buscarOfertasEntreFechas(apto, fechaini, fechafin).size() > 0;
+		return !buscarOfertasEntreFechas(apto, fechaini, fechafin).isEmpty();
 	}
 	
 	public Apartamento guardar(Apartamento apartamento) {
