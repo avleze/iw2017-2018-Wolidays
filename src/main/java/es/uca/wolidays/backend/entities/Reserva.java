@@ -113,13 +113,29 @@ public class Reserva implements Serializable {
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
 	}
-
-	public String getTarjeta() {
+	
+	public String getTarjeta_huesped() {
 		return tarjeta_huesped;
 	}
 
-	public void setTarjeta(String tarjeta) {
-		this.tarjeta_huesped = tarjeta;
+	public void setTarjeta_huesped(String tarjeta_huesped) {
+		this.tarjeta_huesped = tarjeta_huesped;
+	}
+	
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	public List<TransaccionReserva> getTransaccionesReserva() {
+		return transaccionesReserva;
+	}
+
+	public void setTransaccionesReserva(List<TransaccionReserva> transaccionesReserva) {
+		this.transaccionesReserva = transaccionesReserva;
 	}
 
 	public Apartamento getApartamento() {

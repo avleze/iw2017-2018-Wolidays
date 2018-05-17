@@ -51,6 +51,7 @@ public class SignupView extends VerticalLayout implements View {
 	private Binder<Usuario> binder = new Binder<>();
 	private String nameRgx = "[a-zA-ZáéíóúÁÉÍÓÚü\\s]+";
 	private String usrnameRgx = "[a-zA-Z-_\\d]+";
+	private String bankAccountRgx = "\\d{20}";
 	
 	@PostConstruct
 	void init() {
@@ -80,7 +81,14 @@ public class SignupView extends VerticalLayout implements View {
 		binder.forField(correo)
 			.withValidator(new EmailValidator("Dirección de correo no válida."))
 			.asRequired(CAMPO_OBLIGATORIO)
-			.bind(Usuario::getCorreo, Usuario::setCorreo);		
+			.bind(Usuario::getCorreo, Usuario::setCorreo);
+		
+		TextField cuentaBancaria = new TextField("Cuenta bancaria");
+		cuentaBancaria.setId("form_cuentabancaria");
+		binder.forField(cuentaBancaria)
+			.withValidator(new RegexpValidator("El número de cuenta bancaria debe tener 20 dígitos.", bankAccountRgx, true))
+			.asRequired(CAMPO_OBLIGATORIO)
+			.bind(Usuario::getCuentaBancaria, Usuario::setCuentaBancaria);
 		
 		TextField username = new TextField("Username");
 		username.setId("form_username");
@@ -103,11 +111,12 @@ public class SignupView extends VerticalLayout implements View {
 		
 		Button registro = new Button("Regístrate");
 		registro.setId("form_btn_registrate");
-		registroLayout.addComponents(title, nombre, apellidos, correo, username, password, confirmPassword, registro);
+		registroLayout.addComponents(title, nombre, apellidos, correo, cuentaBancaria, username, password, confirmPassword, registro);
 		registroLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
 		registroLayout.setComponentAlignment(nombre, Alignment.TOP_CENTER);
 		registroLayout.setComponentAlignment(apellidos, Alignment.TOP_CENTER);
 		registroLayout.setComponentAlignment(correo, Alignment.TOP_CENTER);
+		registroLayout.setComponentAlignment(cuentaBancaria, Alignment.TOP_CENTER);
 		registroLayout.setComponentAlignment(username, Alignment.TOP_CENTER);
 		registroLayout.setComponentAlignment(password, Alignment.TOP_CENTER);
 		registroLayout.setComponentAlignment(confirmPassword, Alignment.TOP_CENTER);
@@ -127,6 +136,7 @@ public class SignupView extends VerticalLayout implements View {
 				user.setNombre(nombre.getValue());
 				user.setApellidos(apellidos.getValue());
 				user.setCorreo(correo.getValue());
+				user.setCuentaBancaria(cuentaBancaria.getValue());
 				user.setUsername(username.getValue());
 				user.setPassword(password.getValue());
 				List<Rol> roles = new ArrayList<>();
