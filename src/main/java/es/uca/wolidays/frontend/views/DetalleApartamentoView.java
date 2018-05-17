@@ -40,13 +40,13 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 	
 	private HorizontalLayout infoLayout;
 	private VerticalLayout aptoParamsLayout;
-	private VerticalLayout desc_buttons_Layout;
+	private VerticalLayout descButtonsLayout;
 	private HorizontalLayout descLayout;
 	private VerticalLayout buttonsLayout;
 	
 	private Apartamento apartamento;
-	private String huesped_username;
-	private int id_apto;
+	private String huespedUsername;
+	private int idApto;
 	private Label title;
 
 	@PostConstruct
@@ -62,8 +62,8 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 		title = new Label();
 		title.setCaptionAsHtml(true);
 		
-		desc_buttons_Layout = new VerticalLayout();
-		desc_buttons_Layout.setHeight("100%");
+		descButtonsLayout = new VerticalLayout();
+		descButtonsLayout.setHeight("100%");
 		descLayout = new HorizontalLayout();
 		descLayout.setHeight("100%");
 		buttonsLayout = new VerticalLayout();
@@ -75,15 +75,15 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 	public void enter(ViewChangeEvent event) {
 		mainScreen.setButtons();
 		
-		id_apto = Integer.parseInt(event.getParameters().split("/")[0]);
+		idApto = Integer.parseInt(event.getParameters().split("/")[0]);
 		
-		Optional<Apartamento> existeApartamento = aptoService.buscarPorId(id_apto);
+		Optional<Apartamento> existeApartamento = aptoService.buscarPorId(idApto);
 		
 		if(existeApartamento.isPresent()) {
 			apartamento = existeApartamento.get();
 		}
 		
-		huesped_username = apartamento.getPropietario().getUsername();
+		huespedUsername = apartamento.getPropietario().getUsername();
 		
 		Ubicacion aptoUbi = apartamento.getUbicacion();
 		title.setCaption("<h1>Apartamento de <i>" + aptoUbi.getDireccion() + " (" + aptoUbi.getCiudad() + ")</i></h1>");
@@ -114,13 +114,13 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 		
 		// Botones
 		
-		if(SecurityUtils.isLoggedIn() && huesped_username.equals(SecurityUtils.getUsername())) {
+		if(SecurityUtils.isLoggedIn() && huespedUsername.equals(SecurityUtils.getUsername())) {
 			/*
 			 * El usuario ha iniciado sesión y es el propietario del apartamento en cuestión.
 			 */
 			Button ofertasAptoButton = new Button("Ver ofertas");
 			ofertasAptoButton.addClickListener(e -> {
-				getUI().getNavigator().navigateTo(OfertasView.VIEW_NAME + "/" + id_apto);
+				getUI().getNavigator().navigateTo(OfertasView.VIEW_NAME + "/" + idApto);
 			});
 			
 			buttonsLayout.addComponent(ofertasAptoButton);
@@ -135,7 +135,7 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 			reservarAptoButton.addClickListener(e -> {
 				if(SecurityUtils.isLoggedIn()) {
 					int userid = SecurityUtils.getUserId();
-					getUI().getNavigator().navigateTo(NuevaReservaView.VIEW_NAME + "/" + userid + "/" + id_apto);
+					getUI().getNavigator().navigateTo(NuevaReservaView.VIEW_NAME + "/" + userid + "/" + idApto);
 				} else {
 					Notification.show("Debes iniciar sesión", "para poder reservar apartamentos.", Notification.Type.ERROR_MESSAGE);
 				}
@@ -146,13 +146,13 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 			buttonsLayout.setComponentAlignment(reservarAptoButton, Alignment.BOTTOM_RIGHT);
 		}
 		
-		desc_buttons_Layout.addComponents(descLayout, buttonsLayout);
-		desc_buttons_Layout.setComponentAlignment(descLayout, Alignment.TOP_LEFT);
-		desc_buttons_Layout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
+		descButtonsLayout.addComponents(descLayout, buttonsLayout);
+		descButtonsLayout.setComponentAlignment(descLayout, Alignment.TOP_LEFT);
+		descButtonsLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
 		
-		infoLayout.addComponents(aptoParamsLayout, desc_buttons_Layout);
+		infoLayout.addComponents(aptoParamsLayout, descButtonsLayout);
 		infoLayout.setComponentAlignment(aptoParamsLayout, Alignment.TOP_LEFT);
-		infoLayout.setComponentAlignment(desc_buttons_Layout, Alignment.TOP_RIGHT);
+		infoLayout.setComponentAlignment(descButtonsLayout, Alignment.TOP_RIGHT);
 		
 		detalleLayout.addComponents(title, infoLayout);
 		detalleLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
