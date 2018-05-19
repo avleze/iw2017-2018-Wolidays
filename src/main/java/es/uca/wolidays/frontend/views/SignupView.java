@@ -141,11 +141,11 @@ public class SignupView extends VerticalLayout implements View {
 				user.setPassword(password.getValue());
 				List<Rol> roles = new ArrayList<>();
 				
-				Optional<Rol> defaultRol = rolService.buscarPorNombre("DEFAULT_ROL");
+				Optional<Rol> defaultRol = rolService.buscarPorNombre("CLIENTE_ROL");
 				if(!defaultRol.isPresent())
 				{
 					Rol rol = new Rol();
-					rol.setNombre("DEFAULT_ROL");
+					rol.setNombre("CLIENTE_ROL");
 					rolService.guardar(rol);
 					defaultRol = Optional.of(rol);
 				}
