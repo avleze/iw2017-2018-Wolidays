@@ -65,6 +65,7 @@ public class DetalleReservaView extends VerticalLayout implements View {
 		detalleReservaLayout.setWidth("100%");
 		
 		infoLayout = new HorizontalLayout();
+		infoLayout.setWidth("100%");
 		infoLayout.setMargin(false);
 		
 		detallesLayout = new VerticalLayout();
@@ -83,7 +84,7 @@ public class DetalleReservaView extends VerticalLayout implements View {
 		
 		rsrvId = Integer.parseInt(event.getParameters().split("/")[0]);
 		aptoId = Integer.parseInt(event.getParameters().split("/")[1]);
-		Optional<Reserva> existeReserva = rsrvService.buscarPorId(rsrvId);
+		Optional<Reserva> existeReserva = rsrvService.buscarReservaPorIdConIncidencias(rsrvId);
 		Optional<Apartamento> existeApartamento = aptoService.buscarPorId(aptoId);
 		
 		if(existeReserva.isPresent()) {
@@ -104,7 +105,11 @@ public class DetalleReservaView extends VerticalLayout implements View {
 		
 		ArrayList<Label> listIncid = new ArrayList<>();
 		for(Incidencia i : incidencias) {
-			listIncid.add(new Label("\t" + i.getFechaIncidencia() + " - " + i.getComentario()));
+			Label incidencia = new Label();
+			incidencia.setCaptionAsHtml(true);
+			incidencia.setCaption("&emsp;" + i.getFechaIncidencia() + " - " + i.getComentario());
+			
+			listIncid.add(incidencia);
 		}		
 		
 		
@@ -147,9 +152,7 @@ public class DetalleReservaView extends VerticalLayout implements View {
 		
 		Button volverReservas = new Button("Volver a reservas");
 		volverReservas.setIcon(VaadinIcons.ARROW_BACKWARD);
-		volverReservas.addClickListener(e -> getUI().getNavigator().navigateTo("reservas"));
-		
-		
+		volverReservas.addClickListener(e -> getUI().getNavigator().navigateTo("reservas"));		
 		
 		detallesLayout.addComponents(anfitrion, huesped, precio, estado, numIncidencias);
 		detallesLayout.setComponentAlignment(anfitrion, Alignment.TOP_LEFT);

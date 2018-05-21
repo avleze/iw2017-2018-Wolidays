@@ -81,9 +81,7 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		navbarLayout.setHeight("60px");	
 		
 		logoLayout.setHeight("60px");
-		//logoLayout.setWidth("10%");
 		buttonsLayout.setHeight("60px");
-		//buttonsLayout.setWidth("90%");
 		
 		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 		FileResource rsc = new FileResource(new File(basepath + "/resources/img/WolidaysIcon.png"));
@@ -205,8 +203,7 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		perfil.setEmptySelectionAllowed(false);
 		perfil.setWidth("-1");
 		perfil.setHeight("40px");
-		
-		
+		perfil.setId("nav_btn_perfil");		
 		
 		perfil.addValueChangeListener(e -> {
 			String selectedOption = perfil.getValue();
