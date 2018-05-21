@@ -20,7 +20,8 @@ import javax.persistence.OneToMany;
 
 @Entity
 @NamedEntityGraphs({
-	@NamedEntityGraph(name="Reserva.reservaConTransaccionesReserva", attributeNodes=@NamedAttributeNode("transaccionesReserva"))
+	@NamedEntityGraph(name="Reserva.reservaConTransaccionesReserva", attributeNodes=@NamedAttributeNode("transaccionesReserva")),
+	@NamedEntityGraph(name="Reserva.reservaConIncidencias", attributeNodes=@NamedAttributeNode("incidencias"))
 })
 public class Reserva implements Serializable {
 

@@ -18,4 +18,8 @@ public interface ReservaRepository extends CrudRepository<Reserva, Integer>{
 	@EntityGraph(value = "Reserva.reservaConTransaccionesReserva", type = EntityGraphType.LOAD)
 	@Query("SELECT r FROM Reserva r WHERE r.id = ?1")
 	Optional<Reserva> findByIdWithTransaccionesReserva(Integer pk);
+	
+	@EntityGraph(value = "Reserva.reservaConIncidencias", type = EntityGraphType.LOAD)
+	@Query("SELECT r FROM Reserva r WHERE r.id = ?1")
+	Optional<Reserva> findByIdWithIncidencias(Integer pk);
 }
