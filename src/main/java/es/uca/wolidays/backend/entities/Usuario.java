@@ -185,4 +185,9 @@ public class Usuario implements UserDetails, Serializable {
 	public boolean isEnabled() {
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return this.getUsername();
+	}
 }

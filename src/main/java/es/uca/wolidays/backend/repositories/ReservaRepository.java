@@ -12,6 +12,9 @@ import es.uca.wolidays.backend.entities.Reserva;
 
 @Repository
 public interface ReservaRepository extends CrudRepository<Reserva, Integer>{
+	
+	Optional<Reserva> findById(Integer pk);
+	
 	@EntityGraph(value = "Reserva.reservaConTransaccionesReserva", type = EntityGraphType.LOAD)
 	@Query("SELECT r FROM Reserva r WHERE r.id = ?1")
 	Optional<Reserva> findByIdWithTransaccionesReserva(Integer pk);

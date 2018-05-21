@@ -29,8 +29,11 @@ public class ReservaService {
 		repo.deleteAll(reservas);
 	}
 	
-	public Optional<Reserva> buscarReservaPorIdConTransaccionesReserva(Integer pk)
-	{
+	public Optional<Reserva> buscarPorId(Integer pk) {
+		return repo.findById(pk);
+	}
+	
+	public Optional<Reserva> buscarReservaPorIdConTransaccionesReserva(Integer pk) {
 		return repo.findByIdWithTransaccionesReserva(pk);
 	}
 	

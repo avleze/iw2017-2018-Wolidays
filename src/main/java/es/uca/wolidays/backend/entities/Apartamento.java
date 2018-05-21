@@ -119,4 +119,9 @@ public class Apartamento implements Serializable {
 		this.precioEstandar = precioEstandar;		
 	}
 	
+	@Override
+	public String toString() {
+		return this.ubicacion.toString();
+	}
+	
 }

@@ -168,6 +168,7 @@ public class NuevaReservaView extends VerticalLayout implements View {
 			reserva.setUsuario(usuario);
 			reserva.setApartamento(apartamento);
 			reserva.setPrecioFinal(precioFinal);
+			reserva.setEstado(Reserva.Estado.Pendiente);
 			
 			try {
 				binder.writeBean(reserva);
