@@ -156,7 +156,7 @@ public class SignupView extends VerticalLayout implements View {
 				try {
 					
 					binder.writeBean(user);				
-					service.guardar(user);
+					service.guardar(user, true);
 					LoginView.setSuccessfulSignUpNotification();
 					getUI().getNavigator().navigateTo("login");
 					

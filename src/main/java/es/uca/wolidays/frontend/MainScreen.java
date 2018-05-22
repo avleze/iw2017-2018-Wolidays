@@ -29,6 +29,8 @@ import es.uca.wolidays.frontend.views.MisReservasView;
 import es.uca.wolidays.frontend.views.NuevoApartamentoView;
 import es.uca.wolidays.frontend.views.PerfilView;
 import es.uca.wolidays.frontend.views.SignupView;
+import es.uca.wolidays.frontend.views.admin.NegocioView;
+import es.uca.wolidays.frontend.views.admin.PermisosView;
 import es.uca.wolidays.frontend.views.gestor.FacturacionView;
 import es.uca.wolidays.frontend.views.gestor.ReservasView;
 
@@ -51,18 +53,24 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 	private Button inicioSesion = createNavigationButton("Iniciar sesión", "nav_btn_iniciosesion", LoginView.VIEW_NAME, null);
 	private Button registrarse = createNavigationButton("Registrarse","nav_btn_registrarse", SignupView.VIEW_NAME, null);
 	
-	// Botones de usuario cliente
+	// Botones de usuario con sesion iniciada
+	private NativeSelect<String> perfil = new NativeSelect<>();
+	private List<String> perfilOptions = new ArrayList<>();
+	
+	// Botones exclusivos de usuario cliente
 	private Button misReservas = createNavigationButton("Mis reservas", "nav_btn_misreservas", MisReservasView.VIEW_NAME, VaadinIcons.TAGS);
 	private Button registrarApto = createNavigationButton("Nuevo apartamento", "nav_btn_nuevoapartamento", NuevoApartamentoView.VIEW_NAME, VaadinIcons.PLUS_CIRCLE);
 	private Button misAptos = createNavigationButton("Mis apartamentos", "nav_btn_misapartamentos", MisApartamentosView.VIEW_NAME, VaadinIcons.HOME);
 	
-	// Botones de usuario gestor
+	// Botones exclusivos de usuario gestor
 	private Button facturacion = createNavigationButton("Facturación", "nav_btn_facturacion", FacturacionView.VIEW_NAME, VaadinIcons.BOOK_DOLLAR);
 	private Button reservas = createNavigationButton("Reservas", "nav_btn_reservas", ReservasView.VIEW_NAME, VaadinIcons.TAGS);
 	
-	// Botones de usuario con sesion iniciada
-	private NativeSelect<String> perfil = new NativeSelect<>();
-	private List<String> perfilOptions = new ArrayList<>();
+	// Botones exclusivos de usuario administrador
+	private Button permisos = createNavigationButton("Permisos", "nav_btn_permisos", PermisosView.VIEW_NAME, VaadinIcons.KEY);
+	private Button negocio = createNavigationButton("Negocio", "nav_btn_negocio", NegocioView.VIEW_NAME, VaadinIcons.SUITCASE);
+	
+	
 	
 	@Override
 	public void attach() {
@@ -117,6 +125,9 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		if(SecurityUtils.isLoggedIn()) {
 			
 			if(SecurityUtils.hasRole("ADMIN_ROL")) {
+				buttonsLayout.addComponents(permisos, negocio);
+				buttonsLayout.setComponentAlignment(permisos, Alignment.MIDDLE_RIGHT);
+				buttonsLayout.setComponentAlignment(negocio, Alignment.MIDDLE_RIGHT);
 				
 			} else if(SecurityUtils.hasRole("GESTOR_ROL")) {
 				buttonsLayout.addComponents(facturacion, reservas);

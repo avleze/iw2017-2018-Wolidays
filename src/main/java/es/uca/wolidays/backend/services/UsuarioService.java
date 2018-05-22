@@ -45,8 +45,11 @@ public class UsuarioService implements UserDetailsService{
 		return usuario;
 	}
 	
-	public Usuario guardar(Usuario usuario) {
-		usuario.setPassword(passwordEncoder.encode(usuario.getPassword() != null ? usuario.getPassword() : "default"));
+	public Usuario guardar(Usuario usuario, Boolean cifrarPassword) {
+		if(cifrarPassword) {
+			usuario.setPassword(passwordEncoder.encode(usuario.getPassword() != null ? usuario.getPassword() : "default"));
+		}
+
 		return repo.save(usuario);	
 	}
 	
