@@ -45,7 +45,12 @@ pipeline {
 		
         stage ('Compilacion y Entrega') {
             steps {
-                sh 'mvn package -DskipTests=true' 
+                sh '''
+                mvn vaadin:compile
+                mvn vaadin:update-widgetset
+                mvn package -DskipTests=true
+                
+                ''' 
             }
         }
 
