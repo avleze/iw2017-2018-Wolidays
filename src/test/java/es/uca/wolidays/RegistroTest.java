@@ -37,14 +37,12 @@ import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.junit.ConcurrentParameterized;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
-import es.uca.wolidays.backend.entities.Usuario;
-import es.uca.wolidays.backend.repositories.UsuarioRepository;
 
 
 @RunWith(ConcurrentParameterized.class)
 @ContextConfiguration(classes = {TestConfig.class})
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
+public class RegistroTest  implements SauceOnDemandSessionIdProvider {
 
 	public static final String USERNAME = "avleze";
 	public static final String ACCESS_KEY = "5acfd4e5-3c09-400a-b8be-44e843fcd417";
@@ -59,8 +57,6 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 				return String.format("%s", super.getMethodName());
 			}
 		};
-
-	protected String sessionId;
 
 	@Override
 	public String getSessionId() {
