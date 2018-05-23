@@ -24,9 +24,7 @@ public class SampleViewAccessControl implements ViewAccessControl{
 		List<String> gestorViews = Arrays.asList(
 		);
 		
-		if(SecurityUtils.hasRole("ADMIN_ROL")){
-    		return true;
-    	} else if (clienteViews.contains(beanName)) {
+		if (clienteViews.contains(beanName)) {
             return SecurityUtils.hasRole("CLIENTE_ROL");
         } else if (adminViews.contains(beanName)) {
             return SecurityUtils.hasRole("ADMIN_ROL");

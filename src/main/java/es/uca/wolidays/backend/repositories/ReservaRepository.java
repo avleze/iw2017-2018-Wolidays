@@ -1,5 +1,7 @@
 package es.uca.wolidays.backend.repositories;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -22,4 +24,7 @@ public interface ReservaRepository extends CrudRepository<Reserva, Integer>{
 	@EntityGraph(value = "Reserva.reservaConIncidencias", type = EntityGraphType.LOAD)
 	@Query("SELECT r FROM Reserva r WHERE r.id = ?1")
 	Optional<Reserva> findByIdWithIncidencias(Integer pk);
+	
+	@Query("SELECT r FROM Reserva r, Apartamento apt WHERE r.apto_id = ?1 AND r.fecha_inicio >= ?2 AND r.fecha_fin <= ?3")
+	List<Reserva> findByFechasBetween(Integer aptID, LocalDate fecha_inicio, LocalDate fecha_fin);
 }
