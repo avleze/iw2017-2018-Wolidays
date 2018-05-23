@@ -37,79 +37,14 @@ import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.junit.ConcurrentParameterized;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
-
-
 @RunWith(ConcurrentParameterized.class)
-@ContextConfiguration(classes = {TestConfig.class})
-@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-public class RegistroTest  implements SauceOnDemandSessionIdProvider {
+@ContextConfiguration(classes = { TestConfig.class })
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+public class RegistroTest implements SauceOnDemandSessionIdProvider {
 
 	public static final String USERNAME = "avleze";
 	public static final String ACCESS_KEY = "5acfd4e5-3c09-400a-b8be-44e843fcd417";
 	public static final String URL = "https://" + USERNAME + ":" + ACCESS_KEY + "@ondemand.saucelabs.com:443/wd/hub";
-	
-	public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(USERNAME, ACCESS_KEY);
-	@Rule
-	public SauceOnDemandTestWatcher resultReportingTestWatcher = new SauceOnDemandTestWatcher(this, authentication);
-	@Rule
-	public TestName name = new TestName() {
-			public String getMethodName() {
-				return String.format("%s", super.getMethodName());
-			}
-		};
-
-	@Override
-	public String getSessionId() {
-		return sessionId;
-	}
-
-	
-	
-	@ClassRule
-	public static final SpringClassRule springClassRule = new SpringClassRule();
-	
-	@Rule
-	public final SpringMethodRule springMethodRule = new SpringMethodRule();
-	
-    protected String browser;
-    protected String os;
-    protected String version;
-    protected String deviceName;
-    protected String deviceOrientation;
-    protected String sessionId;
-    protected WebDriver driver;
-    protected String username;
-    protected String correo;
-
- 
-
-    public RegistroTest(String os, String version, String browser, String deviceName, String deviceOrientation, String username, String correo) {
-        this.os = os;
-        this.version = version;
-        this.browser = browser;
-        this.deviceName = deviceName;
-        this.deviceOrientation = deviceOrientation;
-        this.username = username;
-        this.correo = correo;
-    }
-    @ConcurrentParameterized.Parameters
-    public static LinkedList<String[]> browsersStrings() {
-        LinkedList<String[]> browsers = new LinkedList<>();
-
-        browsers.add(new String[]{"Windows 10", "14.14393", "MicrosoftEdge", null, null, "username1", "correo1@correo.com"});
-        browsers.add(new String[]{"Windows 10", "49.0", "firefox", null, null, "username2", "correo2@correo.com"});
-        browsers.add(new String[]{"Windows 7", "11.0", "internet explorer", null, null, "username3", "correo3@correo.com"});
-        browsers.add(new String[]{"OS X 10.11", "10.0", "safari", null, null, "username4", "correo4@correo.com"});
-        browsers.add(new String[]{"OS X 10.10", "54.0", "chrome", null, null, "username5", "correo5@correo.com"});
-        return browsers;
-    }
-
-
-	@Autowired
-	public Environment env;
-	
-	private TestContextManager testContextManager;
-	
 	private static final String HOST_URL = "http://ec2-18-236-104-144.us-west-2.compute.amazonaws.com:";
 	private static final String XPATH_NAV_BTN_PERFIL = "//*[@id=\"nav_btn_perfil\"]/select";
 	private static final String XPATH_NAV_BTN_INICIOSESION = "//*[@id=\"nav_btn_iniciosesion\"]";
@@ -124,24 +59,85 @@ public class RegistroTest  implements SauceOnDemandSessionIdProvider {
 	private static final String XPATH_TEXTBOX_APELLIDOS = "//*[@id=\"form_apellidos\"]";
 	private static final String XPATH_NAV_BTN_REGISTRARSE = "//*[@id=\"nav_btn_registrarse\"]";
 
+	protected String browser;
+	protected String os;
+	protected String version;
+	protected String deviceName;
+	protected String deviceOrientation;
+	protected String sessionId;
+	protected WebDriver driver;
+	protected String username;
+	protected String correo;
+
+	private TestContextManager testContextManager;
 	private WebDriverWait wait;
 
-	
+	@Autowired
+	public Environment env;
+
+	public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(USERNAME, ACCESS_KEY);
+
+	@Rule
+	public SauceOnDemandTestWatcher resultReportingTestWatcher = new SauceOnDemandTestWatcher(this, authentication);
+
+	@Rule
+	public TestName name = new TestName() {
+		public String getMethodName() {
+			return String.format("%s", super.getMethodName());
+		}
+	};
+
+	@ClassRule
+	public static final SpringClassRule springClassRule = new SpringClassRule();
+
+	@Rule
+	public final SpringMethodRule springMethodRule = new SpringMethodRule();
+
+	@Override
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	@ConcurrentParameterized.Parameters
+	public static LinkedList<String[]> browsersStrings() {
+		LinkedList<String[]> browsers = new LinkedList<>();
+
+		browsers.add(new String[] { "Windows 10", "14.14393", "MicrosoftEdge", null, null, "username1",
+				"correo1@correo.com" });
+		browsers.add(new String[] { "Windows 10", "49.0", "firefox", null, null, "username2", "correo2@correo.com" });
+		browsers.add(new String[] { "Windows 7", "11.0", "internet explorer", null, null, "username3",
+				"correo3@correo.com" });
+		browsers.add(new String[] { "OS X 10.11", "10.0", "safari", null, null, "username4", "correo4@correo.com" });
+		browsers.add(new String[] { "OS X 10.10", "54.0", "chrome", null, null, "username5", "correo5@correo.com" });
+		return browsers;
+	}
+
+	public RegistroTest(String os, String version, String browser, String deviceName, String deviceOrientation,
+			String username, String correo) {
+		this.os = os;
+		this.version = version;
+		this.browser = browser;
+		this.deviceName = deviceName;
+		this.deviceOrientation = deviceOrientation;
+		this.username = username;
+		this.correo = correo;
+	}
+
 	@Before
 	public void setUp() throws Exception {
 		this.testContextManager = new TestContextManager(getClass());
 		this.testContextManager.prepareTestInstance(this);
-        DesiredCapabilities capabilities = new DesiredCapabilities();
+		DesiredCapabilities capabilities = new DesiredCapabilities();
 
-        capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
-        capabilities.setCapability(CapabilityType.VERSION, version);
-        capabilities.setCapability("deviceName", deviceName);
-        capabilities.setCapability("device-orientation", deviceOrientation);
-        capabilities.setCapability(CapabilityType.PLATFORM_NAME, os);
+		capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
+		capabilities.setCapability(CapabilityType.VERSION, version);
+		capabilities.setCapability("deviceName", deviceName);
+		capabilities.setCapability("device-orientation", deviceOrientation);
+		capabilities.setCapability(CapabilityType.PLATFORM_NAME, os);
 
-        String methodName = name.getMethodName();
-        capabilities.setCapability("name", methodName);
-        
+		String methodName = name.getMethodName();
+		capabilities.setCapability("name", methodName);
+
 		this.driver = new RemoteWebDriver(new URL(URL), capabilities);
 		this.sessionId = (((RemoteWebDriver) driver).getSessionId()).toString();
 		this.wait = new WebDriverWait(driver, 100);
@@ -163,16 +159,20 @@ public class RegistroTest  implements SauceOnDemandSessionIdProvider {
 		elementoFormulario.sendKeys("VÉLEZ ESTÉVEZ");
 		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CORREO)));
 		elementoFormulario.sendKeys(this.correo);
-		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CUENTABANCARIA)));
+		elementoFormulario = wait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CUENTABANCARIA)));
 		elementoFormulario.sendKeys("12345678901234567890");
 		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_USERNAME)));
 		elementoFormulario.sendKeys(this.username);
-		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONTRASENA)));
+		elementoFormulario = wait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONTRASENA)));
 		elementoFormulario.sendKeys("pruebacontraseña");
-		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONFIRMACIONCONTRASENA)));
+		elementoFormulario = wait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONFIRMACIONCONTRASENA)));
 		elementoFormulario.sendKeys("pruebacontraseña");
 
-		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_BOTON_REGISTRARSE_FORMULARIO)));
+		elementoFormulario = wait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_BOTON_REGISTRARSE_FORMULARIO)));
 		elementoFormulario.click();
 
 		assertTrue(wait.until(ExpectedConditions.urlContains("login")));
@@ -190,18 +190,21 @@ public class RegistroTest  implements SauceOnDemandSessionIdProvider {
 
 		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_USERNAME)));
 		elementoFormulario.sendKeys(this.username);
-		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONTRASENA)));
+		elementoFormulario = wait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_TEXTBOX_CONTRASENA)));
 		elementoFormulario.sendKeys("pruebacontraseña");
 
-		elementoFormulario = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_BOTON_INICIOSESION)));
+		elementoFormulario = wait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_BOTON_INICIOSESION)));
 		elementoFormulario.click();
 
-		WebElement navBtnPerfil = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_NAV_BTN_PERFIL)));
+		WebElement navBtnPerfil = wait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_NAV_BTN_PERFIL)));
 		Boolean presente = false;
-		for(WebElement seleccionable : navBtnPerfil.findElements(By.tagName("option")))
-			if(seleccionable.getText().contains(this.username))
+		for (WebElement seleccionable : navBtnPerfil.findElements(By.tagName("option")))
+			if (seleccionable.getText().contains(this.username))
 				presente = true;
-		
+
 		assertTrue(presente);
 	}
 
