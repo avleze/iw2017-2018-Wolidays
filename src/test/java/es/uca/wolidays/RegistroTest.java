@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -199,13 +198,9 @@ public class RegistroTest  implements SauceOnDemandSessionIdProvider {
 
 		WebElement navBtnPerfil = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_NAV_BTN_PERFIL)));
 		Boolean presente = false;
-		try {
-			navBtnPerfil.findElement(By.partialLinkText(this.username));
-			presente = true;
-			
-		} catch(NoSuchElementException noSuchElementException) {
-			presente = false;
-		}
+		for(WebElement seleccionable : navBtnPerfil.findElements(By.tagName("option")))
+			if(seleccionable.getText().contains(this.username))
+				presente = true;
 		
 		assertTrue(presente);
 	}
