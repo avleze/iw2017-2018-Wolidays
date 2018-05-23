@@ -9,8 +9,10 @@ import java.util.LinkedList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -30,8 +32,10 @@ import org.springframework.test.context.TestContextManager;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
+import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.junit.ConcurrentParameterized;
+import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.repositories.UsuarioRepository;
@@ -42,6 +46,29 @@ import es.uca.wolidays.backend.repositories.UsuarioRepository;
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProvider {
 
+	public static final String USERNAME = "avleze";
+	public static final String ACCESS_KEY = "5acfd4e5-3c09-400a-b8be-44e843fcd417";
+	public static final String URL = "https://" + USERNAME + ":" + ACCESS_KEY + "@ondemand.saucelabs.com:443/wd/hub";
+	
+	public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(USERNAME, ACCESS_KEY);
+	@Rule
+	public SauceOnDemandTestWatcher resultReportingTestWatcher = new SauceOnDemandTestWatcher(this, authentication);
+	@Rule
+	public TestName name = new TestName() {
+			public String getMethodName() {
+				return String.format("%s", super.getMethodName());
+			}
+		};
+
+	protected String sessionId;
+
+	@Override
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	
+	
 	@ClassRule
 	public static final SpringClassRule springClassRule = new SpringClassRule();
 	
@@ -124,6 +151,7 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 		this.wait = new WebDriverWait(driver, 100);
 	}
 
+	@Ignore
 	@Test
 	public void registrarse() {
 		driver.get(getHostUrl());
