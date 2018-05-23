@@ -22,9 +22,6 @@ pipeline {
                 sh '''
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
-                    mvn install
-                    mvn vaadin:compile
-                    mvn vaadin:update-widgetset
                 '''
             }
         }
