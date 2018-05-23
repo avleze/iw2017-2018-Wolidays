@@ -156,6 +156,7 @@ public class RegistroTest extends TestBase implements SauceOnDemandSessionIdProv
 
 	@Test
 	public void iniciarSesion() {
+		this.registrarse();
 		driver.get(getHostUrl());
 		WebElement botonRegistrarse = wait
 				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_NAV_BTN_INICIOSESION)));
