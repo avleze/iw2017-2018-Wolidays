@@ -92,17 +92,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-test</artifactId>
 		</dependency>		
-		<dependency>
-   			<groupId>com.vaadin</groupId>
-   			<artifactId>vaadin-charts</artifactId>
-   			<version>LATEST</version>
-		</dependency>
 
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-maven-plugin</artifactId>
 			<version>8.3.3</version>
 			<type>maven-archetype</type>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin.addon</groupId>
+			<artifactId>vaadin-charts</artifactId>
+			<version>3.2.1</version>
 		</dependency>
 	</dependencies>
 
