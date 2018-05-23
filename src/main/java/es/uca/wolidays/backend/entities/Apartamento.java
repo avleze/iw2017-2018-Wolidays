@@ -2,6 +2,7 @@ package es.uca.wolidays.backend.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +18,8 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import es.uca.wolidays.backend.entities.Reserva.Estado;
 
 
 @Entity
@@ -67,6 +70,13 @@ public class Apartamento implements Serializable {
 	public List<Reserva> getReservas() {
 		return reservas;
 	}
+	
+	public List<Reserva> getReservasPendientes() {
+		return reservas.stream()
+				.filter(r -> r.getEstado().equals(Estado.Pendiente))
+				.collect(Collectors.toList());
+	}
+	
 	public void setReservas(List<Reserva> reservas) {
 		this.reservas = reservas;
 	}
