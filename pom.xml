@@ -97,7 +97,13 @@
    			<artifactId>vaadin-charts</artifactId>
    			<version>LATEST</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-maven-plugin</artifactId>
+			<version>8.3.3</version>
+			<type>maven-archetype</type>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
