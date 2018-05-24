@@ -1,10 +1,9 @@
 package es.uca.wolidays.frontend.views;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import javax.annotation.PostConstruct;
-import java.net.URLEncoder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,9 +12,8 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.FileResource;
 import com.vaadin.server.Page;
-import com.vaadin.server.VaadinService;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
@@ -45,8 +43,7 @@ public class HomeView extends VerticalLayout implements View {
 		final VerticalLayout mainLayout = new VerticalLayout();
 		mainLayout.setMargin(true);
 		
-		String logoBasePath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
-		FileResource logoRsc = new FileResource(new File(logoBasePath + "/resources/img/WolidaysLogo.png"));
+		ThemeResource logoRsc = new ThemeResource("img/WolidaysLogo.png");
 		Image logo = new Image(null, logoRsc);
 		
 		CssLayout searchBar = new CssLayout();

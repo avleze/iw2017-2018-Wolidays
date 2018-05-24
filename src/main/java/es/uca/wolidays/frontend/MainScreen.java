@@ -9,8 +9,7 @@ import javax.annotation.PostConstruct;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;
-import com.vaadin.server.FileResource;
-import com.vaadin.server.VaadinService;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -91,8 +90,7 @@ public class MainScreen extends VerticalLayout implements ViewDisplay {
 		logoLayout.setHeight("60px");
 		buttonsLayout.setHeight("60px");
 		
-		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
-		FileResource rsc = new FileResource(new File(basepath + "/resources/img/WolidaysIcon.png"));
+		ThemeResource rsc = new ThemeResource("img/WolidaysIcon.png");
 		Image tlIcon = new Image(null, rsc);
 		tlIcon.addStyleName("icon");
 		tlIcon.addClickListener(e -> getUI().getNavigator().navigateTo(""));

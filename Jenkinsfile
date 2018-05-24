@@ -46,10 +46,9 @@ pipeline {
         stage ('Compilacion y Entrega') {
             steps {
                 sh '''
-                mvn vaadin:compile
-                mvn vaadin:update-widgetset
+                mvn vaadin:compile -Dvaadin.charts.developer.license=5864be45-fdbf-418a-a4cc-a9869a4b6544
+                mvn vaadin:update-widgetset -Dvaadin.charts.developer.license=5864be45-fdbf-418a-a4cc-a9869a4b6544
                 mvn package -DskipTests=true
-                
                 ''' 
             }
         }
