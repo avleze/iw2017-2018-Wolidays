@@ -37,7 +37,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 	}), 
 	@NamedEntityGraph(name="Usuario.usuarioConApartamentosYReservas", 
 		attributeNodes =  @NamedAttributeNode(value="apartamentos", subgraph = "apartamentos"),
-		subgraphs = @NamedSubgraph(name = "apartamentos", attributeNodes = @NamedAttributeNode("reservas")))
+		subgraphs = @NamedSubgraph(name = "apartamentos", attributeNodes = @NamedAttributeNode(value="reservas")))
 })
 @Table(indexes= {@Index(columnList = "username")})
 public class Usuario implements UserDetails, Serializable {

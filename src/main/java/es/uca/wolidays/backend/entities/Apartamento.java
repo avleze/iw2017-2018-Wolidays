@@ -2,6 +2,7 @@ package es.uca.wolidays.backend.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -43,7 +44,7 @@ public class Apartamento implements Serializable {
 	private Double precioEstandar;
 	
 	@OneToMany(mappedBy="apartamento")
-	private List<Reserva> reservas;
+	private Set<Reserva> reservas;
 	
 	@ManyToOne
 	@JoinColumn(name="USR_ID")
@@ -67,17 +68,17 @@ public class Apartamento implements Serializable {
 	public void setOfertas(List<Oferta> ofertas) {
 		this.ofertas = ofertas;
 	}
-	public List<Reserva> getReservas() {
+	public Set<Reserva> getReservas() {
 		return reservas;
 	}
 	
-	public List<Reserva> getReservasPendientes() {
+	public Set<Reserva> getReservasPendientes() {
 		return reservas.stream()
 				.filter(r -> r.getEstado().equals(Estado.Pendiente))
-				.collect(Collectors.toList());
+				.collect(Collectors.toSet());
 	}
 	
-	public void setReservas(List<Reserva> reservas) {
+	public void setReservas(Set<Reserva> reservas) {
 		this.reservas = reservas;
 	}
 	public Usuario getPropietario() {
