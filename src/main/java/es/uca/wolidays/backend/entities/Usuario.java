@@ -19,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedEntityGraphs;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,6 +35,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 	@NamedEntityGraph(name="Usuario.usuarioConReservas", attributeNodes =  {
 		@NamedAttributeNode(value="reservas")
 	}), 
+	@NamedEntityGraph(name="Usuario.usuarioConApartamentosYReservas", 
+		attributeNodes =  @NamedAttributeNode(value="apartamentos", subgraph = "apartamentos"),
+		subgraphs = @NamedSubgraph(name = "apartamentos", attributeNodes = @NamedAttributeNode(value="reservas")))
 })
 @Table(indexes= {@Index(columnList = "username")})
 public class Usuario implements UserDetails, Serializable {

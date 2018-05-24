@@ -45,6 +45,18 @@ public class UsuarioService implements UserDetailsService{
 		return usuario;
 	}
 	
+	public Usuario loadUserByUsernameWithApartamentosAndReservas(String username) throws UsernameNotFoundException {
+		Usuario usuario = repo.findByUsernameWithApartamentosAndReservas(username);
+		if (usuario == null) {
+			throw new UsernameNotFoundException(username);
+		}
+		return usuario;
+	}
+	
+	public Boolean usernameExists(String username) {
+		return repo.findByUsername(username) != null;
+	}
+	
 	public Usuario guardar(Usuario usuario, Boolean cifrarPassword) {
 		if(cifrarPassword) {
 			usuario.setPassword(passwordEncoder.encode(usuario.getPassword() != null ? usuario.getPassword() : "default"));
