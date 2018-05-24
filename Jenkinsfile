@@ -27,7 +27,7 @@ pipeline {
         }
 		stage ('Pruebas') {
 			steps {
-			    sh 'mvn clean verify -Dspring.profiles.active=test'
+			    sh 'mvn clean verify -Dspring.profiles.active=test -Dvaadin.charts.developer.license=5864be45-fdbf-418a-a4cc-a9869a4b6544'
 			}
 
 		}
@@ -46,9 +46,8 @@ pipeline {
         stage ('Compilacion y Entrega') {
             steps {
                 sh '''
-                mvn vaadin:compile -Dvaadin.charts.developer.license=5864be45-fdbf-418a-a4cc-a9869a4b6544
-                mvn vaadin:update-widgetset -Dvaadin.charts.developer.license=5864be45-fdbf-418a-a4cc-a9869a4b6544
-                mvn package -DskipTests=true
+                mvn package -DskipTests=true -Dvaadin.charts.developer.license=5864be45-fdbf-418a-a4cc-a9869a4b6544
+                
                 ''' 
             }
         }
