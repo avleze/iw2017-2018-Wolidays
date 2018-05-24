@@ -1,6 +1,9 @@
 package es.uca.wolidays.backend.services;
 
+import java.util.List;
 import java.util.Optional;
+
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,9 @@ import es.uca.wolidays.backend.repositories.TransaccionReservaRepository;
 
 @Service
 public class TransaccionService {
+	
+	@Autowired
+	private EntityManager em;
 	@Autowired
 	private TransaccionPenalizacionRepository repoTranPenalizacion;
 	@Autowired
@@ -23,6 +29,11 @@ public class TransaccionService {
 	
 	public Optional<TransaccionPenalizacion> buscarTransaccionReservaPorId(Integer pk) {
 		return repoTranPenalizacion.findById(pk);
+	}
+	
+	public List<?> obtenerBeneficiosTotales(){
+		return em.createNamedQuery("TransaccionReserva.getTotalBenefits")
+				.getResultList();
 	}
 	
 	public void eliminarTransaccionPenalizacion(TransaccionPenalizacion tP) {
