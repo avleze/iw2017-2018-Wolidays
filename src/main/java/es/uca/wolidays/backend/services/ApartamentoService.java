@@ -68,6 +68,10 @@ public class ApartamentoService {
 		return repo.findByIdWithOfertas(pk);
 	}
 	
+	public Optional<Apartamento> buscarPorIdConReservas(Integer pk){
+		return repo.findByIdWithReservas(pk);
+	}
+	
 	public void eliminar(Apartamento apartamento) {
 		repo.delete(apartamento);
 	}
