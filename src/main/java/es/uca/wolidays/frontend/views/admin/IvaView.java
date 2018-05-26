@@ -138,7 +138,7 @@ public class IvaView extends VerticalLayout implements View {
 					ivaService.guardar(iva);
 					
 					setSuccessfulIVANotification();
-					getUI().getNavigator().navigateTo("iva");
+					getUI().getNavigator().navigateTo(IvaView.VIEW_NAME);
 					
 				} catch (ValidationException ve) {
 					Notification.show("No se ha podido completar el registro");
