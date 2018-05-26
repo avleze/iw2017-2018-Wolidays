@@ -108,11 +108,11 @@ public class BeneficioView extends VerticalLayout implements View {
 		try {
 			
 			if(Files.exists(path)) {
-				beneficioFile = Files.readAllLines(Paths.get("src/main/resources/beneficio"));
+				beneficioFile = Files.readAllLines(path);
 			} else {
-				Files.createFile(Paths.get("src/main/resources/beneficio"));
+				Files.createFile(path);
 				Files.write(path, "5.0".getBytes());
-				beneficioFile = Files.readAllLines(Paths.get("src/main/resources/beneficio"));
+				beneficioFile = Files.readAllLines(path);
 			}
 			
 		} catch(IOException ex) {
