@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedEntityGraphs;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -23,6 +24,8 @@ import javax.persistence.OneToMany;
 	@NamedEntityGraph(name="Reserva.reservaConTransaccionesReserva", attributeNodes=@NamedAttributeNode("transaccionesReserva")),
 	@NamedEntityGraph(name="Reserva.reservaConIncidencias", attributeNodes=@NamedAttributeNode("incidencias"))
 })
+@NamedNativeQuery(name = "Reserva.getNumReservaByState",
+		query="select count(id), estado from reserva group by estado")
 public class Reserva implements Serializable {
 
 	public enum Estado { 

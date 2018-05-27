@@ -5,6 +5,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import es.uca.wolidays.backend.repositories.ReservaRepository;
 @Service
 public class ReservaService {
 	
+	@Autowired
+	EntityManager em;
 	@Autowired
 	ReservaRepository repo;
 	@Autowired
@@ -43,6 +47,11 @@ public class ReservaService {
 	
 	public Boolean buscarReservaEntreFechas(Integer aptID,LocalDate fechaInicio, LocalDate fechaFin) {
 		return repo.findByFechasBetween(aptID, fechaInicio, fechaFin).size() > 0;
+	}
+	
+	public List<?> obtenerNumReservasPorEstado() {
+		return em.createNamedQuery("Reserva.getNumReservaByState")
+				.getResultList();
 	}
 	
 	public void eliminarPorId(Integer pk){
