@@ -1,4 +1,4 @@
-package es.uca.wolidays.frontend.views.gestor;
+package es.uca.wolidays.frontend.views;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,8 +26,13 @@ import com.vaadin.ui.VerticalLayout;
 import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.entities.Incidencia;
 import es.uca.wolidays.backend.entities.Reserva;
+import es.uca.wolidays.backend.entities.TransaccionReserva;
+import es.uca.wolidays.backend.entities.TransaccionPenalizacion;
+import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.backend.services.ReservaService;
+import es.uca.wolidays.backend.services.TransaccionService;
+import es.uca.wolidays.frontend.views.gestor.ReservasView;
 
 @SpringView(name = DetalleReservaView.VIEW_NAME)
 public class DetalleReservaView extends VerticalLayout implements View {
@@ -41,6 +46,9 @@ public class DetalleReservaView extends VerticalLayout implements View {
 	
 	@Autowired
 	ApartamentoService aptoService;
+	
+	@Autowired
+	TransaccionService transacService;
 	
 	private VerticalLayout detalleReservaLayout;
 	private HorizontalLayout infoLayout;
@@ -58,6 +66,8 @@ public class DetalleReservaView extends VerticalLayout implements View {
 	private Double nuevoPrecioFinal;
 	
 	private Binder<Reserva> binder = new Binder<>();
+	private Binder<TransaccionReserva> binderTransacRes= new Binder<>();
+	private Binder<TransaccionPenalizacion> binderTransac = new Binder<>();
 	
 	@PostConstruct
 	void init() {
@@ -100,8 +110,8 @@ public class DetalleReservaView extends VerticalLayout implements View {
 		Label anfitrion = new Label("Anfitrión: " + apartamento.getPropietario());
 		Label huesped = new Label("Huésped: " + reserva.getUsuario());
 		Label precio = new Label("Precio: " + reserva.getPrecioFinal());
-		Label estado = new Label("Estado: " + reserva.getEstado());
 		Label numIncidencias = new Label("Incidencias: " + incidencias.size());
+		Label estado = new Label("Estado: " + reserva.getEstado());
 		
 		ArrayList<Label> listIncid = new ArrayList<>();
 		for(Incidencia i : incidencias) {
@@ -143,34 +153,108 @@ public class DetalleReservaView extends VerticalLayout implements View {
 				binder.writeBean(reserva);
 				rsrvService.guardar(reserva);
 				ReservasView.setSuccessfulReservationModNotification();
+				/*if(SecurityUtils.hasRole("CLIENTE_ROL") && apartamento.getPropietario().toString().equals(SecurityUtils.getUsername())) {
+					TransaccionPenalizacion transPenaliz = new TransaccionPenalizacion();
+					transPenaliz.setCuentaOrigen(apartamento.getPropietario().getCuentaBancaria());
+					transPenaliz.setCuentaDestino(reserva.getUsuario().getCuentaBancaria());
+					//transPenaliz.setCosteAdicional(costeAdicional);
+					transPenaliz.setUsuarioAfectado(reserva.getUsuario());
+					transPenaliz.setUsuarioPenalizado(apartamento.getPropietario());
+					binderTransac.writeBean(transPenaliz);
+					transacService.guardar(transPenaliz);
+					
+				}
+				if(SecurityUtils.hasRole("CLIENTE_ROL") && reserva.getUsuario().toString().equals(SecurityUtils.getUsername())) {
+					TransaccionPenalizacion transPenaliz = new TransaccionPenalizacion();
+					transPenaliz.setCuentaOrigen(reserva.getUsuario().getCuentaBancaria());
+					transPenaliz.setCuentaDestino(apartamento.getPropietario().getCuentaBancaria());
+					//transPenaliz.setCosteAdicional(costeAdicional);
+					transPenaliz.setUsuarioAfectado(apartamento.getPropietario());
+					transPenaliz.setUsuarioPenalizado(reserva.getUsuario());
+					binderTransac.writeBean(transPenaliz);
+					transacService.guardar(transPenaliz);
+				}*/
 				getUI().getNavigator().navigateTo("reservas");
 			} catch (ValidationException vEx) {
 				Notification.show("No se ha podido modificar la reserva.");
 			}
 		});
 		modificarReservaButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+		Label modificarReservaLabel = new Label("* Modificar las fechas de la reserva puede derivar en penalizaciones");
 		
-		Button volverReservas = new Button("Volver a reservas");
-		volverReservas.setIcon(VaadinIcons.ARROW_BACKWARD);
-		volverReservas.addClickListener(e -> getUI().getNavigator().navigateTo("reservas"));		
-		
-		detallesLayout.addComponents(anfitrion, huesped, precio, estado, numIncidencias);
+		detallesLayout.addComponents(anfitrion, huesped, precio, numIncidencias, estado);
 		detallesLayout.setComponentAlignment(anfitrion, Alignment.TOP_LEFT);
 		detallesLayout.setComponentAlignment(huesped, Alignment.TOP_LEFT);
 		detallesLayout.setComponentAlignment(precio, Alignment.TOP_LEFT);
-		detallesLayout.setComponentAlignment(estado, Alignment.TOP_LEFT);
 		detallesLayout.setComponentAlignment(numIncidencias, Alignment.TOP_LEFT);
 		for(Label incid : listIncid) {
 			detallesLayout.addComponent(incid);
 			detallesLayout.setComponentAlignment(incid, Alignment.TOP_LEFT);
-		}		
-		detallesLayout.addComponent(volverReservas);
-		detallesLayout.setComponentAlignment(volverReservas, Alignment.TOP_LEFT);
+		}
 		
+	    if(reserva.getEstado().toString().equals("Pendiente") && SecurityUtils.isLoggedIn() 
+	    		&& SecurityUtils.hasRole("CLIENTE_ROL") && apartamento.getPropietario().toString().equals(SecurityUtils.getUsername())) {
+	    	Button aceptarReservaButton = new Button("Aceptar reserva");
+	    	aceptarReservaButton.setIcon(VaadinIcons.CHECK);
+	    	Button rechazarReservaButton = new Button("Rechazar reserva");
+	    	rechazarReservaButton.setIcon(VaadinIcons.CLOSE);
+	    	aceptarReservaButton.addClickListener(e -> {
+	    		try {
+	    			reserva.setEstado(Reserva.Estado.Validada);
+	    			binder.writeBean(reserva);
+					rsrvService.guardar(reserva);
+					TransaccionReserva transacReserva = new TransaccionReserva();
+					transacReserva.setCuentaAnfitrion(apartamento.getPropietario().getCuentaBancaria());
+					transacReserva.setReservaAsociada(reserva);
+					transacReserva.setTarjetaHuesped(reserva.getTarjetaHuesped());
+					transacReserva.setBeneficioEmpresa(reserva.getPrecioFinal()*transacService.obtenerPctBeneficioActual());
+					binderTransacRes.writeBean(transacReserva);
+					transacService.guardar(transacReserva);
+		    		ReservasView.setSuccessfulReservationAcceptNotification();
+		    		getUI().getNavigator().navigateTo(DetalleReservaView.VIEW_NAME + "/" + reserva.getId() + "/" + apartamento.getId());
+	    		} catch (ValidationException vEx) {
+	    			Notification.show("No se ha podido aceptar la reserva");
+	    		}
+	    		
+	    	});
+	    	rechazarReservaButton.addClickListener(e -> {
+	    		try {
+	    			reserva.setEstado(Reserva.Estado.Rechazada);
+	    			binder.writeBean(reserva);
+					rsrvService.guardar(reserva);
+		    		ReservasView.setSuccessfulReservationRejectNotification();
+		    		getUI().getNavigator().navigateTo(DetalleReservaView.VIEW_NAME + "/" + reserva.getId() + "/" + apartamento.getId());
+	    		} catch (ValidationException vEx){
+	    			Notification.show("No se ha podido rechazar la reserva");		
+	    		}
+	    		
+	    	});
+	    	
+	    	detallesLayout.addComponents(aceptarReservaButton, rechazarReservaButton);
+	    	detallesLayout.setComponentAlignment(aceptarReservaButton, Alignment.TOP_LEFT);
+	    	detallesLayout.setComponentAlignment(rechazarReservaButton, Alignment.TOP_CENTER);
+			
+		}
+		detallesLayout.setComponentAlignment(estado, Alignment.TOP_LEFT);
+		
+		if(SecurityUtils.isLoggedIn() && SecurityUtils.hasRole("GESTOR_ROL")) {
+			Button volverReservas = new Button("Volver a reservas");
+			volverReservas.setIcon(VaadinIcons.ARROW_BACKWARD);
+			volverReservas.addClickListener(e -> getUI().getNavigator().navigateTo("reservas"));
+			
+			detallesLayout.addComponent(volverReservas);
+			detallesLayout.setComponentAlignment(volverReservas, Alignment.TOP_LEFT);
+		}
+						
 		fechasLayout.addComponents(fechaInicioField, fechaFinField, modificarReservaButton);
+		if(!SecurityUtils.hasRole("GESTOR_ROL")) {
+			fechasLayout.addComponents(modificarReservaLabel);
+			fechasLayout.setComponentAlignment(modificarReservaLabel, Alignment.TOP_LEFT);
+		}
 		fechasLayout.setComponentAlignment(fechaInicioField, Alignment.TOP_LEFT);
 		fechasLayout.setComponentAlignment(fechaFinField, Alignment.TOP_LEFT);
 		fechasLayout.setComponentAlignment(modificarReservaButton, Alignment.TOP_LEFT);
+		
 		
 		infoLayout.addComponents(detallesLayout, fechasLayout);
 		

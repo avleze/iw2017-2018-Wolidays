@@ -20,6 +20,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.PopupView;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -28,6 +29,7 @@ import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.UsuarioService;
+import es.uca.wolidays.backend.services.ReservaService;
 import es.uca.wolidays.frontend.MainScreen;
 
 @Theme("wolidays")
@@ -43,12 +45,16 @@ public class MisReservasView extends VerticalLayout implements View {
 	@Autowired
 	private transient UsuarioService userService;
 	
+	@Autowired
+	private transient ReservaService rsrvService;
+	
 	private VerticalLayout misReservasLayout;
 	private Label title;
 	
 	private HorizontalLayout reservaInfo;
 	private VerticalLayout reservasLeft;
 	private VerticalLayout reservasRight;
+	private VerticalLayout popupConfirmacion;
 	
 	private Usuario usuario;
 	private List<Reserva> usuarioReservas;
@@ -67,6 +73,8 @@ public class MisReservasView extends VerticalLayout implements View {
 		
 		reservasLeft = new VerticalLayout();
 		reservasRight = new VerticalLayout();
+		
+		popupConfirmacion = new VerticalLayout();
 	}
 	
 	
@@ -106,7 +114,25 @@ public class MisReservasView extends VerticalLayout implements View {
 				estadoReserva.setCaption("Estado: " + rsrv.getEstado());
 				estadoReserva.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 				
+				/*popupConfirmacion.addComponent(new Label("¿Está seguro de eliminar esta reserva?"));
+				PopupView popup = new PopupView(null, popupConfirmacion);
+				popupConfirmacion.addComponents(new Button("Sí", click -> rsrvService.eliminar(rsrv)), 
+						new Button("No", click -> popup.setPopupVisible(false)));
+				
+				Button modificarReserva = new Button();
+				modificarReserva.setIcon(VaadinIcons.EDIT);
+				modificarReserva.setCaption("Modificar reserva");
+				modificarReserva.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleReservaView.VIEW_NAME + "/" + rsrv.getId() + "/" + rsrv.getApartamento().getId()));
+				
+				Button eliminarReserva = new Button();
+				eliminarReserva.setIcon(VaadinIcons.CLOSE);
+				eliminarReserva.setCaption("Eliminar reserva");
+				eliminarReserva.addClickListener(e -> {
+					popup.setPopupVisible(true);
+				});*/
+				
 				reserva.addComponents(fechaLlegada, fechaSalida, ubicacion, precioNoches, estadoReserva);
+				
 				
 				if(i % 2 == 0) {
 					reservasLeft.addComponent(reserva);

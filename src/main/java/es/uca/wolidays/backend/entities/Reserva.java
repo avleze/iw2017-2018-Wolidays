@@ -29,7 +29,7 @@ import javax.persistence.OneToMany;
 public class Reserva implements Serializable {
 
 	public enum Estado { 
-		Pendiente, Validada, Anulada, Rechazada
+		Pendiente, Validada, Anulada, Rechazada, Finalizada
 	}
 	
 	private static final long serialVersionUID = 4788271250558192695L;

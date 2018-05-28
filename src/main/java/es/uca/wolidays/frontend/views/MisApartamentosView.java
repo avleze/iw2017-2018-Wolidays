@@ -67,7 +67,7 @@ public class MisApartamentosView extends VerticalLayout implements View {
 		title.setCaptionAsHtml(true);
 		title.setCaption("<h1>Mis apartamentos</h1>");
 		
-		Usuario currentUser = userService.loadUserByUsernameWithApartamentos(SecurityUtils.getUsername());
+		Usuario currentUser = userService.loadUserByUsernameWithApartamentosAndReservas(SecurityUtils.getUsername());
 		misAptos = currentUser.getApartamentos();
 		
 		setAptosInfoColumns();
@@ -136,7 +136,18 @@ public class MisApartamentosView extends VerticalLayout implements View {
 				numCamas.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
 				numCamas.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 				
-				aptoInfo.addComponents(ubicacion, precioStd, numCamas);			
+				Button soltdes;
+				
+				if(apto.getReservasPendientes().size() == 0) {
+					soltdes = new Button("No hay solicitudes de reserva pendientes");
+					soltdes.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
+				} else {
+					soltdes = new Button(+ apto.getReservasPendientes().size() + " solicitud(es) de reserva pendiente(s)");
+					soltdes.addClickListener(e -> getUI().getNavigator().navigateTo(SolicitudesView.VIEW_NAME + "/" + apto.getId()));
+				}
+				
+						
+				aptoInfo.addComponents(ubicacion, precioStd, numCamas, soltdes);			
 				
 				if(i % 2 == 0) {
 					leftAptos.addComponent(aptoInfo);
