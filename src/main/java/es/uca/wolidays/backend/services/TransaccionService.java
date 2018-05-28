@@ -36,6 +36,14 @@ public class TransaccionService {
 				.getResultList();
 	}
 	
+	public TransaccionPenalizacion guardar(TransaccionPenalizacion tP) {
+		return repoTranPenalizacion.save(tP);
+	}
+	
+	public TransaccionReserva guardar(TransaccionReserva tR) {
+		return repoTranReserva.save(tR);
+	}
+	
 	public void eliminarTransaccionPenalizacion(TransaccionPenalizacion tP) {
 		repoTranPenalizacion.delete(tP);
 	}
