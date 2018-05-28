@@ -17,11 +17,13 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.entities.Incidencia;
@@ -54,6 +56,7 @@ public class DetalleReservaView extends VerticalLayout implements View {
 	private HorizontalLayout infoLayout;
 	private VerticalLayout detallesLayout;
 	private VerticalLayout fechasLayout;
+	private CssLayout botonesReserva;
 	
 	private Label title;
 	
@@ -87,6 +90,8 @@ public class DetalleReservaView extends VerticalLayout implements View {
 		title = new Label();
 		title.setCaptionAsHtml(true);
 		title.setCaption("<h1>Detalle de reserva</h1>");
+		
+		botonesReserva = new CssLayout();
 	}
 	
 	@Override
@@ -230,9 +235,12 @@ public class DetalleReservaView extends VerticalLayout implements View {
 	    		
 	    	});
 	    	
-	    	detallesLayout.addComponents(aceptarReservaButton, rechazarReservaButton);
-	    	detallesLayout.setComponentAlignment(aceptarReservaButton, Alignment.TOP_LEFT);
-	    	detallesLayout.setComponentAlignment(rechazarReservaButton, Alignment.TOP_CENTER);
+	    	botonesReserva.addComponents(aceptarReservaButton, rechazarReservaButton);
+	    	botonesReserva.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+	    	//botonesReserva.setComponentAlignment(aceptarReservaButton, Alignment.TOP_LEFT);
+	    	//botonesReserva.setComponentAlignment(rechazarReservaButton, Alignment.TOP_CENTER);
+	    	detallesLayout.addComponent(botonesReserva);
+	    	detallesLayout.setComponentAlignment(botonesReserva, Alignment.TOP_LEFT);
 			
 		}
 		detallesLayout.setComponentAlignment(estado, Alignment.TOP_LEFT);
