@@ -76,11 +76,12 @@ public class ImageUploader extends CustomComponent {
 						public void streamingFinished(final StreamingEndEvent event) {
 							progress.setVisible(false);
 							final StreamSource streamSource = () -> {
+								ByteArrayInputStream ret = null;
 								if (bas != null) {
 									final byte[] byteArray = bas.toByteArray();
-									return new ByteArrayInputStream(byteArray);
+									ret = new ByteArrayInputStream(byteArray);
 								}
-								return null;
+								return ret;
 							};
 							
 							
