@@ -13,6 +13,8 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
@@ -159,15 +161,26 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 		infoLayout.setComponentAlignment(descButtonsLayout, Alignment.TOP_RIGHT);
 		
 		Set<Imagen> imagenes = apartamento.getImagenes();
+		GridLayout imagenesLayout = new GridLayout(4,4);
 		if(!imagenes.isEmpty())
 		{
-			Image imagen = ImageUtils.convertToImage(apartamento.getImagenes().iterator().next().getImagen());
-			detalleLayout.addComponents(title, imagen, infoLayout);
+			for(Imagen i : imagenes)
+			{
+				Image image = ImageUtils.convertToImage(i.getImagen());
+				image.setWidth(200, Unit.PIXELS);
+				imagenesLayout.addComponent(image);
+				imagenesLayout.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+			}
+			
+			detalleLayout.addComponents(title, imagenesLayout, infoLayout);
+			detalleLayout.setComponentAlignment(imagenesLayout, Alignment.TOP_CENTER);
 		}
 		else
 			detalleLayout.addComponents(title, infoLayout);
 		
 		detalleLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
+		detalleLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
+
 		detalleLayout.setComponentAlignment(infoLayout, Alignment.TOP_CENTER);
 		
 		addComponent(detalleLayout);
