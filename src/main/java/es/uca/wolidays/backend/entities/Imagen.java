@@ -9,8 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
-import com.vaadin.ui.Image;
-
 @Entity
 public class Imagen implements Serializable {
 

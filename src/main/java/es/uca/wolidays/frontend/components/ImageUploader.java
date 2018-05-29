@@ -4,10 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import com.vaadin.server.Responsive;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
@@ -17,15 +14,11 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.dnd.FileDropTarget;
-
-import es.uca.wolidays.backend.entities.Imagen;
-
 
 public class ImageUploader extends CustomComponent {
     /**
@@ -33,7 +26,7 @@ public class ImageUploader extends CustomComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	List<byte[]> images = new ArrayList<>();
+	private List<byte[]> images = new ArrayList<>();
 
 	
 	public ImageUploader(String message) {        
@@ -120,28 +113,24 @@ public class ImageUploader extends CustomComponent {
 
 						@Override
 						public boolean listenProgress() {
-							// TODO Auto-generated method stub
 							return false;
 						}
 
 
 						@Override
 						public void onProgress(StreamingProgressEvent event) {
-							// TODO Auto-generated method stub
 							
 						}
 
 
 						@Override
 						public void streamingStarted(StreamingStartEvent event) {
-							// TODO Auto-generated method stub
 							
 						}
 
 
 						@Override
 						public boolean isInterrupted() {
-							// TODO Auto-generated method stub
 							return false;
 						}
 					};
