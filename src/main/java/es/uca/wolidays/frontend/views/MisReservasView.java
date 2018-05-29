@@ -57,6 +57,7 @@ public class MisReservasView extends VerticalLayout implements View {
 	private VerticalLayout reservasRight;
 	private VerticalLayout popupConfirmacion;
 	private CssLayout botonesReserva;
+	CssLayout botonesConfirmacion;
 	
 	private Usuario usuario;
 	private List<Reserva> usuarioReservas;
@@ -79,6 +80,8 @@ public class MisReservasView extends VerticalLayout implements View {
 		popupConfirmacion = new VerticalLayout();
 		
 		botonesReserva = new CssLayout();
+		
+		botonesConfirmacion = new CssLayout();
 	}
 	
 	
@@ -118,9 +121,18 @@ public class MisReservasView extends VerticalLayout implements View {
 				estadoReserva.setCaption("Estado: " + rsrv.getEstado());
 				estadoReserva.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 				
+				Button confirmacionSi = new Button("Sí", click -> {
+					rsrvService.eliminar(rsrv);
+					getUI().getNavigator().navigateTo("mis_reservas");
+					MisReservasView.setSuccessfulReservationDeleteNotification();
+				});
+								
+				botonesConfirmacion.addComponent(confirmacionSi);
+		    	botonesConfirmacion.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+								
 				popupConfirmacion.addComponent(new Label("¿Está seguro de eliminar esta reserva?"));
-				popupConfirmacion.addComponents(new Button("Sí", click -> rsrvService.eliminar(rsrv))); 
-						//new Button("No", click -> popup.setPopupVisible(false)));
+				popupConfirmacion.addComponent(botonesConfirmacion); 
+				popupConfirmacion.setComponentAlignment(botonesConfirmacion, Alignment.MIDDLE_CENTER);
 				PopupView popup = new PopupView(null, popupConfirmacion);
 				
 				
@@ -137,10 +149,15 @@ public class MisReservasView extends VerticalLayout implements View {
 					//AÑADIR PENALIZACION
 				});
 				
-				botonesReserva.addComponents(modificarReserva, eliminarReserva); //añadir popup a layout
+				botonesReserva.addComponents(modificarReserva, eliminarReserva, popup);
 		    	botonesReserva.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-				reserva.addComponents(fechaLlegada, fechaSalida, ubicacion, precioNoches, estadoReserva, botonesReserva);
-				reserva.setComponentAlignment(botonesReserva, Alignment.TOP_LEFT);				
+				reserva.addComponents(fechaLlegada, fechaSalida, ubicacion, precioNoches, estadoReserva);
+				reserva.addComponent(botonesReserva);
+				reserva.setComponentAlignment(botonesReserva, Alignment.TOP_LEFT);		
+				if(rsrv.getEstado() == Reserva.Estado.Rechazada) {
+					reserva.removeComponent(botonesReserva);
+				}
+						
 				
 				if(i % 2 == 0) {
 					reservasLeft.addComponent(reserva);
@@ -163,6 +180,16 @@ public class MisReservasView extends VerticalLayout implements View {
 	
 	public static void setSuccessfulReservationNotification() {
 		Notification successfulSignUp = new Notification("Reserva registrada con éxito");
+		successfulSignUp.setIcon(VaadinIcons.CHECK);
+		successfulSignUp.setPosition(Position.TOP_RIGHT);
+		successfulSignUp.setDelayMsec(2500);
+		successfulSignUp.setStyleName("success_notification");
+		
+		successfulSignUp.show(Page.getCurrent());
+	}
+	
+	public static void setSuccessfulReservationDeleteNotification() {
+		Notification successfulSignUp = new Notification("Reserva eliminada con éxito");
 		successfulSignUp.setIcon(VaadinIcons.CHECK);
 		successfulSignUp.setPosition(Position.TOP_RIGHT);
 		successfulSignUp.setDelayMsec(2500);
