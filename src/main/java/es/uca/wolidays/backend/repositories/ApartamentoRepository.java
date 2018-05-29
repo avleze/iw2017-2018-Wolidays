@@ -39,4 +39,8 @@ public interface ApartamentoRepository extends CrudRepository<Apartamento, Integ
 	@EntityGraph(value = "Apartamento.apartamentoConReservas", type = EntityGraphType.LOAD)
 	@Query("SELECT apt FROM Apartamento apt WHERE apt.id = ?1")
 	Optional<Apartamento> findByIdWithReservas(Integer pk);
+	
+	@EntityGraph(value = "Apartamento.apartamentoConImagenes", type = EntityGraphType.LOAD)
+	@Query("SELECT apt FROM Apartamento apt WHERE apt.id = ?1")
+	Optional<Apartamento> findByIdWithImages(Integer pk);
 }
