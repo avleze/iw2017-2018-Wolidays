@@ -13,12 +13,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.vaadin.ui.Image;
 
 import es.uca.wolidays.backend.entities.Reserva.Estado;
 
@@ -55,6 +58,16 @@ public class Apartamento implements Serializable {
 	
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Ubicacion ubicacion;
+	
+	@OneToMany
+	private List<Imagen> imagenes;
+	
+	public List<Imagen> getImagenes() {
+		return imagenes;
+	}
+	public void setImagenes(List<Imagen> imagenes) {
+		this.imagenes = imagenes;
+	}
 	
 	public Ubicacion getUbicacion() {
 		return ubicacion;

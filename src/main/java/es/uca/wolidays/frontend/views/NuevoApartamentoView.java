@@ -1,7 +1,9 @@
 package es.uca.wolidays.frontend.views;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -29,12 +31,14 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Imagen;
 import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.backend.services.UsuarioService;
 import es.uca.wolidays.frontend.MainScreen;
+import es.uca.wolidays.frontend.components.ImageUploader;
 
 @Theme("wolidays")
 @SpringView(name = NuevoApartamentoView.VIEW_NAME)
@@ -150,6 +154,9 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		aptoBinder.forField(precioStdField)
 			.asRequired(CAMPO_OBLIGATORIO);
 		
+		ImageUploader imageUploader = new ImageUploader("Arrastra las fotos de tu apartamento aquí");
+		imageUploader.setWidth(100, Unit.PERCENTAGE);
+		
 		rightFields.addComponents(descripcionField, precioStdField);
 		rightFields.setComponentAlignment(descripcionField, Alignment.TOP_LEFT);
 		rightFields.setComponentAlignment(precioStdField, Alignment.TOP_LEFT);
@@ -186,6 +193,15 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 				try {
 					ubiBinder.writeBean(ubicacion);
 					apartamento.setUbicacion(ubicacion);
+					List<Imagen> imagenes = new ArrayList<>();
+					for(byte[] i : imageUploader.getImages())
+					{
+						Imagen img = new Imagen();
+						img.setImagen(i);
+						aptoService.guardarImagen(img);
+						imagenes.add(img);
+					}
+					apartamento.setImagenes(imagenes);
 					
 					apartamento.setPrecioEstandar(Double.parseDouble(precioStdField.getValue()));
 					aptoBinder.writeBean(apartamento);
@@ -203,9 +219,10 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		});
 		registrarAptoButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 		
-		nuevoAptoLayout.addComponents(title, fieldsLayout, registrarAptoButton);
+		nuevoAptoLayout.addComponents(title, fieldsLayout, imageUploader, registrarAptoButton);
 		nuevoAptoLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
 		nuevoAptoLayout.setComponentAlignment(fieldsLayout, Alignment.TOP_CENTER);
+		nuevoAptoLayout.setComponentAlignment(imageUploader, Alignment.TOP_CENTER);
 		nuevoAptoLayout.setComponentAlignment(registrarAptoButton, Alignment.TOP_CENTER);
 		
 		addComponent(nuevoAptoLayout);
