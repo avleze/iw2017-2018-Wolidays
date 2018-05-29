@@ -1,6 +1,7 @@
 package es.uca.wolidays.frontend.views;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -17,17 +18,20 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Imagen;
 import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.UsuarioService;
 import es.uca.wolidays.frontend.MainScreen;
+import es.uca.wolidays.frontend.utils.ImageUtils;
 
 @Theme("wolidays")
 @SpringView(name = MisApartamentosView.VIEW_NAME)
@@ -67,7 +71,7 @@ public class MisApartamentosView extends VerticalLayout implements View {
 		title.setCaptionAsHtml(true);
 		title.setCaption("<h1>Mis apartamentos</h1>");
 		
-		Usuario currentUser = userService.loadUserByUsernameWithApartamentos(SecurityUtils.getUsername());
+		Usuario currentUser = userService.loadUserByUsernameWithApartamentosReservasAndImages(SecurityUtils.getUsername());
 		misAptos = currentUser.getApartamentos();
 		
 		setAptosInfoColumns();
@@ -136,7 +140,25 @@ public class MisApartamentosView extends VerticalLayout implements View {
 				numCamas.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
 				numCamas.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 				
-				aptoInfo.addComponents(ubicacion, precioStd, numCamas);			
+				Button soltdes;
+				
+				if(apto.getReservasPendientes().size() == 0) {
+					soltdes = new Button("No hay solicitudes de reserva pendientes");
+					soltdes.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
+				} else {
+					soltdes = new Button(+ apto.getReservasPendientes().size() + " solicitud(es) de reserva pendiente(s)");
+					soltdes.addClickListener(e -> getUI().getNavigator().navigateTo(SolicitudesView.VIEW_NAME + "/" + apto.getId()));
+				}
+				
+				Set<Imagen> imagenes = apto.getImagenes();
+				if(!imagenes.isEmpty())
+				{
+					Image imagen = ImageUtils.convertToImage(apto.getImagenes().iterator().next().getImagen());
+					aptoInfo.addComponents(ubicacion, imagen, precioStd, numCamas, soltdes);			
+				}
+				else
+					aptoInfo.addComponents(ubicacion, precioStd, numCamas, soltdes);			
+						
 				
 				if(i % 2 == 0) {
 					leftAptos.addComponent(aptoInfo);

@@ -20,13 +20,15 @@ import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+
 import es.uca.wolidays.backend.entities.Reserva.Estado;
 
 
 @Entity
 @NamedEntityGraphs({
 	@NamedEntityGraph(name="Apartamento.apartamentoConOfertas", attributeNodes=@NamedAttributeNode("ofertas")),
-	@NamedEntityGraph(name="Apartamento.apartamentoConReservas", attributeNodes=@NamedAttributeNode("reservas"))
+	@NamedEntityGraph(name="Apartamento.apartamentoConReservas", attributeNodes=@NamedAttributeNode("reservas")),
+	@NamedEntityGraph(name="Apartamento.apartamentoConImagenes", attributeNodes=@NamedAttributeNode("imagenes"))
 })
 public class Apartamento implements Serializable {
 
@@ -56,6 +58,16 @@ public class Apartamento implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Ubicacion ubicacion;
 	
+	@OneToMany
+	private Set<Imagen> imagenes;
+	
+	public Set<Imagen> getImagenes() {
+		return imagenes;
+	}
+	public void setImagenes(Set<Imagen> imagenes) {
+		this.imagenes = imagenes;
+	}
+	
 	public Ubicacion getUbicacion() {
 		return ubicacion;
 	}
@@ -76,6 +88,10 @@ public class Apartamento implements Serializable {
 		return reservas.stream()
 				.filter(r -> r.getEstado().equals(Estado.Pendiente))
 				.collect(Collectors.toSet());
+	}
+	
+	public Boolean haveReservasPendientes() {
+		return getReservasPendientes().size() > 1;
 	}
 	
 	public void setReservas(Set<Reserva> reservas) {

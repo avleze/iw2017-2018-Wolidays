@@ -76,6 +76,17 @@
         font-size: x-large;
         text-align: center;
     }
+    
+    .drop-area {
+        border-radius: 20px;
+        border: 2px gray dashed;
+    }
+    
+    .img-uploader-button {
+        position:absolute;
+        right:0;
+        top:0;
+    }
 }
 
 

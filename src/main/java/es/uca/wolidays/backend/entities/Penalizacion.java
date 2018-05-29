@@ -8,8 +8,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class Penalizacion implements Serializable{
@@ -18,6 +16,10 @@ public class Penalizacion implements Serializable{
 	
 	public enum Motivo {
 		Modificacion, Cancelacion
+	}
+	
+	public enum TipoUsuario {
+		Huesped, Anfitrion
 	}
 	
 	@Id
@@ -33,9 +35,8 @@ public class Penalizacion implements Serializable{
 	@Enumerated(EnumType.STRING)
 	private Motivo motivo;
 	
-	@ManyToOne
-	@JoinColumn(name="TIPO_USR")
-	private Rol tipo_usuario;
+	@Enumerated(EnumType.STRING)
+	private TipoUsuario tipoUsr;
 	
 	public Motivo getMotivo() {
 		return motivo;
@@ -43,11 +44,11 @@ public class Penalizacion implements Serializable{
 	public void setMotivo(Motivo motivo) {
 		this.motivo = motivo;
 	}
-	public Rol getTipo_usuario() {
-		return tipo_usuario;
+	public TipoUsuario getTipoUsuario() {
+		return tipoUsr;
 	}
-	public void setTipo_usuario(Rol tipo_usuario) {
-		this.tipo_usuario = tipo_usuario;
+	public void setTipoUsuario(TipoUsuario tipoUsr) {
+		this.tipoUsr = tipoUsr;
 	}
 	public Integer getId() {
 		return Id;

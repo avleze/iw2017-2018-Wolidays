@@ -9,7 +9,7 @@ import javax.persistence.NamedNativeQuery;
 
 @Entity
 @NamedNativeQuery(name = "TransaccionReserva.getTotalBenefits",
-		query="select year(t_fecha), sum(tr_beneficio) from transaccion_reserva group by t_fecha")
+		query="select year(t_fecha), sum(tr_beneficio) from transaccion_reserva group by year(t_fecha)")
 public class TransaccionReserva extends Transaccion implements Serializable{
 
 	private static final long serialVersionUID = 3983378816379306082L;

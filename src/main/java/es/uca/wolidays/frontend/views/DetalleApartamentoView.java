@@ -1,6 +1,7 @@
 package es.uca.wolidays.frontend.views;
 
 import java.util.Optional;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -12,16 +13,21 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Imagen;
 import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.frontend.MainScreen;
+import es.uca.wolidays.frontend.utils.ImageUtils;
 
 @Theme("wolidays")
 @SpringView(name = DetalleApartamentoView.VIEW_NAME)
@@ -77,7 +83,7 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 		
 		idApto = Integer.parseInt(event.getParameters().split("/")[0]);
 		
-		Optional<Apartamento> existeApartamento = aptoService.buscarPorId(idApto);
+		Optional<Apartamento> existeApartamento = aptoService.buscarPorIdConImagenes(idApto);
 		
 		if(existeApartamento.isPresent()) {
 			apartamento = existeApartamento.get();
@@ -154,8 +160,27 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 		infoLayout.setComponentAlignment(aptoParamsLayout, Alignment.TOP_LEFT);
 		infoLayout.setComponentAlignment(descButtonsLayout, Alignment.TOP_RIGHT);
 		
-		detalleLayout.addComponents(title, infoLayout);
+		Set<Imagen> imagenes = apartamento.getImagenes();
+		GridLayout imagenesLayout = new GridLayout(4,4);
+		if(!imagenes.isEmpty())
+		{
+			for(Imagen i : imagenes)
+			{
+				Image image = ImageUtils.convertToImage(i.getImagen());
+				image.setWidth(200, Unit.PIXELS);
+				imagenesLayout.addComponent(image);
+				imagenesLayout.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
+			}
+			
+			detalleLayout.addComponents(title, imagenesLayout, infoLayout);
+			detalleLayout.setComponentAlignment(imagenesLayout, Alignment.TOP_CENTER);
+		}
+		else
+			detalleLayout.addComponents(title, infoLayout);
+		
 		detalleLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
+		detalleLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
+
 		detalleLayout.setComponentAlignment(infoLayout, Alignment.TOP_CENTER);
 		
 		addComponent(detalleLayout);

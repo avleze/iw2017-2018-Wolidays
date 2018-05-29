@@ -1,7 +1,11 @@
 package es.uca.wolidays.backend.services;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 
@@ -34,6 +38,30 @@ public class TransaccionService {
 	public List<?> obtenerBeneficiosTotales(){
 		return em.createNamedQuery("TransaccionReserva.getTotalBenefits")
 				.getResultList();
+	}
+	
+	public Float obtenerPctBeneficioActual() {
+    	
+		String filename = "src/main/resources/beneficio";
+    	try (Stream<String> stream = Files.lines(Paths.get(filename))) {
+    		
+    		Optional<String> beneficioStr = stream.findFirst();
+        	
+    		if(beneficioStr.isPresent())
+    			return Float.parseFloat(beneficioStr.get());
+ 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return null;
+	}
+	
+	public TransaccionPenalizacion guardar(TransaccionPenalizacion tP) {
+		return repoTranPenalizacion.save(tP);
+	}
+	
+	public TransaccionReserva guardar(TransaccionReserva tR) {
+		return repoTranReserva.save(tR); 
 	}
 	
 	public void eliminarTransaccionPenalizacion(TransaccionPenalizacion tP) {

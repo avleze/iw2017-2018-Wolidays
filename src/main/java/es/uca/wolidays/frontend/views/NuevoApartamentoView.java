@@ -1,7 +1,9 @@
 package es.uca.wolidays.frontend.views;
 
 import java.util.List;
-import java.util.regex.*;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -29,12 +31,14 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Imagen;
 import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.backend.services.UsuarioService;
 import es.uca.wolidays.frontend.MainScreen;
+import es.uca.wolidays.frontend.components.ImageUploader;
 
 @Theme("wolidays")
 @SpringView(name = NuevoApartamentoView.VIEW_NAME)
@@ -64,7 +68,7 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 	private String precioStdRgx = "^\\d{0,5}(\\.\\d{1,2})?$";
 	
 	Binder<Ubicacion> ubiBinder = new Binder<>();
-	private String ubicacionRgx = "[\\w\\s,.()áéíóúÁÉÍÓÚñÑ\\/]+";
+	private String ubicacionRgx = "[\\w\\s,.()áéíóúÁÉÍÓÚñÑ\\/\\º]+";
 	
 	private Boolean precioVacio = true;
 	private Boolean precioValido = false;
@@ -150,6 +154,9 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		aptoBinder.forField(precioStdField)
 			.asRequired(CAMPO_OBLIGATORIO);
 		
+		ImageUploader imageUploader = new ImageUploader("Arrastra las fotos de tu apartamento aquí");
+		imageUploader.setWidth(100, Unit.PERCENTAGE);
+		
 		rightFields.addComponents(descripcionField, precioStdField);
 		rightFields.setComponentAlignment(descripcionField, Alignment.TOP_LEFT);
 		rightFields.setComponentAlignment(precioStdField, Alignment.TOP_LEFT);
@@ -186,6 +193,12 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 				try {
 					ubiBinder.writeBean(ubicacion);
 					apartamento.setUbicacion(ubicacion);
+					Set<Imagen> imagenesApto = imageUploader.getImages();
+					for(Imagen i : imagenesApto)
+						aptoService.guardarImagen(i);
+						
+					
+					apartamento.setImagenes(imagenesApto);
 					
 					apartamento.setPrecioEstandar(Double.parseDouble(precioStdField.getValue()));
 					aptoBinder.writeBean(apartamento);
@@ -203,9 +216,10 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		});
 		registrarAptoButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 		
-		nuevoAptoLayout.addComponents(title, fieldsLayout, registrarAptoButton);
+		nuevoAptoLayout.addComponents(title, fieldsLayout, imageUploader, registrarAptoButton);
 		nuevoAptoLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
 		nuevoAptoLayout.setComponentAlignment(fieldsLayout, Alignment.TOP_CENTER);
+		nuevoAptoLayout.setComponentAlignment(imageUploader, Alignment.TOP_CENTER);
 		nuevoAptoLayout.setComponentAlignment(registrarAptoButton, Alignment.TOP_CENTER);
 		
 		addComponent(nuevoAptoLayout);

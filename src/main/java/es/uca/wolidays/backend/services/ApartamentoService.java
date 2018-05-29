@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Imagen;
 import es.uca.wolidays.backend.entities.Oferta;
 import es.uca.wolidays.backend.repositories.ApartamentoRepository;
 import es.uca.wolidays.backend.repositories.OfertaRepository;
+import es.uca.wolidays.backend.repositories.ImagenRepository;
 
 @Service
 public class ApartamentoService {
@@ -19,6 +21,8 @@ public class ApartamentoService {
 	private ApartamentoRepository repo;
 	@Autowired
 	private OfertaRepository ofertasRepo;
+	@Autowired
+	private ImagenRepository imagenRepo;
 	
 	public List<Apartamento> buscarPorUbicacion(String ubicacion) {
 		return repo.findByUbicacion(ubicacion);
@@ -68,6 +72,10 @@ public class ApartamentoService {
 		return repo.findByIdWithOfertas(pk);
 	}
 	
+	public Optional<Apartamento> buscarPorIdConImagenes(Integer pk){
+		return repo.findByIdWithImages(pk);
+	}
+	
 	public Optional<Apartamento> buscarPorIdConReservas(Integer pk){
 		return repo.findByIdWithReservas(pk);
 	}
@@ -78,5 +86,9 @@ public class ApartamentoService {
 	
 	public Iterable<Apartamento> apartamentos() {
 		return repo.findAll();
+	}
+	
+	public void guardarImagen(Imagen entity) {
+		imagenRepo.save(entity);
 	}
 }

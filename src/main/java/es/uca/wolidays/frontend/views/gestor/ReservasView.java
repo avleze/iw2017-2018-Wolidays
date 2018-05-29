@@ -22,6 +22,7 @@ import com.vaadin.ui.VerticalLayout;
 import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.entities.Reserva;
 import es.uca.wolidays.backend.services.ReservaService;
+import es.uca.wolidays.frontend.views.DetalleReservaView;
 
 @SpringView(name = ReservasView.VIEW_NAME)
 public class ReservasView extends VerticalLayout implements View {
@@ -86,8 +87,36 @@ public class ReservasView extends VerticalLayout implements View {
 		successfulMod.setIcon(VaadinIcons.CHECK);
 		successfulMod.setPosition(Position.TOP_RIGHT);
 		successfulMod.setDelayMsec(2500);
+		successfulMod.setStyleName("success_notification");		
+		successfulMod.show(Page.getCurrent());
+	}
+	
+	public static void setSuccessfulReservationAcceptNotification() {
+		Notification successfulMod = new Notification("Reserva validada con éxito");
+		successfulMod.setIcon(VaadinIcons.CHECK);
+		successfulMod.setPosition(Position.TOP_RIGHT);
+		successfulMod.setDelayMsec(2500);
 		successfulMod.setStyleName("success_notification");
 		
+		successfulMod.show(Page.getCurrent());
+	}
+	
+	public static void setSuccessfulReservationRejectNotification() {
+		Notification successfulMod = new Notification("Reserva rechazada con éxito");
+		successfulMod.setIcon(VaadinIcons.CHECK);
+		successfulMod.setPosition(Position.TOP_RIGHT);
+		successfulMod.setDelayMsec(2500);
+		successfulMod.setStyleName("success_notification");
+		
+		successfulMod.show(Page.getCurrent());
+	}
+	
+	public static void setSuccessfulReservationDelNotification() {
+		Notification successfulMod = new Notification("Reserva eliminada con éxito");
+		successfulMod.setIcon(VaadinIcons.CHECK);
+		successfulMod.setPosition(Position.TOP_RIGHT);
+		successfulMod.setDelayMsec(2500);
+		successfulMod.setStyleName("success_notification");		
 		successfulMod.show(Page.getCurrent());
 	}
 }
