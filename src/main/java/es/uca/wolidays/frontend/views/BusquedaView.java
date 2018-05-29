@@ -45,7 +45,7 @@ public class BusquedaView extends VerticalLayout implements View {
 	@Autowired
 	private transient ApartamentoService aptoService;
 	
-	private String ciudadBuscada = "";
+	private String textoBuscado = "";
 	
 	private VerticalLayout busquedaLayout;
 	private HorizontalLayout resultadosLayout;
@@ -132,16 +132,16 @@ public class BusquedaView extends VerticalLayout implements View {
 		mainScreen.setButtons();
 		
 		try {
-			ciudadBuscada = URLDecoder.decode(event.getParameters().split("/")[0], "UTF-8");
+			textoBuscado = URLDecoder.decode(event.getParameters().split("/")[0], "UTF-8");
 		} catch (UnsupportedEncodingException ex) {
 			
 		}
-		aptosSinFiltro = aptoService.buscarPorCiudad(ciudadBuscada);
+		aptosSinFiltro = aptoService.buscarPorUbicacion(textoBuscado);
 		
 		if(aptosSinFiltro.isEmpty()) {
 			
-			Notification.show("No existen apartamentos", "en " + ciudadBuscada, Notification.Type.ERROR_MESSAGE);
-			Button volverInicio = new Button("Buscar otra ciudad");
+			Notification.show("No existen apartamentos", "en " + textoBuscado, Notification.Type.ERROR_MESSAGE);
+			Button volverInicio = new Button("Buscar otra ubicación");
 			volverInicio.setIcon(VaadinIcons.ARROW_BACKWARD);
 			volverInicio.setClickShortcut(KeyCode.ENTER);
 			volverInicio.addClickListener(e -> getUI().getNavigator().navigateTo(""));
@@ -175,7 +175,7 @@ public class BusquedaView extends VerticalLayout implements View {
 			Notification.show("El valor mínimo es mayor que el máximo", "Introdúcelo de nuevo", Notification.Type.ERROR_MESSAGE);
 		} else {
 			List<Apartamento> aptosActualizados = aptoService
-					.filtrarPorUbicacionyPrecioEstandar(ciudadBuscada, minPrecio, maxPrecio);
+					.filtrarPorUbicacionyPrecioEstandar(textoBuscado, minPrecio, maxPrecio);
 			
 			limpiarApartamentos();
 			setApartamentos(aptosActualizados);
