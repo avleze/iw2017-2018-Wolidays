@@ -12,7 +12,6 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
-import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
@@ -70,7 +69,7 @@ public class MisApartamentosView extends VerticalLayout implements View {
 		title.setCaptionAsHtml(true);
 		title.setCaption("<h1>Mis apartamentos</h1>");
 		
-		Usuario currentUser = userService.loadUserByUsernameWithApartamentosAndReservas(SecurityUtils.getUsername());
+		Usuario currentUser = userService.loadUserByUsernameWithApartamentosReservasAndImages(SecurityUtils.getUsername());
 		misAptos = currentUser.getApartamentos();
 		
 		setAptosInfoColumns();

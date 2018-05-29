@@ -22,7 +22,11 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Integer>{
 	@Query("SELECT u FROM Usuario u WHERE username = ?1")
 	Usuario findByUsernameWithApartamentos(String username);
 	
-	@EntityGraph(value = "Usuario.usuarioConApartamentosReservasEImagenes", type = EntityGraphType.LOAD)
+	@EntityGraph(value = "Usuario.usuarioConApartamentosYReservas", type = EntityGraphType.LOAD)
 	@Query("SELECT u FROM Usuario u WHERE username = ?1")
 	Usuario findByUsernameWithApartamentosAndReservas(String username);
+	
+	@EntityGraph(value = "Usuario.usuarioConApartamentosReservasEImagenes", type = EntityGraphType.LOAD)
+	@Query("SELECT u FROM Usuario u WHERE username = ?1")
+	Usuario findByUsernameWithApartamentosReservasAndImages(String username);
 }
