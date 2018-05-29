@@ -154,7 +154,6 @@ public class MisApartamentosView extends VerticalLayout implements View {
 				if(!imagenes.isEmpty())
 				{
 					Image imagen = ImageUtils.convertToImage(apto.getImagenes().iterator().next().getImagen());
-					imagen.setWidth(150, Unit.PIXELS);
 					aptoInfo.addComponents(ubicacion, imagen, precioStd, numCamas, soltdes);			
 				}
 				else

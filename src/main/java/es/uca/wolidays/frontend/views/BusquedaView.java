@@ -3,6 +3,7 @@ package es.uca.wolidays.frontend.views;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -13,19 +14,23 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Slider;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Imagen;
 import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.frontend.MainScreen;
+import es.uca.wolidays.frontend.utils.ImageUtils;
 
 @Theme("wolidays")
 @SpringView(name = BusquedaView.VIEW_NAME)
@@ -222,7 +227,15 @@ public class BusquedaView extends VerticalLayout implements View {
 				numCamas.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
 				numCamas.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 				
-				aptoInfo.addComponents(ubicacion, precioStd, numCamas);			
+				Set<Imagen> imagenes = apto.getImagenes();
+				if(!imagenes.isEmpty())
+				{
+					Image imagen = ImageUtils.convertToImage(apto.getImagenes().iterator().next().getImagen());
+					aptoInfo.addComponents(ubicacion, imagen, precioStd, numCamas);			
+				}
+				else
+					aptoInfo.addComponents(ubicacion, precioStd, numCamas);			
+				
 				
 				if(i % 2 == 0) {
 					leftAptos.addComponent(aptoInfo);
