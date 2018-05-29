@@ -181,6 +181,9 @@ public class DetalleReservaView extends VerticalLayout implements View {
 				}*/
 				if(SecurityUtils.hasRole("GESTOR_ROL"))
 					getUI().getNavigator().navigateTo("reservas");
+				else {
+					getUI().getNavigator().navigateTo("mis_reservas");
+				}
 			} catch (ValidationException vEx) {
 				Notification.show("No se ha podido modificar la reserva.");
 			}
