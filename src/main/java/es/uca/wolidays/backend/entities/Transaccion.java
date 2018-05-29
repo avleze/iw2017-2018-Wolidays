@@ -15,7 +15,7 @@ import javax.persistence.InheritanceType;
 public class Transaccion {
 	@Id
 	@Column(name = "T_ID")
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Integer id;
 	
 	@Column(name="T_FECHA")
