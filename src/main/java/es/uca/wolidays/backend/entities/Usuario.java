@@ -139,6 +139,16 @@ public class Usuario implements UserDetails, Serializable {
 	public void setApartamentos(List<Apartamento> apartamentos) {
 		this.apartamentos = apartamentos;
 	}
+	
+	public Boolean haveApartamentosWithReservaPendientes() {
+		
+		for (Apartamento apartamento : apartamentos) {
+			if(apartamento.haveReservasPendientes())
+				return true;
+		}
+		return false;
+	}
+	
 	public List<Reserva> getReservas() {
 		return reservas;
 	}

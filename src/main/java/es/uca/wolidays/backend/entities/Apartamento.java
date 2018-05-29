@@ -58,12 +58,12 @@ public class Apartamento implements Serializable {
 	private Ubicacion ubicacion;
 	
 	@OneToMany
-	private List<Imagen> imagenes;
+	private Set<Imagen> imagenes;
 	
-	public List<Imagen> getImagenes() {
+	public Set<Imagen> getImagenes() {
 		return imagenes;
 	}
-	public void setImagenes(List<Imagen> imagenes) {
+	public void setImagenes(Set<Imagen> imagenes) {
 		this.imagenes = imagenes;
 	}
 	
@@ -87,6 +87,10 @@ public class Apartamento implements Serializable {
 		return reservas.stream()
 				.filter(r -> r.getEstado().equals(Estado.Pendiente))
 				.collect(Collectors.toSet());
+	}
+	
+	public Boolean haveReservasPendientes() {
+		return getReservasPendientes().size() > 1;
 	}
 	
 	public void setReservas(Set<Reserva> reservas) {
