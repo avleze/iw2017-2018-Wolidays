@@ -26,7 +26,7 @@ public class ImageUploader extends CustomComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	List<byte[]> images = new ArrayList<>();
+	private List<byte[]> images = new ArrayList<>();
 
 	
 	public ImageUploader(String message) {        
@@ -77,6 +77,7 @@ public class ImageUploader extends CustomComponent {
 									final byte[] byteArray = bas.toByteArray();
 									return new ByteArrayInputStream(byteArray);
 								}
+								return null;
 							};
 							
 							
@@ -112,28 +113,24 @@ public class ImageUploader extends CustomComponent {
 
 						@Override
 						public boolean listenProgress() {
-							// TODO Auto-generated method stub
 							return false;
 						}
 
 
 						@Override
 						public void onProgress(StreamingProgressEvent event) {
-							// TODO Auto-generated method stub
 							
 						}
 
 
 						@Override
 						public void streamingStarted(StreamingStartEvent event) {
-							// TODO Auto-generated method stub
 							
 						}
 
 
 						@Override
 						public boolean isInterrupted() {
-							// TODO Auto-generated method stub
 							return false;
 						}
 					};
