@@ -17,6 +17,7 @@ import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -55,6 +56,7 @@ public class MisReservasView extends VerticalLayout implements View {
 	private VerticalLayout reservasLeft;
 	private VerticalLayout reservasRight;
 	private VerticalLayout popupConfirmacion;
+	private CssLayout botonesReserva;
 	
 	private Usuario usuario;
 	private List<Reserva> usuarioReservas;
@@ -75,6 +77,8 @@ public class MisReservasView extends VerticalLayout implements View {
 		reservasRight = new VerticalLayout();
 		
 		popupConfirmacion = new VerticalLayout();
+		
+		botonesReserva = new CssLayout();
 	}
 	
 	
@@ -114,10 +118,11 @@ public class MisReservasView extends VerticalLayout implements View {
 				estadoReserva.setCaption("Estado: " + rsrv.getEstado());
 				estadoReserva.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 				
-				/*popupConfirmacion.addComponent(new Label("¿Está seguro de eliminar esta reserva?"));
+				popupConfirmacion.addComponent(new Label("¿Está seguro de eliminar esta reserva?"));
+				popupConfirmacion.addComponents(new Button("Sí", click -> rsrvService.eliminar(rsrv))); 
+						//new Button("No", click -> popup.setPopupVisible(false)));
 				PopupView popup = new PopupView(null, popupConfirmacion);
-				popupConfirmacion.addComponents(new Button("Sí", click -> rsrvService.eliminar(rsrv)), 
-						new Button("No", click -> popup.setPopupVisible(false)));
+				
 				
 				Button modificarReserva = new Button();
 				modificarReserva.setIcon(VaadinIcons.EDIT);
@@ -129,10 +134,13 @@ public class MisReservasView extends VerticalLayout implements View {
 				eliminarReserva.setCaption("Eliminar reserva");
 				eliminarReserva.addClickListener(e -> {
 					popup.setPopupVisible(true);
-				});*/
+					//AÑADIR PENALIZACION
+				});
 				
-				reserva.addComponents(fechaLlegada, fechaSalida, ubicacion, precioNoches, estadoReserva);
-				
+				botonesReserva.addComponents(modificarReserva, eliminarReserva); //añadir popup a layout
+		    	botonesReserva.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+				reserva.addComponents(fechaLlegada, fechaSalida, ubicacion, precioNoches, estadoReserva, botonesReserva);
+				reserva.setComponentAlignment(botonesReserva, Alignment.TOP_LEFT);				
 				
 				if(i % 2 == 0) {
 					reservasLeft.addComponent(reserva);

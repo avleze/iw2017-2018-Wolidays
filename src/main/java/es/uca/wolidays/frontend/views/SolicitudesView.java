@@ -60,8 +60,6 @@ public class SolicitudesView extends VerticalLayout implements View {
 		title.setCaptionAsHtml(true);
 		title.setCaption("<h1>Solicitudes de reservas</h1>");
 		
-		
-		//setAptosInfoColumns();
 	}
 	
 	@Override

@@ -58,7 +58,7 @@ public class OfertasView extends VerticalLayout implements View {
 	
 	private List<Oferta> ofertas;
 	
-	private int id_aptoOferta = 0;
+	private int idAptoOferta = 0;
 
 	@PostConstruct
 	void init() {
@@ -95,19 +95,19 @@ public class OfertasView extends VerticalLayout implements View {
 	public void enter(ViewChangeEvent event) {
 		mainScreen.setButtons();
 		
-		id_aptoOferta = Integer.parseInt(event.getParameters().split("/")[0]);
+		idAptoOferta = Integer.parseInt(event.getParameters().split("/")[0]);
 		
-		Optional<Apartamento> existeApartamento = aptoService.buscarPorIdConOfertas(id_aptoOferta);
+		Optional<Apartamento> existeApartamento = aptoService.buscarPorIdConOfertas(idAptoOferta);
 		if(existeApartamento.isPresent()) {
 			ofertas = existeApartamento.get().getOfertas();
 			title.setCaption("<h1>Ofertas del apartamento de <i>" + existeApartamento.get().getUbicacion() + "</i></h1>");
 			help.setCaption("<h3><i>Sólo se muestran las ofertas vigentes o futuras.</i></h3>");
 			
 			nuevaOfertaButton.addClickListener(e -> {
-				getUI().getNavigator().navigateTo(NuevaOfertaView.VIEW_NAME + "/" + id_aptoOferta);
+				getUI().getNavigator().navigateTo(NuevaOfertaView.VIEW_NAME + "/" + idAptoOferta);
 			});
 			volverButton.addClickListener(e -> {
-				getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + id_aptoOferta);
+				getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + idAptoOferta);
 			});
 			
 		}

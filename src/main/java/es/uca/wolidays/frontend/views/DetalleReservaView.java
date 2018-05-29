@@ -44,13 +44,13 @@ public class DetalleReservaView extends VerticalLayout implements View {
 	public static final String VIEW_NAME = "detalle_reserva";
 	
 	@Autowired
-	ReservaService rsrvService;
+	private transient ReservaService rsrvService;
 	
 	@Autowired
-	ApartamentoService aptoService;
+	private transient ApartamentoService aptoService;
 	
 	@Autowired
-	TransaccionService transacService;
+	private transient TransaccionService transacService;
 	
 	private VerticalLayout detalleReservaLayout;
 	private HorizontalLayout infoLayout;
@@ -70,7 +70,7 @@ public class DetalleReservaView extends VerticalLayout implements View {
 	
 	private Binder<Reserva> binder = new Binder<>();
 	private Binder<TransaccionReserva> binderTransacRes= new Binder<>();
-	private Binder<TransaccionPenalizacion> binderTransac = new Binder<>();
+	//private Binder<TransaccionPenalizacion> binderTransac = new Binder<>();
 	
 	@PostConstruct
 	void init() {
