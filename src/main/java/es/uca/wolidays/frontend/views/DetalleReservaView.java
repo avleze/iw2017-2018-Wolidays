@@ -179,7 +179,8 @@ public class DetalleReservaView extends VerticalLayout implements View {
 					binderTransac.writeBean(transPenaliz);
 					transacService.guardar(transPenaliz);
 				}*/
-				getUI().getNavigator().navigateTo("reservas");
+				if(SecurityUtils.hasRole("GESTOR_ROL"))
+					getUI().getNavigator().navigateTo("reservas");
 			} catch (ValidationException vEx) {
 				Notification.show("No se ha podido modificar la reserva.");
 			}
@@ -237,8 +238,6 @@ public class DetalleReservaView extends VerticalLayout implements View {
 	    	
 	    	botonesReserva.addComponents(aceptarReservaButton, rechazarReservaButton);
 	    	botonesReserva.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-	    	//botonesReserva.setComponentAlignment(aceptarReservaButton, Alignment.TOP_LEFT);
-	    	//botonesReserva.setComponentAlignment(rechazarReservaButton, Alignment.TOP_CENTER);
 	    	detallesLayout.addComponent(botonesReserva);
 	    	detallesLayout.setComponentAlignment(botonesReserva, Alignment.TOP_LEFT);
 			
