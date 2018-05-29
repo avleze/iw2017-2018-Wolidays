@@ -37,7 +37,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 	}), 
 	@NamedEntityGraph(name="Usuario.usuarioConApartamentosYReservas", 
 		attributeNodes =  @NamedAttributeNode(value="apartamentos", subgraph = "apartamentos"),
-		subgraphs = @NamedSubgraph(name = "apartamentos", attributeNodes = @NamedAttributeNode(value="reservas")))
+		subgraphs = @NamedSubgraph(name = "apartamentos", attributeNodes = @NamedAttributeNode(value="reservas"))),
+	@NamedEntityGraph(name="Usuario.usuarioConApartamentosReservasEImagenes", 
+	attributeNodes =  @NamedAttributeNode(value="apartamentos", subgraph = "apartamentos"),
+	subgraphs = @NamedSubgraph(name = "apartamentos", attributeNodes = {@NamedAttributeNode(value="reservas"), @NamedAttributeNode(value="imagenes")}))
 })
 @Table(indexes= {@Index(columnList = "username")})
 public class Usuario implements UserDetails, Serializable {
@@ -139,6 +142,16 @@ public class Usuario implements UserDetails, Serializable {
 	public void setApartamentos(List<Apartamento> apartamentos) {
 		this.apartamentos = apartamentos;
 	}
+	
+	public Boolean haveApartamentosWithReservaPendientes() {
+		
+		for (Apartamento apartamento : apartamentos) {
+			if(apartamento.haveReservasPendientes())
+				return true;
+		}
+		return false;
+	}
+	
 	public List<Reserva> getReservas() {
 		return reservas;
 	}

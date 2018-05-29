@@ -17,6 +17,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
@@ -28,6 +29,7 @@ import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.UsuarioService;
 import es.uca.wolidays.frontend.MainScreen;
+import es.uca.wolidays.frontend.utils.ImageUtils;
 
 @Theme("wolidays")
 @SpringView(name = MisApartamentosView.VIEW_NAME)
@@ -67,7 +69,7 @@ public class MisApartamentosView extends VerticalLayout implements View {
 		title.setCaptionAsHtml(true);
 		title.setCaption("<h1>Mis apartamentos</h1>");
 		
-		Usuario currentUser = userService.loadUserByUsernameWithApartamentosAndReservas(SecurityUtils.getUsername());
+		Usuario currentUser = userService.loadUserByUsernameWithApartamentosReservasAndImages(SecurityUtils.getUsername());
 		misAptos = currentUser.getApartamentos();
 		
 		setAptosInfoColumns();
@@ -145,9 +147,10 @@ public class MisApartamentosView extends VerticalLayout implements View {
 					soltdes = new Button(+ apto.getReservasPendientes().size() + " solicitud(es) de reserva pendiente(s)");
 					soltdes.addClickListener(e -> getUI().getNavigator().navigateTo(SolicitudesView.VIEW_NAME + "/" + apto.getId()));
 				}
-				
+				Image imagen = ImageUtils.convertToImage(apto.getImagenes().iterator().next().getImagen());
+				imagen.setWidth(150, Unit.PIXELS);
 						
-				aptoInfo.addComponents(ubicacion, precioStd, numCamas, soltdes);			
+				aptoInfo.addComponents(ubicacion, imagen, precioStd, numCamas, soltdes);			
 				
 				if(i % 2 == 0) {
 					leftAptos.addComponent(aptoInfo);
