@@ -193,15 +193,12 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 				try {
 					ubiBinder.writeBean(ubicacion);
 					apartamento.setUbicacion(ubicacion);
-					List<Imagen> imagenes = new ArrayList<>();
-					for(byte[] i : imageUploader.getImages())
-					{
-						Imagen img = new Imagen();
-						img.setImagen(i);
-						aptoService.guardarImagen(img);
-						imagenes.add(img);
-					}
-					apartamento.setImagenes(imagenes);
+					List<Imagen> imagenesApto = imageUploader.getImages();
+					for(Imagen i : imagenesApto)
+						aptoService.guardarImagen(i);
+						
+					
+					apartamento.setImagenes(imagenesApto);
 					
 					apartamento.setPrecioEstandar(Double.parseDouble(precioStdField.getValue()));
 					aptoBinder.writeBean(apartamento);

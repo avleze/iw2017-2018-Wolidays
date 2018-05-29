@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.vaadin.server.Responsive;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
@@ -20,13 +21,15 @@ import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.dnd.FileDropTarget;
 
+import es.uca.wolidays.backend.entities.Imagen;
+
 public class ImageUploader extends CustomComponent {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private List<byte[]> images = new ArrayList<>();
+	private List<Imagen> images = new ArrayList<>();
 
 	
 	public ImageUploader(String message) {        
@@ -82,8 +85,9 @@ public class ImageUploader extends CustomComponent {
 							
 							
 							final StreamResource resource = new StreamResource(streamSource, fileName);
-							byte[] byteArrayImage = bas.toByteArray();
-							images.add(byteArrayImage);
+							Imagen image = new Imagen();
+							image.setImagen(bas.toByteArray());
+							images.add(image);
 
 							
 							/* Showing the file */
@@ -100,7 +104,7 @@ public class ImageUploader extends CustomComponent {
 							remover.addClickListener(listener -> 
 							{
 								glDropPane.removeComponent(imgContainer);
-								images.remove(byteArrayImage);
+								images.remove(image);
 							});
 							glDropPane.addComponent(imgContainer);
 						}
@@ -148,12 +152,12 @@ public class ImageUploader extends CustomComponent {
     }
 
 
-	public List<byte[]> getImages() {
+	public List<Imagen> getImages() {
 		return images;
 	}
 
 
-	public void setImages(List<byte[]> images) {
+	public void setImages(List<Imagen> images) {
 		this.images = images;
 	}
 
