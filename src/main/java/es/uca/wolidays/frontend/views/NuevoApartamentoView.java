@@ -1,7 +1,7 @@
 package es.uca.wolidays.frontend.views;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -193,7 +193,7 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 				try {
 					ubiBinder.writeBean(ubicacion);
 					apartamento.setUbicacion(ubicacion);
-					List<Imagen> imagenesApto = imageUploader.getImages();
+					Set<Imagen> imagenesApto = imageUploader.getImages();
 					for(Imagen i : imagenesApto)
 						aptoService.guardarImagen(i);
 						
