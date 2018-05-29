@@ -89,6 +89,10 @@ public class Apartamento implements Serializable {
 				.collect(Collectors.toSet());
 	}
 	
+	public Boolean haveReservasPendientes() {
+		return getReservasPendientes().size() > 1;
+	}
+	
 	public void setReservas(Set<Reserva> reservas) {
 		this.reservas = reservas;
 	}
