@@ -27,7 +27,8 @@ import es.uca.wolidays.backend.entities.Reserva.Estado;
 @Entity
 @NamedEntityGraphs({
 	@NamedEntityGraph(name="Apartamento.apartamentoConOfertas", attributeNodes=@NamedAttributeNode("ofertas")),
-	@NamedEntityGraph(name="Apartamento.apartamentoConReservas", attributeNodes=@NamedAttributeNode("reservas"))
+	@NamedEntityGraph(name="Apartamento.apartamentoConReservas", attributeNodes=@NamedAttributeNode("reservas")),
+	@NamedEntityGraph(name="Apartamento.apartamentoConImagenes", attributeNodes=@NamedAttributeNode("imagenes"))
 })
 public class Apartamento implements Serializable {
 

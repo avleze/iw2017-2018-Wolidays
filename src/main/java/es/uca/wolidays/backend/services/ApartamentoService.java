@@ -72,6 +72,10 @@ public class ApartamentoService {
 		return repo.findByIdWithOfertas(pk);
 	}
 	
+	public Optional<Apartamento> buscarPorIdConImagenes(Integer pk){
+		return repo.findByIdWithImages(pk);
+	}
+	
 	public Optional<Apartamento> buscarPorIdConReservas(Integer pk){
 		return repo.findByIdWithReservas(pk);
 	}

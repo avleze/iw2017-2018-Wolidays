@@ -1,6 +1,7 @@
 package es.uca.wolidays.frontend.views;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -24,6 +25,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Imagen;
 import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
@@ -147,10 +149,16 @@ public class MisApartamentosView extends VerticalLayout implements View {
 					soltdes = new Button(+ apto.getReservasPendientes().size() + " solicitud(es) de reserva pendiente(s)");
 					soltdes.addClickListener(e -> getUI().getNavigator().navigateTo(SolicitudesView.VIEW_NAME + "/" + apto.getId()));
 				}
-				Image imagen = ImageUtils.convertToImage(apto.getImagenes().iterator().next().getImagen());
-				imagen.setWidth(150, Unit.PIXELS);
+				
+				Set<Imagen> imagenes = apto.getImagenes();
+				if(!imagenes.isEmpty())
+				{
+					Image imagen = ImageUtils.convertToImage(apto.getImagenes().iterator().next().getImagen());
+					aptoInfo.addComponents(ubicacion, imagen, precioStd, numCamas, soltdes);			
+				}
+				else
+					aptoInfo.addComponents(ubicacion, precioStd, numCamas, soltdes);			
 						
-				aptoInfo.addComponents(ubicacion, imagen, precioStd, numCamas, soltdes);			
 				
 				if(i % 2 == 0) {
 					leftAptos.addComponent(aptoInfo);
