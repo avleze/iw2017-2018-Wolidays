@@ -3,8 +3,8 @@ package es.uca.wolidays.frontend.components;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.vaadin.server.Responsive;
 import com.vaadin.server.StreamResource;
@@ -29,7 +29,7 @@ public class ImageUploader extends CustomComponent {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private List<Imagen> images = new ArrayList<>();
+	private Set<Imagen> images = new HashSet<>();
 
 	
 	public ImageUploader(String message) {        
@@ -152,12 +152,12 @@ public class ImageUploader extends CustomComponent {
     }
 
 
-	public List<Imagen> getImages() {
+	public Set<Imagen> getImages() {
 		return images;
 	}
 
 
-	public void setImages(List<Imagen> images) {
+	public void setImages(Set<Imagen> images) {
 		this.images = images;
 	}
 
