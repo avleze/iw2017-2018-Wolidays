@@ -158,6 +158,8 @@ public class MisApartamentosView extends VerticalLayout implements View {
 				{
 					Image imagen = ImageUtils.convertToImage(imagenes.iterator().next().getImagen());
 					imagen.setWidth(200, Unit.PIXELS);
+					imagen.setStyleName("navigator-cursor");
+					imagen.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 					aptoInfo.addComponents(ubicacion, imagen, precioStd, numCamas, soltdes);			
 				}
 				else
