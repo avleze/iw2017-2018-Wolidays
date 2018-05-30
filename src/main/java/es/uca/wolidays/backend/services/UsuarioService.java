@@ -65,6 +65,10 @@ public class UsuarioService implements UserDetailsService{
 		return repo.findByUsername(username) != null;
 	}
 	
+	public Boolean correoExists(String correo) {
+		return repo.findByCorreo(correo) != null;
+	}
+	
 	public Usuario guardar(Usuario usuario, Boolean cifrarPassword) {
 		if(cifrarPassword) {
 			usuario.setPassword(passwordEncoder.encode(usuario.getPassword() != null ? usuario.getPassword() : "default"));
