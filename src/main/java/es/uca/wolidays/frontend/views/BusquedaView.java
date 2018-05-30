@@ -2,6 +2,7 @@ package es.uca.wolidays.frontend.views;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -14,14 +15,17 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Slider;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -36,6 +40,9 @@ import es.uca.wolidays.frontend.utils.ImageUtils;
 @SpringView(name = BusquedaView.VIEW_NAME)
 public class BusquedaView extends VerticalLayout implements View {
 	
+	private static final String FILTRO_PRECIO = "Precio";
+	private static final String FILTRO_FECHA = "Fechas";
+	
 	private static final long serialVersionUID = -3089381541889114455L;
 	public static final String VIEW_NAME = "buscar";
 	
@@ -48,11 +55,16 @@ public class BusquedaView extends VerticalLayout implements View {
 	private String textoBuscado = "";
 	
 	private VerticalLayout busquedaLayout;
+	private CssLayout nuevaBusquedaLayout;
 	private HorizontalLayout resultadosLayout;
 	private VerticalLayout filtrosLayout;
 	private HorizontalLayout buttonsLayout;
 	private VerticalLayout leftAptos;
 	private VerticalLayout rightAptos;
+	
+	private Label separator;
+	private TextField searchBar;
+	private Button searchButton;
 	
 	private Button filtroPrecio;
 	private Button filtroFechas;
@@ -61,16 +73,49 @@ public class BusquedaView extends VerticalLayout implements View {
 	private HorizontalLayout slidersLayout;
 	private Slider precioMinSlider;
 	private Slider precioMaxSlider;
-	
 	private Button aplicarFiltroPrecio;
 	
+	private HorizontalLayout fechasLayout;
+	private DateField fechaInicio;
+	private DateField fechaFin;
+	private Button aplicarFiltroFechas;
+	
 	private List<Apartamento> aptosSinFiltro;
+	
+	private String filtroActual;
 	
 	@PostConstruct
 	void init() {
 		busquedaLayout = new VerticalLayout();
 		busquedaLayout.setWidth("100%");
 		busquedaLayout.setMargin(false);
+		
+		separator = new Label();
+		separator.setCaptionAsHtml(true);
+		separator.setCaption("<hr>");
+		separator.setStyleName("separator");
+		
+		nuevaBusquedaLayout = new CssLayout();
+		searchBar = new TextField();
+		searchButton = new Button("Buscar");
+		
+		searchBar.setPlaceholder("Introduce otra ciudad ...");
+		searchBar.setWidth("400px");
+		searchButton.setWidth("80px");
+		searchButton.setClickShortcut(KeyCode.ENTER);
+		searchButton.addClickListener(e -> {
+			
+			if(!searchBar.isEmpty()) {
+				textoBuscado = searchBar.getValue();
+				aptosSinFiltro = aptoService.buscarPorUbicacion(textoBuscado);
+				limpiarApartamentos();
+				setApartamentos(aptosSinFiltro, false);
+			}
+			
+		});
+		
+		nuevaBusquedaLayout.addComponents(searchBar, searchButton);
+		nuevaBusquedaLayout.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 		
 		resultadosLayout = new HorizontalLayout();
 		resultadosLayout.setWidth("100%");
@@ -83,12 +128,11 @@ public class BusquedaView extends VerticalLayout implements View {
 		
 		filtroPrecio = new Button("Precio");
 		filtroFechas = new Button("Fechas");
-		filtroFechas.setEnabled(false);
 		limpiarFiltro = new Button(VaadinIcons.CLOSE);
 		limpiarFiltro.setDescription("Limpia el filtro actual");
 		limpiarFiltro.addClickListener(limpiar -> { 
 			limpiarApartamentos();
-			setApartamentos(aptosSinFiltro);
+			setApartamentos(aptosSinFiltro, true);
 		});
 		buttonsLayout.addComponents(filtroPrecio, filtroFechas, limpiarFiltro);
 		buttonsLayout.setComponentAlignment(filtroPrecio, Alignment.TOP_LEFT);
@@ -118,12 +162,27 @@ public class BusquedaView extends VerticalLayout implements View {
 		slidersLayout.addComponent(precioMaxSlider);
 		
 		aplicarFiltroPrecio = new Button("Aplicar filtro");
-		aplicarFiltroPrecio.addClickListener(filter -> updateApartamentos());
+		aplicarFiltroPrecio.addClickListener(filter -> updateApartamentosPorPrecio());
 		filtrosLayout.addComponent(aplicarFiltroPrecio);
 		filtrosLayout.setComponentAlignment(aplicarFiltroPrecio, Alignment.TOP_CENTER);
 		aplicarFiltroPrecio.setVisible(false);
 		
-		setAptosInfoColumns();		
+		fechasLayout = new HorizontalLayout();
+		fechasLayout.setWidth("100%");
+		fechasLayout.setHeight("-1");
+		fechaInicio = new DateField("Fecha inicio", LocalDate.now());
+		fechaFin = new DateField("Fecha fin", LocalDate.now().plusDays(1));
+		fechasLayout.addComponents(fechaInicio, fechaFin);
+		
+		aplicarFiltroFechas = new Button("Aplicar filtro");
+		aplicarFiltroFechas.addClickListener(filter -> updateApartamentosPorFechas());
+		filtrosLayout.addComponent(aplicarFiltroFechas);
+		filtrosLayout.setComponentAlignment(aplicarFiltroFechas, Alignment.TOP_CENTER);
+		aplicarFiltroFechas.setVisible(false);
+		
+		setAptosInfoColumns();
+		
+		filtroActual = "";
 	}
 	
 	
@@ -138,20 +197,15 @@ public class BusquedaView extends VerticalLayout implements View {
 		}
 		aptosSinFiltro = aptoService.buscarPorUbicacion(textoBuscado);
 		
-		if(aptosSinFiltro.isEmpty()) {
-			
+		if(aptosSinFiltro.isEmpty()) {			
 			Notification.show("No existen apartamentos", "en " + textoBuscado, Notification.Type.ERROR_MESSAGE);
-			Button volverInicio = new Button("Buscar otra ubicación");
-			volverInicio.setIcon(VaadinIcons.ARROW_BACKWARD);
-			volverInicio.setClickShortcut(KeyCode.ENTER);
-			volverInicio.addClickListener(e -> getUI().getNavigator().navigateTo(""));
-			leftAptos.addComponent(volverInicio);
-			
 		} else {			
-			setApartamentos(aptosSinFiltro);			
+			setApartamentos(aptosSinFiltro, false);			
 		}
 		
 		filtroPrecio.addClickListener(e -> {
+			limpiarFiltros();
+			
 			slidersLayout.addComponents(precioMinSlider, precioMaxSlider);
 			slidersLayout.setComponentAlignment(precioMinSlider, Alignment.MIDDLE_RIGHT);
 			slidersLayout.setComponentAlignment(precioMaxSlider, Alignment.MIDDLE_LEFT);
@@ -159,15 +213,43 @@ public class BusquedaView extends VerticalLayout implements View {
 			filtrosLayout.setComponentAlignment(slidersLayout, Alignment.TOP_LEFT);
 			
 			aplicarFiltroPrecio.setVisible(false);
-			aplicarFiltroPrecio.setVisible(true);			
+			aplicarFiltroPrecio.setVisible(true);		
 			
-		});		
+			filtroActual = FILTRO_PRECIO;
+		});
 		
-		busquedaLayout.addComponents(filtrosLayout, resultadosLayout);
+		filtroFechas.addClickListener(e -> {
+			limpiarFiltros();
+			
+			fechasLayout.addComponents(fechaInicio, fechaFin);
+			fechasLayout.setComponentAlignment(fechaInicio, Alignment.MIDDLE_RIGHT);
+			fechasLayout.setComponentAlignment(fechaFin, Alignment.MIDDLE_LEFT);
+			filtrosLayout.addComponent(fechasLayout);
+			filtrosLayout.setComponentAlignment(fechasLayout, Alignment.TOP_LEFT);
+			
+			aplicarFiltroFechas.setVisible(false);
+			aplicarFiltroFechas.setVisible(true);
+			
+			filtroActual = FILTRO_FECHA;
+		});
+		
+		busquedaLayout.addComponents(filtrosLayout, separator, nuevaBusquedaLayout, resultadosLayout);
+		busquedaLayout.setComponentAlignment(nuevaBusquedaLayout, Alignment.TOP_CENTER);
 		addComponent(busquedaLayout);
 	}
 	
-	private void updateApartamentos() {
+	private void limpiarFiltros() {
+		if(filtroActual.equals(FILTRO_PRECIO)) {
+			filtrosLayout.removeComponent(slidersLayout);
+			aplicarFiltroPrecio.setVisible(false);
+		} else if(filtroActual.equals(FILTRO_FECHA)) {
+			filtrosLayout.removeComponent(fechasLayout);
+			aplicarFiltroFechas.setVisible(false);
+		}
+	}
+	
+	private void updateApartamentosPorPrecio() {
+		
 		Double minPrecio = precioMinSlider.getValue();
 		Double maxPrecio = precioMaxSlider.getValue();
 		
@@ -178,7 +260,22 @@ public class BusquedaView extends VerticalLayout implements View {
 					.filtrarPorUbicacionyPrecioEstandar(textoBuscado, minPrecio, maxPrecio);
 			
 			limpiarApartamentos();
-			setApartamentos(aptosActualizados);
+			setApartamentos(aptosActualizados, true);
+		}
+	}
+	
+	private void updateApartamentosPorFechas() {
+		
+		LocalDate fechaIni = fechaInicio.getValue();
+		LocalDate fechaF = fechaFin.getValue();
+		
+		if(fechaF.isBefore(fechaIni)) {
+			Notification.show("La fecha de fin es anterior a la de inicio.", "Introdúcelas de nuevo", Notification.Type.ERROR_MESSAGE);
+		} else {
+			List<Apartamento> aptosActualizados = aptoService.filtrarPorUbicacionyFecha(textoBuscado, fechaIni, fechaF);
+			
+			limpiarApartamentos();
+			setApartamentos(aptosActualizados, true);
 		}
 	}
 	
@@ -197,10 +294,15 @@ public class BusquedaView extends VerticalLayout implements View {
 		rightAptos.setSpacing(true);
 	}
 	
-	private void setApartamentos(List<Apartamento> aptos) {
+	private void setApartamentos(List<Apartamento> aptos, Boolean filtrando) {
 		
 		if(aptos.isEmpty()) {
-			Notification.show("No existen apartamentos con el filtro introducido", "Prueba con otro", Notification.Type.ERROR_MESSAGE);
+			if(filtrando) {
+				Notification.show("No existen apartamentos con el filtro introducido", "Prueba con otro", Notification.Type.ERROR_MESSAGE);
+			} else {
+				Notification.show("No existen apartamentos", "en " + textoBuscado, Notification.Type.ERROR_MESSAGE);
+			}
+			
 		} else {
 			int i = 0;
 			
@@ -231,6 +333,9 @@ public class BusquedaView extends VerticalLayout implements View {
 				if(!imagenes.isEmpty())
 				{
 					Image imagen = ImageUtils.convertToImage(apto.getImagenes().iterator().next().getImagen());
+					imagen.setWidth("200px");
+					imagen.setStyleName("navigator-cursor");
+					imagen.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 					aptoInfo.addComponents(ubicacion, imagen, precioStd, numCamas);			
 				}
 				else
