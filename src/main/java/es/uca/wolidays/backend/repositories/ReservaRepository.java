@@ -25,6 +25,6 @@ public interface ReservaRepository extends CrudRepository<Reserva, Integer>{
 	@Query("SELECT r FROM Reserva r WHERE r.id = ?1")
 	Optional<Reserva> findByIdWithIncidencias(Integer pk);
 	
-	@Query("SELECT r FROM Reserva r, Apartamento apt WHERE r.apartamento = ?1 AND r.fechaInicio >= ?2 AND r.fechaFin <= ?3")
+	@Query("SELECT r FROM Reserva r WHERE r.apartamento = ?1 AND r.estado = 'Validada' AND r.fechaInicio >= ?2 AND r.fechaFin <= ?3")
 	List<Reserva> findByFechasBetween(Integer aptID, LocalDate fecha_inicio, LocalDate fecha_fin);
 }

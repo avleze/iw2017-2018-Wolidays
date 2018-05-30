@@ -45,7 +45,7 @@ public class ReservaService {
 		return repo.findByIdWithIncidencias(pk);
 	}
 	
-	public Boolean buscarReservaEntreFechas(Integer aptID,LocalDate fechaInicio, LocalDate fechaFin) {
+	public Boolean buscarReservaValidadaEntreFechas(Integer aptID,LocalDate fechaInicio, LocalDate fechaFin) {
 		return repo.findByFechasBetween(aptID, fechaInicio, fechaFin).size() > 0;
 	}
 	
