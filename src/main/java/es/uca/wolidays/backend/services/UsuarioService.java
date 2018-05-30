@@ -53,14 +53,6 @@ public class UsuarioService implements UserDetailsService{
 		return usuario;
 	}
 	
-	public Usuario loadUserByUsernameWithApartamentosReservasAndImages(String username) throws UsernameNotFoundException {
-		Usuario usuario = repo.findByUsernameWithApartamentosReservasAndImages(username);
-		if (usuario == null) {
-			throw new UsernameNotFoundException(username);
-		}
-		return usuario;
-	}
-	
 	public Boolean usernameExists(String username) {
 		return repo.findByUsername(username) != null;
 	}

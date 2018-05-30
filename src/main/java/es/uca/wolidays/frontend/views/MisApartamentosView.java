@@ -29,6 +29,7 @@ import es.uca.wolidays.backend.entities.Imagen;
 import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
+import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.backend.services.UsuarioService;
 import es.uca.wolidays.frontend.MainScreen;
 import es.uca.wolidays.frontend.utils.ImageUtils;
@@ -45,7 +46,9 @@ public class MisApartamentosView extends VerticalLayout implements View {
 	
 	@Autowired
 	private transient UsuarioService userService;
-	
+	@Autowired
+	private transient ApartamentoService apartamentoService;
+
 	private VerticalLayout misapartamentosLayout;
 	private HorizontalLayout resultadosLayout;
 	private VerticalLayout leftAptos;
@@ -71,7 +74,7 @@ public class MisApartamentosView extends VerticalLayout implements View {
 		title.setCaptionAsHtml(true);
 		title.setCaption("<h1>Mis apartamentos</h1>");
 		
-		Usuario currentUser = userService.loadUserByUsernameWithApartamentosReservasAndImages(SecurityUtils.getUsername());
+		Usuario currentUser = userService.loadUserByUsernameWithApartamentosAndReservas(SecurityUtils.getUsername());
 		misAptos = currentUser.getApartamentos();
 		
 		setAptosInfoColumns();
@@ -150,10 +153,11 @@ public class MisApartamentosView extends VerticalLayout implements View {
 					soltdes.addClickListener(e -> getUI().getNavigator().navigateTo(SolicitudesView.VIEW_NAME + "/" + apto.getId()));
 				}
 				
-				Set<Imagen> imagenes = apto.getImagenes();
+				Set<Imagen> imagenes = apartamentoService.getImagenesApartamento(apto.getId());
 				if(!imagenes.isEmpty())
 				{
-					Image imagen = ImageUtils.convertToImage(apto.getImagenes().iterator().next().getImagen());
+					Image imagen = ImageUtils.convertToImage(imagenes.iterator().next().getImagen());
+					imagen.setWidth(200, Unit.PIXELS);
 					aptoInfo.addComponents(ubicacion, imagen, precioStd, numCamas, soltdes);			
 				}
 				else

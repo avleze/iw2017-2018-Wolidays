@@ -3,6 +3,7 @@ package es.uca.wolidays.backend.repositories;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
@@ -12,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import es.uca.wolidays.backend.entities.Apartamento;
+import es.uca.wolidays.backend.entities.Imagen;
 
 @Repository
 public interface ApartamentoRepository extends CrudRepository<Apartamento, Integer> {
@@ -45,4 +47,7 @@ public interface ApartamentoRepository extends CrudRepository<Apartamento, Integ
 	@EntityGraph(value = "Apartamento.apartamentoConImagenes", type = EntityGraphType.LOAD)
 	@Query("SELECT apt FROM Apartamento apt WHERE apt.id = ?1")
 	Optional<Apartamento> findByIdWithImages(Integer pk);
+	
+	@Query("SELECT apt FROM Apartamento apt JOIN FETCH apt.imagenes WHERE apt.id = ?1")
+	Apartamento findImagesApartamento(Integer pk);
 }

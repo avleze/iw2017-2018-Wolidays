@@ -3,6 +3,9 @@ package es.uca.wolidays.backend.services;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,8 +14,8 @@ import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.entities.Imagen;
 import es.uca.wolidays.backend.entities.Oferta;
 import es.uca.wolidays.backend.repositories.ApartamentoRepository;
-import es.uca.wolidays.backend.repositories.OfertaRepository;
 import es.uca.wolidays.backend.repositories.ImagenRepository;
+import es.uca.wolidays.backend.repositories.OfertaRepository;
 
 @Service
 public class ApartamentoService {
@@ -90,5 +93,9 @@ public class ApartamentoService {
 	
 	public void guardarImagen(Imagen entity) {
 		imagenRepo.save(entity);
+	}
+	
+	public Set<Imagen> getImagenesApartamento(Integer pk){
+		return repo.findImagesApartamento(pk).getImagenes();
 	}
 }
