@@ -142,7 +142,7 @@ public class MisApartamentosView extends VerticalLayout implements View {
 				
 				Button soltdes;
 				
-				if(apto.getReservasPendientes().size() == 0) {
+				if(apto.getReservasPendientes().isEmpty()) {
 					soltdes = new Button("No hay solicitudes de reserva pendientes");
 					soltdes.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
 				} else {

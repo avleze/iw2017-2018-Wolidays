@@ -12,6 +12,8 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
@@ -53,6 +55,9 @@ public class SignupView extends VerticalLayout implements View {
 	private String usrnameRgx = "[a-zA-Z-_\\d]+";
 	private String bankAccountRgx = "\\d{20}";
 	
+	private Boolean usernameRepetido;
+	private Boolean correoRepetido;
+	
 	@PostConstruct
 	void init() {
 		final VerticalLayout registroLayout = new VerticalLayout();
@@ -77,6 +82,7 @@ public class SignupView extends VerticalLayout implements View {
 			.bind(Usuario::getApellidos, Usuario::setApellidos);
 		
 		TextField correo = new TextField("Correo");
+		correo.addValueChangeListener(e -> comprobarSiExisteCorreo(correo.getValue()));
 		correo.setId("form_correo");
 		binder.forField(correo)
 			.withValidator(new EmailValidator("Dirección de correo no válida."))
@@ -84,6 +90,9 @@ public class SignupView extends VerticalLayout implements View {
 			.bind(Usuario::getCorreo, Usuario::setCorreo);
 		
 		TextField cuentaBancaria = new TextField("Cuenta bancaria");
+		cuentaBancaria.setIcon(VaadinIcons.INFO_CIRCLE);
+		cuentaBancaria.setDescription("La cuenta bancaria debe ser un número de 20 dígitos.");
+		cuentaBancaria.setMaxLength(20);
 		cuentaBancaria.setId("form_cuentabancaria");
 		binder.forField(cuentaBancaria)
 			.withValidator(new RegexpValidator("El número de cuenta bancaria debe tener 20 dígitos.", bankAccountRgx, true))
@@ -91,7 +100,11 @@ public class SignupView extends VerticalLayout implements View {
 			.bind(Usuario::getCuentaBancaria, Usuario::setCuentaBancaria);
 		
 		TextField username = new TextField("Username");
+		username.setIcon(VaadinIcons.INFO_CIRCLE);
+		username.setDescription("El nombre de usuario sólo admite letras, números, guiones (-) y guiones bajos (_). Máximo 15 caracteres.");
 		username.setId("form_username");
+		username.setMaxLength(15);
+		username.addValueChangeListener(e -> comprobarSiExisteUsername(username.getValue()));
 		binder.forField(username)
 			.withValidator(new RegexpValidator("El nombre de usuario sólo admite letras, "
 					+ "números, guiones (-) y guiones bajos (_).", usrnameRgx, true))
@@ -105,11 +118,20 @@ public class SignupView extends VerticalLayout implements View {
 			.bind(Usuario::getPassword, Usuario::setPassword);
 		
 		PasswordField confirmPassword = new PasswordField("Confirma la contraseña");
+		confirmPassword.addValueChangeListener(e -> {
+			String pass = password.getValue();
+			String confirmPass = confirmPassword.getValue();
+			
+			if(!pass.equals(confirmPass)) {
+				Notification.show("Las contraseñas no coinciden", "", Notification.Type.WARNING_MESSAGE);
+			}
+		});
 		confirmPassword.setId("form_confirmpassword");
 		binder.forField(confirmPassword)
 			.asRequired(CAMPO_OBLIGATORIO);
 		
 		Button registro = new Button("Regístrate");
+		registro.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 		registro.setId("form_btn_registrate");
 		registroLayout.addComponents(title, nombre, apellidos, correo, cuentaBancaria, username, password, confirmPassword, registro);
 		registroLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
@@ -130,41 +152,46 @@ public class SignupView extends VerticalLayout implements View {
 				Notification.show("Las contraseñas no coinciden", Notification.Type.ERROR_MESSAGE);
 				
 			} else {
+				
+				if(correoRepetido) {
+					correo.clear();
+					showUsedCorreoErrorNotification();
+				} else if(usernameRepetido) {
+					username.clear();
+					showUsedUsernameErrorNotification();
+				} else {
 			
-				Usuario user = new Usuario();			
-				
-				user.setNombre(nombre.getValue());
-				user.setApellidos(apellidos.getValue());
-				user.setCorreo(correo.getValue());
-				user.setCuentaBancaria(cuentaBancaria.getValue());
-				user.setUsername(username.getValue());
-				user.setPassword(password.getValue());
-				List<Rol> roles = new ArrayList<>();
-				
-				Optional<Rol> defaultRol = rolService.buscarPorNombre("CLIENTE_ROL");
-				if(!defaultRol.isPresent())
-				{
-					Rol rol = new Rol();
-					rol.setNombre("CLIENTE_ROL");
-					rolService.guardar(rol);
-					defaultRol = Optional.of(rol);
-				}
-				
-				roles.add(defaultRol.get());
-				user.setRoles(roles);
-				
-				try {
+					Usuario user = new Usuario();			
 					
-					binder.writeBean(user);				
-					service.guardar(user, true);
-					LoginView.setSuccessfulSignUpNotification();
-					getUI().getNavigator().navigateTo("login");
+					List<Rol> roles = new ArrayList<>();					
+					Optional<Rol> defaultRol = rolService.buscarPorNombre("CLIENTE_ROL");
+					if(!defaultRol.isPresent())
+					{
+						Rol rol = new Rol();
+						rol.setNombre("CLIENTE_ROL");
+						rolService.guardar(rol);
+						defaultRol = Optional.of(rol);
+					}
 					
-				} catch(ValidationException ex) {
-					Notification.show("No se ha podido completar el registro");
+					roles.add(defaultRol.get());
+					user.setRoles(roles);
+					
+					try {
+						
+						binder.writeBean(user);				
+						service.guardar(user, true);
+						LoginView.setSuccessfulSignUpNotification();
+						getUI().getNavigator().navigateTo("login");
+						
+					} catch(ValidationException ex) {
+						Notification.show("No se ha podido completar el registro");
+					}
 				}
 			}
 		});
+		
+		usernameRepetido = false;
+		correoRepetido = false;
 		
 		addComponent(registroLayout);
 	}
@@ -172,5 +199,34 @@ public class SignupView extends VerticalLayout implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 		mainScreen.setButtons();
+	}
+	
+	
+	public void comprobarSiExisteUsername(String username) {
+		
+		if(service.usernameExists(username)) {
+			usernameRepetido = true;
+			showUsedUsernameErrorNotification();
+		} else {
+			usernameRepetido = false;
+		}
+	}
+	
+	public void comprobarSiExisteCorreo(String correo) {
+		
+		if(service.correoExists(correo)) {
+			correoRepetido = true;
+			showUsedCorreoErrorNotification();
+		} else {
+			correoRepetido = false;
+		}
+	}
+	
+	public void showUsedUsernameErrorNotification() {
+		Notification.show("El nombre de usuario ya está en uso", "Selecciona otro", Notification.Type.ERROR_MESSAGE);
+	}
+	
+	public void showUsedCorreoErrorNotification() {
+		Notification.show("El correo ya está en uso", "Selecciona otro", Notification.Type.ERROR_MESSAGE);
 	}
 }

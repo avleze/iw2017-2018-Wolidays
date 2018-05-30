@@ -27,11 +27,13 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.entities.Incidencia;
+import es.uca.wolidays.backend.entities.Penalizacion;
 import es.uca.wolidays.backend.entities.Reserva;
 import es.uca.wolidays.backend.entities.TransaccionPenalizacion;
 import es.uca.wolidays.backend.entities.TransaccionReserva;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.ApartamentoService;
+import es.uca.wolidays.backend.services.ReglasDeNegocioService;
 import es.uca.wolidays.backend.services.ReservaService;
 import es.uca.wolidays.backend.services.TransaccionService;
 import es.uca.wolidays.frontend.views.gestor.ReservasView;
@@ -44,13 +46,16 @@ public class DetalleReservaView extends VerticalLayout implements View {
 	public static final String VIEW_NAME = "detalle_reserva";
 	
 	@Autowired
-	ReservaService rsrvService;
+	private transient ReservaService rsrvService;
 	
 	@Autowired
-	ApartamentoService aptoService;
+	private transient ApartamentoService aptoService;
 	
 	@Autowired
-	TransaccionService transacService;
+	private transient TransaccionService transacService;
+	
+	@Autowired
+	private transient ReglasDeNegocioService reglasNegService;
 	
 	private VerticalLayout detalleReservaLayout;
 	private HorizontalLayout infoLayout;
@@ -158,27 +163,27 @@ public class DetalleReservaView extends VerticalLayout implements View {
 				binder.writeBean(reserva);
 				rsrvService.guardar(reserva);
 				ReservasView.setSuccessfulReservationModNotification();
-				/*if(SecurityUtils.hasRole("CLIENTE_ROL") && apartamento.getPropietario().toString().equals(SecurityUtils.getUsername())) {
+				if(SecurityUtils.hasRole("CLIENTE_ROL") && apartamento.getPropietario().toString().equals(SecurityUtils.getUsername())) {
 					TransaccionPenalizacion transPenaliz = new TransaccionPenalizacion();
 					transPenaliz.setCuentaOrigen(apartamento.getPropietario().getCuentaBancaria());
 					transPenaliz.setCuentaDestino(reserva.getUsuario().getCuentaBancaria());
-					//transPenaliz.setCosteAdicional(costeAdicional);
+					transPenaliz.setCosteAdicional(reglasNegService.calcularCosteAdicionalPorPenalizacion(Penalizacion.TipoUsuario.Anfitrion, Penalizacion.Motivo.Modificacion, reserva));
 					transPenaliz.setUsuarioAfectado(reserva.getUsuario());
 					transPenaliz.setUsuarioPenalizado(apartamento.getPropietario());
 					binderTransac.writeBean(transPenaliz);
 					transacService.guardar(transPenaliz);
 					
 				}
-				if(SecurityUtils.hasRole("CLIENTE_ROL") && reserva.getUsuario().toString().equals(SecurityUtils.getUsername())) {
+				else if(SecurityUtils.hasRole("CLIENTE_ROL") && reserva.getUsuario().toString().equals(SecurityUtils.getUsername())) {
 					TransaccionPenalizacion transPenaliz = new TransaccionPenalizacion();
 					transPenaliz.setCuentaOrigen(reserva.getUsuario().getCuentaBancaria());
 					transPenaliz.setCuentaDestino(apartamento.getPropietario().getCuentaBancaria());
-					//transPenaliz.setCosteAdicional(costeAdicional);
+					transPenaliz.setCosteAdicional(reglasNegService.calcularCosteAdicionalPorPenalizacion(Penalizacion.TipoUsuario.Huesped, Penalizacion.Motivo.Modificacion, reserva));
 					transPenaliz.setUsuarioAfectado(apartamento.getPropietario());
 					transPenaliz.setUsuarioPenalizado(reserva.getUsuario());
 					binderTransac.writeBean(transPenaliz);
 					transacService.guardar(transPenaliz);
-				}*/
+				}
 				if(SecurityUtils.hasRole("GESTOR_ROL"))
 					getUI().getNavigator().navigateTo("reservas");
 				else {
