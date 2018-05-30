@@ -116,6 +116,7 @@ public class NuevaOfertaView extends VerticalLayout implements View {
 		fechaFinField.addValueChangeListener(compDates -> returnBinder.validate());
 		
 		TextField precioStdField = new TextField("Precio por noche en oferta");
+		precioStdField.setRequiredIndicatorVisible(true);
 		precioStdField.setWidth("85px");
 		
 		Button registrarOfertaButton = new Button("Registrar oferta");

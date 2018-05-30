@@ -16,6 +16,7 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
@@ -90,6 +91,8 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 		title.setCaption("<h1>Nuevo apartamento</h1>");
 		
 		TextField contactoField = new TextField("Contacto");
+		contactoField.setIcon(VaadinIcons.INFO_CIRCLE);
+		contactoField.setDescription("El contacto debe ser un email o un número de teléfono (9 dígitos)");
 		aptoBinder.forField(contactoField)
 			.withValidator(new RegexpValidator("El contacto debe ser un email o un número de teléfono", contactoRgx, true))
 			.asRequired(CAMPO_OBLIGATORIO)
@@ -150,6 +153,8 @@ public class NuevoApartamentoView extends VerticalLayout implements View {
 			.bind(Apartamento::getDescripcion, Apartamento::setDescripcion);		
 		
 		TextField precioStdField = new TextField("Precio estándar por noche");
+		precioStdField.setIcon(VaadinIcons.INFO_CIRCLE);
+		precioStdField.setDescription("Precio que valdrá una noche en tu apartamento. Más tarde podrás definir otros precios para fechas concretas. Debes separar los decimales con un punto (.)");
 		precioStdField.setWidth("85px");
 		aptoBinder.forField(precioStdField)
 			.asRequired(CAMPO_OBLIGATORIO);
