@@ -31,6 +31,7 @@ import es.uca.wolidays.backend.entities.Penalizacion;
 import es.uca.wolidays.backend.entities.Reserva;
 import es.uca.wolidays.backend.entities.TransaccionPenalizacion;
 import es.uca.wolidays.backend.entities.TransaccionReserva;
+import es.uca.wolidays.backend.invoice.EmailService;
 import es.uca.wolidays.backend.security.SecurityUtils;
 import es.uca.wolidays.backend.services.ApartamentoService;
 import es.uca.wolidays.backend.services.ReglasDeNegocioService;
@@ -56,6 +57,9 @@ public class DetalleReservaView extends VerticalLayout implements View {
 	
 	@Autowired
 	private transient ReglasDeNegocioService reglasNegService;
+	
+	@Autowired
+	private transient EmailService emailService;
 	
 	private VerticalLayout detalleReservaLayout;
 	private HorizontalLayout infoLayout;
@@ -224,6 +228,7 @@ public class DetalleReservaView extends VerticalLayout implements View {
 					transacReserva.setBeneficioEmpresa(reserva.getPrecioFinal()*transacService.obtenerPctBeneficioActual());
 					binderTransacRes.writeBean(transacReserva);
 					transacService.guardar(transacReserva);
+					emailService.sendInvoiceMessage(apartamento.getPropietario().getCorreo() + "," + reserva.getUsuario().getCorreo(), "Factura de tu reserva en Wolidays", "Gracias por confiar en Wolidays para tus vacaciones! \n Esperemos que disfrute de su estancia y que tenga unas merecidas Wolidays! \n ", reserva, apartamento.getPropietario());
 		    		ReservasView.setSuccessfulReservationAcceptNotification();
 		    		getUI().getNavigator().navigateTo(DetalleReservaView.VIEW_NAME + "/" + reserva.getId() + "/" + apartamento.getId());
 	    		} catch (ValidationException vEx) {
