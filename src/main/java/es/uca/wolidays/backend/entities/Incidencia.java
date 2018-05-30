@@ -17,7 +17,7 @@ public class Incidencia implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer Id;
+	private Integer id;
 	
 	private LocalDate fechaIncidencia;
 	private String contacto;
@@ -44,10 +44,10 @@ public class Incidencia implements Serializable{
 		this.reserva = reserva;
 	}
 	public Integer getId() {
-		return Id;
+		return id;
 	}
 	public void setId(Integer id) {
-		Id = id;
+		this.id = id;
 	}
 	public LocalDate getFechaIncidencia() {
 		return fechaIncidencia;

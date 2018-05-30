@@ -15,16 +15,16 @@ public class IVA implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer Id;
+	private Integer id;
 	@Column(unique=true)
 	private String pais;
 	private Float porcentajeIVA;
 	
 	public Integer getId() {
-		return Id;
+		return id;
 	}
 	public void setId(Integer id) {
-		Id = id;
+		this.id = id;
 	}
 	public String getPais() {
 		return pais;
