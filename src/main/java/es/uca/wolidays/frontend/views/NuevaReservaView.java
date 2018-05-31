@@ -12,6 +12,7 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
@@ -53,6 +54,8 @@ public class NuevaReservaView extends VerticalLayout implements View {
 	
 	@Autowired
 	MainScreen mainScreen;
+	
+	private Optional<Apartamento> existeApartamento;
 	
 	private VerticalLayout nuevaReservaLayout;
 	private Label title;
@@ -106,24 +109,32 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		aptoId = Integer.parseInt(event.getParameters().split("/")[1]);
 		usuario = (Usuario)userService.loadUserByUsername(SecurityUtils.getUsername());
 		
-		Optional<Apartamento> existeApartamento = aptoService.buscarPorIdConOfertas(aptoId);
+		existeApartamento = aptoService.buscarPorIdConOfertas(aptoId);
 		
 		if(existeApartamento.isPresent()) {
 			apartamento = existeApartamento.get();
 		}
 		
 		TextField contactoField = new TextField("Contacto");
+		contactoField.setIcon(VaadinIcons.INFO_CIRCLE);
+		contactoField.setDescription("Correo electrónico o télefono (9 dígitos) que servirán para ponerse en contacto contigo.");
 		binder.forField(contactoField)
 			.withValidator(new RegexpValidator("El contacto debe ser un email o un número de teléfono", contactoRgx, true))
 			.asRequired(CAMPO_OBLIGATORIO)
 			.bind(Reserva::getContacto, Reserva::setContacto);
 		
 		TextArea comentarioField = new TextArea("Comentario");
+		comentarioField.setIcon(VaadinIcons.INFO_CIRCLE);
+		comentarioField.setDescription("Máximo 250 caracteres.");
+		comentarioField.setMaxLength(250);
 		comentarioField.setWidth("300px");
 		binder.forField(comentarioField)
 			.bind(Reserva::getComentario, Reserva::setComentario);
 		
 		TextField tarjetaCredField = new TextField("Tarjeta de crédito");
+		tarjetaCredField.setIcon(VaadinIcons.INFO_CIRCLE);
+		tarjetaCredField.setDescription("Número formado por 16 dígitos.");
+		tarjetaCredField.setMaxLength(16);
 		binder.forField(tarjetaCredField)
 			.withValidator(new RegexpValidator("La tarjeta de crédito debe tener 16 dígitos.", tarjetaRgx, true))
 			.asRequired(CAMPO_OBLIGATORIO)
@@ -163,18 +174,33 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		
 		Button realizarReservaButton = new Button("Realizar reserva");
 		realizarReservaButton.addClickListener(nuevaRes -> {
-			Reserva reserva = new Reserva();			
-
-			reserva.setUsuario(usuario);
-			reserva.setApartamento(apartamento);
-			reserva.setPrecioFinal(precioFinal);
-			reserva.setEstado(Reserva.Estado.Pendiente);
+			
+			existeApartamento = aptoService.buscarPorIdConOfertas(aptoId);
+			
+			if(existeApartamento.isPresent()) {
+				apartamento = existeApartamento.get();
+			}
 			
 			try {
-				binder.writeBean(reserva);
-				reservaService.guardar(reserva);
-				MisReservasView.setSuccessfulReservationNotification();
-				getUI().getNavigator().navigateTo("mis_reservas");
+				Double nuevoPrecioFinal = reservaService.calcularPrecioFinal(apartamento, fechaInicioField.getValue(), fechaFinField.getValue());
+				
+				if(Double.compare(precioFinal, nuevoPrecioFinal) != 0) {					
+					Notification.show("El precio del apartamento ha cambiado mientras realizabas la reserva.", "Revisa los parámetros de la reserva y el nuevo precio", Notification.Type.ERROR_MESSAGE);
+					
+				} else {
+					
+					Reserva reserva = new Reserva();
+					reserva.setUsuario(usuario);
+					reserva.setApartamento(apartamento);
+					reserva.setPrecioFinal(precioFinal);
+					reserva.setEstado(Reserva.Estado.Pendiente);
+					
+					binder.writeBean(reserva);
+					reservaService.guardar(reserva);
+					MisReservasView.setSuccessfulReservationNotification();
+					getUI().getNavigator().navigateTo("mis_reservas");
+				}
+				
 			} catch (ValidationException vEx) {
 				Notification.show("No se ha podido completar el registro");
 			}
