@@ -1,0 +1,13 @@
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (1, 4, 9, 3, 1, 'Modificacion', 32.35, 'Huesped');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (2, 6, 2, 4, 0, 'Modificacion', 15.49, 'Anfitrion');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (3, 5, 9, 1, 0, 'Modificacion', 31.04, 'Huesped');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (4, 3, 2, 1, 0, 'Cancelacion', 23.34, 'Huesped');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (5, 7, 2, 5, 1, 'Cancelacion', 26.94, 'Anfitrion');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (6, 6, 10, 3, 5, 'Modificacion', 27.53, 'Anfitrion');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (7, 7, 3, 4, 2, 'Modificacion', 36.19, 'Huesped');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (8, 1, 8, 0, 3, 'Cancelacion', 4.44, 'Huesped');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (9, 3, 7, 1, 0, 'Modificacion', 17.99, 'Huesped');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (10, 1, 2, 0, 0, 'Modificacion', 31.31, 'Huesped');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (11, 5, 3, 0, 2, 'Modificacion', 37.33, 'Anfitrion');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (12, 5, 8, 2, 4, 'Modificacion', 10.36, 'Huesped');
+insert into penalizacion (id, max_dias_antelacion, max_noches, min_dias_antelacion, min_noches, motivo, porcentaje_cargo, tipo_usr) values (13, 8, 4, 0, 1, 'Modificacion', 16.65, 'Anfitrion');
