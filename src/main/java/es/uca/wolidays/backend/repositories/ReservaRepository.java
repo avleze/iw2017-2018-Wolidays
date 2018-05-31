@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.entities.Reserva;
 
 @Repository
@@ -25,6 +26,6 @@ public interface ReservaRepository extends CrudRepository<Reserva, Integer>{
 	@Query("SELECT r FROM Reserva r WHERE r.id = ?1")
 	Optional<Reserva> findByIdWithIncidencias(Integer pk);
 	
-	@Query("SELECT r FROM Reserva r WHERE r.apartamento = ?1 AND r.estado = 'Validada' AND r.fechaInicio >= ?2 AND r.fechaFin <= ?3")
-	List<Reserva> findByFechasBetween(Integer aptID, LocalDate fecha_inicio, LocalDate fecha_fin);
+	@Query("SELECT r FROM Reserva r WHERE r.apartamento = ?1 AND (((?2 BETWEEN r.fechaInicio AND r.fechaFin) OR (?3 BETWEEN r.fechaInicio AND r.fechaFin)) AND r.estado = 'Validada')")
+	List<Reserva> findByValidadasAndFechasBetween(Apartamento apto, LocalDate fecha_inicio, LocalDate fecha_fin);
 }

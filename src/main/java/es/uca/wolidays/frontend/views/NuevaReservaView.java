@@ -160,7 +160,7 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		
 		Binder.BindingBuilder<Reserva, LocalDate> fechaFinBindingBuilder = 
 				binder.forField(fechaFinField)
-					.withValidator(fechaFin -> !fechaFin.isBefore(fechaInicioField.getValue()), "No puedes irte antes de llegar")
+					.withValidator(fechaFin -> fechaInicioField.getValue().isBefore(fechaFin), "No puedes irte antes de llegar y debes pasar al menos una noche")
 					.asRequired(CAMPO_OBLIGATORIO);
 		
 		Binder.Binding<Reserva, LocalDate> returnBinder = 
@@ -170,6 +170,11 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		fechaFinField.addValueChangeListener(precio -> {
 			precioFinal = reservaService.calcularPrecioFinal(apartamento, fechaInicioField.getValue(), fechaFinField.getValue());
 			precioFinalLabel.setValue("Precio final: " + precioFinal + "€");
+		});
+		fechaFinField.addValueChangeListener(ocupado -> {
+			if(estaOcupado(apartamento, fechaInicioField.getValue(), fechaFinField.getValue())) {
+				Notification.show("El apartamento está ocupado para los días seleccionados", "Elige otro día", Notification.Type.ERROR_MESSAGE);
+			}
 		});
 		
 		Button realizarReservaButton = new Button("Realizar reserva");
@@ -182,23 +187,30 @@ public class NuevaReservaView extends VerticalLayout implements View {
 			}
 			
 			try {
-				Double nuevoPrecioFinal = reservaService.calcularPrecioFinal(apartamento, fechaInicioField.getValue(), fechaFinField.getValue());
 				
-				if(Double.compare(precioFinal, nuevoPrecioFinal) != 0) {					
-					Notification.show("El precio del apartamento ha cambiado mientras realizabas la reserva.", "Revisa los parámetros de la reserva y el nuevo precio", Notification.Type.ERROR_MESSAGE);
+				if(estaOcupado(apartamento, fechaInicioField.getValue(), fechaFinField.getValue())) {
+					Notification.show("El apartamento está ocupado para los días seleccionados", "Elige otro día", Notification.Type.ERROR_MESSAGE);
+				
+				} else {					
+				
+					Double nuevoPrecioFinal = reservaService.calcularPrecioFinal(apartamento, fechaInicioField.getValue(), fechaFinField.getValue());
 					
-				} else {
-					
-					Reserva reserva = new Reserva();
-					reserva.setUsuario(usuario);
-					reserva.setApartamento(apartamento);
-					reserva.setPrecioFinal(precioFinal);
-					reserva.setEstado(Reserva.Estado.Pendiente);
-					
-					binder.writeBean(reserva);
-					reservaService.guardar(reserva);
-					MisReservasView.setSuccessfulReservationNotification();
-					getUI().getNavigator().navigateTo("mis_reservas");
+					if(Double.compare(precioFinal, nuevoPrecioFinal) != 0) {					
+						Notification.show("El precio del apartamento ha cambiado mientras realizabas la reserva.", "Revisa los parámetros de la reserva y el nuevo precio", Notification.Type.ERROR_MESSAGE);
+						
+					} else {
+						
+						Reserva reserva = new Reserva();
+						reserva.setUsuario(usuario);
+						reserva.setApartamento(apartamento);
+						reserva.setPrecioFinal(precioFinal);
+						reserva.setEstado(Reserva.Estado.Pendiente);
+						
+						binder.writeBean(reserva);
+						reservaService.guardar(reserva);
+						MisReservasView.setSuccessfulReservationNotification();
+						getUI().getNavigator().navigateTo("mis_reservas");
+					}
 				}
 				
 			} catch (ValidationException vEx) {
@@ -223,5 +235,8 @@ public class NuevaReservaView extends VerticalLayout implements View {
 		addComponent(nuevaReservaLayout);
 	}
 	
+	private Boolean estaOcupado(Apartamento apto, LocalDate fechaInicio, LocalDate fechaFin) {
+		return reservaService.existenReservasValidadasEntreFechas(apto, fechaInicio, fechaFin);
+	}
 
 }
