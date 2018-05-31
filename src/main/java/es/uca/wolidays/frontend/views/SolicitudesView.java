@@ -83,8 +83,10 @@ public class SolicitudesView extends VerticalLayout implements View {
 		reservasTabla.addColumn(Reserva::getId).setCaption("ID");
 		reservasTabla.addColumn(Reserva::getUsuario).setCaption("Usuario solicitante");
 		reservasTabla.addColumn(Reserva::getContacto).setCaption("Contacto");
+		reservasTabla.addColumn(Reserva::getPrecioFinal).setCaption("Precio");
 		reservasTabla.addColumn(Reserva::getFechaInicio).setCaption("Fecha inicio");
 		reservasTabla.addColumn(Reserva::getFechaFin).setCaption("Fecha fin");
+		reservasTabla.addColumn(Reserva::getEstado).setCaption("Estado");
 		
 		reservasTabla.addSelectionListener(e -> {
 			Optional<Reserva> rsrvSelec = e.getFirstSelectedItem();
