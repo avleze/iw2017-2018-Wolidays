@@ -55,8 +55,7 @@ public class MisReservasView extends VerticalLayout implements View {
 	private HorizontalLayout reservaInfo;
 	private VerticalLayout reservasLeft;
 	private VerticalLayout reservasRight;
-	private VerticalLayout popupConfirmacion;
-	private CssLayout botonesReserva;
+	private VerticalLayout popupConfirmacionLayout;
 	CssLayout botonesConfirmacion;
 	
 	private Usuario usuario;
@@ -76,10 +75,6 @@ public class MisReservasView extends VerticalLayout implements View {
 		
 		reservasLeft = new VerticalLayout();
 		reservasRight = new VerticalLayout();
-		
-		popupConfirmacion = new VerticalLayout();
-		
-		botonesReserva = new CssLayout();
 		
 		botonesConfirmacion = new CssLayout();
 	}
@@ -121,43 +116,40 @@ public class MisReservasView extends VerticalLayout implements View {
 				estadoReserva.setCaption("Estado: " + rsrv.getEstado());
 				estadoReserva.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 				
-				Button confirmacionSi = new Button("Sí", click -> {
-					rsrvService.eliminar(rsrv);
-					getUI().getNavigator().navigateTo("mis_reservas");
-					MisReservasView.setSuccessfulReservationDeleteNotification();
-				});
-								
-				botonesConfirmacion.addComponent(confirmacionSi);
-		    	botonesConfirmacion.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
-								
-				popupConfirmacion.addComponent(new Label("¿Está seguro de eliminar esta reserva?"));
-				popupConfirmacion.addComponent(botonesConfirmacion); 
-				popupConfirmacion.setComponentAlignment(botonesConfirmacion, Alignment.MIDDLE_CENTER);
-				PopupView popup = new PopupView(null, popupConfirmacion);
-				
-				
 				Button modificarReserva = new Button();
 				modificarReserva.setIcon(VaadinIcons.EDIT);
 				modificarReserva.setCaption("Modificar reserva");
 				modificarReserva.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleReservaView.VIEW_NAME + "/" + rsrv.getId() + "/" + rsrv.getApartamento().getId()));
 				
-				Button eliminarReserva = new Button();
-				eliminarReserva.setIcon(VaadinIcons.CLOSE);
-				eliminarReserva.setCaption("Eliminar reserva");
-				eliminarReserva.addClickListener(e -> {
-					popup.setPopupVisible(true);
-					//AÑADIR PENALIZACION
+				Button cancelarReserva = new Button();
+				cancelarReserva.setIcon(VaadinIcons.CLOSE);
+				cancelarReserva.setCaption("Cancelar reserva");
+				
+				Button confirmacionCancelacion = new Button("Cancelar");
+				confirmacionCancelacion.addClickListener(e -> {
+					rsrv.setEstado(Reserva.Estado.Rechazada);
+					rsrvService.guardar(rsrv);
+					getUI().getNavigator().navigateTo(MisReservasView.VIEW_NAME);
+					MisReservasView.setSuccessfulReservationDeleteNotification();
 				});
 				
-				botonesReserva.addComponents(modificarReserva, eliminarReserva, popup);
-		    	botonesReserva.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+				popupConfirmacionLayout = new VerticalLayout();
+				Label confirmacion = new Label("¿Estás seguro de cancelar la reserva? Esto conllevará un recargo en tu cuenta.");
+				popupConfirmacionLayout.addComponent(confirmacion);
+				popupConfirmacionLayout.addComponent(confirmacionCancelacion);
+				popupConfirmacionLayout.setComponentAlignment(confirmacion, Alignment.TOP_CENTER);
+				popupConfirmacionLayout.setComponentAlignment(confirmacionCancelacion, Alignment.TOP_CENTER);
+				PopupView popup = new PopupView(null, popupConfirmacionLayout);
+				
+				cancelarReserva.addClickListener(e -> {
+					popup.setPopupVisible(true);
+					// penalizacion
+				});
+				
 				reserva.addComponents(fechaLlegada, fechaSalida, ubicacion, precioNoches, estadoReserva);
-				reserva.addComponent(botonesReserva);
-				reserva.setComponentAlignment(botonesReserva, Alignment.TOP_LEFT);		
-				if(rsrv.getEstado() == Reserva.Estado.Rechazada) {
-					reserva.removeComponent(botonesReserva);
-				}
-						
+				if(rsrv.getEstado().equals(Reserva.Estado.Pendiente)) {
+					reserva.addComponents(modificarReserva, cancelarReserva, popup);
+				}						
 				
 				if(i % 2 == 0) {
 					reservasLeft.addComponent(reserva);
@@ -189,7 +181,7 @@ public class MisReservasView extends VerticalLayout implements View {
 	}
 	
 	public static void setSuccessfulReservationDeleteNotification() {
-		Notification successfulSignUp = new Notification("Reserva eliminada con éxito");
+		Notification successfulSignUp = new Notification("Reserva cancelada con éxito");
 		successfulSignUp.setIcon(VaadinIcons.CHECK);
 		successfulSignUp.setPosition(Position.TOP_RIGHT);
 		successfulSignUp.setDelayMsec(2500);
