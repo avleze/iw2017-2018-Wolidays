@@ -77,7 +77,7 @@ public class MisApartamentosView extends VerticalLayout implements View {
 		title.setCaptionAsHtml(true);
 		title.setCaption("<h1>Mis apartamentos</h1>");
 		
-		Usuario currentUser = userService.loadUserByUsernameWithApartamentosAndReservas(SecurityUtils.getUsername());
+		Usuario currentUser = userService.loadUserByUsernameWithApartamentos(SecurityUtils.getUsername());
 		misAptos = currentUser.getApartamentos();
 		
 		setAptosInfoColumns();
