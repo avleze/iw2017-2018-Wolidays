@@ -1,11 +1,10 @@
 package es.uca.wolidays.backend.services;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -96,11 +95,19 @@ public class ApartamentoService {
 		imagenRepo.save(entity);
 	}
 	
-	public Set<Imagen> getImagenesApartamento(Integer pk){
-		return repo.findImagesApartamento(pk).getImagenes();
-	}
-	
+	/*public Set<Imagen> getImagenesApartamento(Integer pk){
+		Set<Imagen> imagenes = repo.findImagesApartamento(pk).getImagenes();
+		if(imagenes == null)
+			return new HashSet<Imagen>();
+		else
+			return imagenes;
+	}*/
+	/*
 	public Set<Reserva> getReservasApartamento(Integer pk){
-		return repo.findReservasApartamento(pk).getReservas();
-	}
+		Set<Reserva> reservas = repo.findReservasApartamento(pk).getReservas();
+		if(reservas == null)
+			return new HashSet<Reserva>();
+		else
+			return repo.findReservasApartamento(pk).getReservas();
+	}*/
 }

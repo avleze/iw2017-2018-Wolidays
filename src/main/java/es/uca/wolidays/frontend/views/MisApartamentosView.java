@@ -2,7 +2,6 @@ package es.uca.wolidays.frontend.views;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -27,8 +26,6 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.entities.Imagen;
-import es.uca.wolidays.backend.entities.Reserva;
-import es.uca.wolidays.backend.entities.Reserva.Estado;
 import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
@@ -77,7 +74,7 @@ public class MisApartamentosView extends VerticalLayout implements View {
 		title.setCaptionAsHtml(true);
 		title.setCaption("<h1>Mis apartamentos</h1>");
 		
-		Usuario currentUser = userService.loadUserByUsernameWithApartamentos(SecurityUtils.getUsername());
+		Usuario currentUser = userService.loadUserByUsernameWithApartamentosAndReservas(SecurityUtils.getUsername());
 		misAptos = currentUser.getApartamentos();
 		
 		setAptosInfoColumns();
@@ -148,19 +145,14 @@ public class MisApartamentosView extends VerticalLayout implements View {
 				
 				Button soltdes;
 				
-				Set<Reserva> aptoReservas = apartamentoService.getReservasApartamento(apto.getId());
-				Set<Reserva> reservasPendientes = aptoReservas.stream()
-						.filter(r -> r.getEstado().equals(Estado.Pendiente))
-						.collect(Collectors.toSet());
-				
-				if(reservasPendientes.isEmpty()) {
+				if(apto.getReservasPendientes().isEmpty()) {
 					soltdes = new Button("No hay solicitudes de reserva pendientes");
 					soltdes.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
 				} else {
-					soltdes = new Button(reservasPendientes.size() + " solicitud(es) de reserva pendiente(s)");
+					soltdes = new Button(+ apto.getReservasPendientes().size() + " solicitud(es) de reserva pendiente(s)");
 					soltdes.addClickListener(e -> getUI().getNavigator().navigateTo(SolicitudesView.VIEW_NAME + "/" + apto.getId()));
 				}
-				
+				/*
 				Set<Imagen> imagenes = apartamentoService.getImagenesApartamento(apto.getId());
 				if(!imagenes.isEmpty())
 				{
@@ -170,7 +162,7 @@ public class MisApartamentosView extends VerticalLayout implements View {
 					imagen.addClickListener(e -> getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + apto.getId()));
 					aptoInfo.addComponents(ubicacion, imagen, precioStd, numCamas, soltdes);			
 				}
-				else
+				else*/
 					aptoInfo.addComponents(ubicacion, precioStd, numCamas, soltdes);			
 						
 				
