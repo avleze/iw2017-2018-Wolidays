@@ -8,10 +8,12 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -45,6 +47,8 @@ public class SolicitudesView extends VerticalLayout implements View {
 	private int idApto;
 	private Apartamento apartamento;
 	
+	private Button volverApto;
+	
 	@PostConstruct
 	void init() {
 		
@@ -60,6 +64,9 @@ public class SolicitudesView extends VerticalLayout implements View {
 		title.setCaptionAsHtml(true);
 		title.setCaption("<h1>Solicitudes de reservas</h1>");
 		
+		volverApto = new Button("Volver al apartamento");
+		volverApto.setIcon(VaadinIcons.ARROW_BACKWARD);
+		
 	}
 	
 	@Override
@@ -68,6 +75,10 @@ public class SolicitudesView extends VerticalLayout implements View {
 		mainScreen.setButtons();
 		
 		idApto = Integer.parseInt(event.getParameters().split("/")[0]);
+		volverApto.addClickListener(e -> {
+			getUI().getNavigator().navigateTo(DetalleApartamentoView.VIEW_NAME + "/" + idApto);
+		});
+		
 		Optional<Apartamento> existenAptosReservas = aptoService.buscarPorIdConReservas(idApto);
 		
 		if(existenAptosReservas.isPresent()) {
@@ -98,9 +109,10 @@ public class SolicitudesView extends VerticalLayout implements View {
 			}
 		});
 		
-		solicitudesLayout.addComponents(title, reservasTabla);
+		solicitudesLayout.addComponents(title, reservasTabla, volverApto);
 		solicitudesLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
 		solicitudesLayout.setComponentAlignment(reservasTabla, Alignment.TOP_CENTER);
+		solicitudesLayout.setComponentAlignment(volverApto, Alignment.TOP_LEFT);
 		addComponent(solicitudesLayout);
 	}
 	
