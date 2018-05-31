@@ -2,6 +2,7 @@ package es.uca.wolidays.frontend.views;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -26,6 +27,8 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.entities.Imagen;
+import es.uca.wolidays.backend.entities.Reserva;
+import es.uca.wolidays.backend.entities.Reserva.Estado;
 import es.uca.wolidays.backend.entities.Ubicacion;
 import es.uca.wolidays.backend.entities.Usuario;
 import es.uca.wolidays.backend.security.SecurityUtils;
@@ -145,11 +148,16 @@ public class MisApartamentosView extends VerticalLayout implements View {
 				
 				Button soltdes;
 				
-				if(apto.getReservasPendientes().isEmpty()) {
+				Set<Reserva> aptoReservas = apartamentoService.getReservasApartamento(apto.getId());
+				Set<Reserva> reservasPendientes = aptoReservas.stream()
+						.filter(r -> r.getEstado().equals(Estado.Pendiente))
+						.collect(Collectors.toSet());
+				
+				if(reservasPendientes.isEmpty()) {
 					soltdes = new Button("No hay solicitudes de reserva pendientes");
 					soltdes.addStyleNames(ValoTheme.BUTTON_BORDERLESS, "small_text");
 				} else {
-					soltdes = new Button(+ apto.getReservasPendientes().size() + " solicitud(es) de reserva pendiente(s)");
+					soltdes = new Button(reservasPendientes.size() + " solicitud(es) de reserva pendiente(s)");
 					soltdes.addClickListener(e -> getUI().getNavigator().navigateTo(SolicitudesView.VIEW_NAME + "/" + apto.getId()));
 				}
 				

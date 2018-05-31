@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import es.uca.wolidays.backend.entities.Apartamento;
 import es.uca.wolidays.backend.entities.Imagen;
 import es.uca.wolidays.backend.entities.Oferta;
+import es.uca.wolidays.backend.entities.Reserva;
 import es.uca.wolidays.backend.repositories.ApartamentoRepository;
 import es.uca.wolidays.backend.repositories.ImagenRepository;
 import es.uca.wolidays.backend.repositories.OfertaRepository;
@@ -97,5 +98,9 @@ public class ApartamentoService {
 	
 	public Set<Imagen> getImagenesApartamento(Integer pk){
 		return repo.findImagesApartamento(pk).getImagenes();
+	}
+	
+	public Set<Reserva> getReservasApartamento(Integer pk){
+		return repo.findReservasApartamento(pk).getReservas();
 	}
 }

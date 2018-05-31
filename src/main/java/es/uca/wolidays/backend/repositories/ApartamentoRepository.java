@@ -50,4 +50,7 @@ public interface ApartamentoRepository extends CrudRepository<Apartamento, Integ
 	
 	@Query("SELECT apt FROM Apartamento apt JOIN FETCH apt.imagenes WHERE apt.id = ?1")
 	Apartamento findImagesApartamento(Integer pk);
+	
+	@Query("SELECT apt FROM Apartamento apt JOIN FETCH apt.reservas WHERE apt.id = ?1")
+	Apartamento findReservasApartamento(Integer pk);
 }
