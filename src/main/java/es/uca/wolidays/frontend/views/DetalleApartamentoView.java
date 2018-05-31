@@ -13,7 +13,6 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
@@ -129,8 +128,14 @@ public class DetalleApartamentoView extends VerticalLayout implements View {
 				getUI().getNavigator().navigateTo(OfertasView.VIEW_NAME + "/" + idApto);
 			});
 			
-			buttonsLayout.addComponent(ofertasAptoButton);
+			Button reservasAptoButton = new Button("Ver reservas");
+			reservasAptoButton.addClickListener(e -> {
+				getUI().getNavigator().navigateTo(SolicitudesView.VIEW_NAME + "/" + idApto);
+			});
+			
+			buttonsLayout.addComponents(ofertasAptoButton, reservasAptoButton);
 			buttonsLayout.setComponentAlignment(ofertasAptoButton, Alignment.BOTTOM_RIGHT);
+			buttonsLayout.setComponentAlignment(reservasAptoButton, Alignment.BOTTOM_RIGHT);
 		}
 		else {
 			/*
