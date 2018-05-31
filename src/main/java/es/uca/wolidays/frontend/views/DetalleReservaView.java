@@ -189,9 +189,9 @@ public class DetalleReservaView extends VerticalLayout implements View {
 					transacService.guardar(transPenaliz);
 				}
 				if(SecurityUtils.hasRole("GESTOR_ROL"))
-					getUI().getNavigator().navigateTo("reservas");
+					getUI().getNavigator().navigateTo(ReservasView.VIEW_NAME);
 				else {
-					getUI().getNavigator().navigateTo("mis_reservas");
+					getUI().getNavigator().navigateTo(MisReservasView.VIEW_NAME);
 				}
 			} catch (ValidationException vEx) {
 				Notification.show("No se ha podido modificar la reserva.");
@@ -260,7 +260,7 @@ public class DetalleReservaView extends VerticalLayout implements View {
 		if(SecurityUtils.isLoggedIn() && SecurityUtils.hasRole("GESTOR_ROL")) {
 			Button volverReservas = new Button("Volver a reservas");
 			volverReservas.setIcon(VaadinIcons.ARROW_BACKWARD);
-			volverReservas.addClickListener(e -> getUI().getNavigator().navigateTo("reservas"));
+			volverReservas.addClickListener(e -> getUI().getNavigator().navigateTo(ReservasView.VIEW_NAME));
 			
 			detallesLayout.addComponent(volverReservas);
 			detallesLayout.setComponentAlignment(volverReservas, Alignment.TOP_LEFT);
